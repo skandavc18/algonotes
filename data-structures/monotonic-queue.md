@@ -1,68 +1,68 @@
-# 单调队列结构解决滑动窗口问题
+# Solving Sliding-Window Problems with the Monotonic Queue
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) | [239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/) | 🔴 |
-| [面试题59 - II. 队列的最大值 LCOF](https://leetcode.com/problems/dui-lie-de-zui-da-zhi-lcof/) | [面试题59 - II. 队列的最大值](https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/) | 🟠 |
+| [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) | [239. Sliding Window Maximum](https://leetcode.cn/problems/sliding-window-maximum/) | 🔴 |
+| [Sword to Offer 59 - II. Maximum Value of a Queue (LCOF)](https://leetcode.com/problems/dui-lie-de-zui-da-zhi-lcof/) | [Sword to Offer 59 - II. Maximum Value of a Queue](https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [数组基础](https://labuladong.online/algo/data-structure-basic/array-basic/)
-> - [链表基础](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/)
-> - [队列/栈基础](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/)
+> - [Array Basics](https://labuladong.online/algo/data-structure-basic/array-basic/)
+> - [Linked List Basics](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/)
+> - [Queue/Stack Basics](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/)
 
-前文用 [单调栈解决三道算法问题](https://labuladong.online/algo/data-structure/monotonic-stack/) 介绍了单调栈这种特殊数据结构，本文写一个类似的数据结构「单调队列」。
+The earlier article [Solving Three Problems with the Monotonic Stack](https://labuladong.online/algo/data-structure/monotonic-stack/) introduced the monotonic-stack data structure. This article presents a similar one — the "monotonic queue".
 
-也许这种数据结构的名字你没听过，其实没啥难的，就是一个「队列」，只是使用了一点巧妙的方法，使得队列中的元素全都是单调递增（或递减）的。
+You may not have heard of it, but it's nothing complicated: it's just a "queue" that uses a clever trick so that the elements inside are always monotonically increasing (or decreasing).
 
-为啥要发明「单调队列」这种结构呢，主要是为了解决下面这个场景：
+Why invent this structure? Mainly to handle the following scenario:
 
-**给你一个数组 `window`，已知其最值为 `A`，如果给 `window` 中添加一个数 `B`，那么比较一下 `A` 和 `B` 就可以立即算出新的最值；但如果要从 `window` 数组中减少一个数，就不能直接得到最值了，因为如果减少的这个数恰好是 `A`，就需要遍历 `window` 中的所有元素重新寻找新的最值**。
+**Given an array `window` whose maximum is `A`, if a number `B` is added to `window`, comparing `A` and `B` immediately yields the new max. But if a number is removed from `window`, the max isn't immediately known: if the removed number happened to be `A`, you must scan all of `window` to find a new max.**
 
-这个场景很常见，但不用单调队列似乎也可以，比如 [优先级队列（二叉堆）](https://labuladong.online/algo/data-structure-basic/binary-heap-basic/) 就是专门用来动态寻找最值的，我创建一个大（小）顶堆，不就可以很快拿到最大（小）值了吗？
+This is common, and you might think a monotonic queue isn't needed — for example, [priority queues (binary heap)](https://labuladong.online/algo/data-structure-basic/binary-heap-basic/) are designed to track the running max/min: build a max- (or min-) heap, get the top quickly.
 
-如果单纯地维护最值的话，优先级队列很专业，队头元素就是最值。但优先级队列无法满足标准队列结构「先进先出」的**时间顺序**，因为优先级队列底层利用二叉堆对元素进行动态排序，元素的出队顺序是元素的大小顺序，和入队的先后顺序完全没有关系。
+For tracking only the max/min, priority queues do the job. But they don't preserve the queue's **temporal** "first-in-first-out" order — the heap orders by value, so dequeue order is by element size, with no relation to insertion order.
 
-所以，现在需要一种新的队列结构，既能够维护队列元素「先进先出」的时间顺序，又能够正确维护队列中所有元素的最值，这就是「单调队列」结构。
+So we need a new queue structure that maintains FIFO time order while also correctly maintaining the max of all elements — the monotonic queue.
 
-「单调队列」这个数据结构主要用来辅助解决滑动窗口相关的问题，前文 [滑动窗口核心框架](https://labuladong.online/algo/essential-technique/sliding-window-framework/) 把滑动窗口算法作为双指针技巧的一部分进行了讲解，但有些稍微复杂的滑动窗口问题不能只靠两个指针来解决，需要上更先进的数据结构。
+Monotonic queues mainly help with sliding-window problems. The earlier article [Sliding Window Core Framework](https://labuladong.online/algo/essential-technique/sliding-window-framework/) treated sliding window as part of two-pointer techniques, but slightly more complex sliding-window problems can't be solved by two pointers alone — we need a more advanced data structure.
 
-比方说，你注意看前文 [滑动窗口核心框架](https://labuladong.online/algo/essential-technique/sliding-window-framework/) 讲的几道题目，每当窗口扩大（`right++`）和窗口缩小（`left++`）时，你单凭移出和移入窗口的元素即可决定是否更新答案。
+In particular, in the problems covered in [Sliding Window Core Framework](https://labuladong.online/algo/essential-technique/sliding-window-framework/), at each `right++` (window grows) and `left++` (window shrinks), you can decide the answer based solely on the element entering or leaving.
 
-但本文开头说的那个判断一个窗口中最值的例子，你无法单凭移出窗口的那个元素更新窗口的最值，除非重新遍历所有元素，但这样的话时间复杂度就上来了，这是我们不希望看到的。
+But in the maximum-of-window scenario above, you cannot update the max from the removed element alone — unless you scan everything, which raises the time complexity (we don't want this).
 
-我们来看看力扣第 239 题「滑动窗口最大值」，就是一道标准的滑动窗口问题：
+LeetCode 239 "Sliding Window Maximum" is a standard sliding-window problem:
 
-给你输入一个数组 `nums` 和一个正整数 `k`，有一个大小为 `k` 的窗口在 `nums` 上从左至右滑动，请你输出每次窗口中 `k` 个元素的最大值。
+Given an array `nums` and a positive integer `k`, a window of size `k` slides over `nums` from left to right. Output the maximum among the `k` elements at each window position.
 
-函数签名如下：
+Signature:
 
 ```java
 int[] maxSlidingWindow(int[] nums, int k);
 ```
 
-比如说力扣给出的一个示例：
+A sample from LeetCode:
 
 ```
-输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
-输出：[3,3,5,5,6,7]
-解释：
-滑动窗口的位置                最大值
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+Explanation:
+Window position                 Max
 ---------------               -----
 [1  3  -1] -3  5  3  6  7       3
  1 [3  -1  -3] 5  3  6  7       3
@@ -74,33 +74,33 @@ int[] maxSlidingWindow(int[] nums, int k);
 
 
 
-接下来，我们就借助单调队列结构，用 $O(1)$ 时间算出每个滑动窗口中的最大值，使得整个算法在线性时间完成。
+We will use a monotonic queue to compute the max of each window in $O(1)$ amortized time, giving a linear-time algorithm overall.
 
-### 一、搭建解题框架
+### 1. Solution Framework
 
-在介绍「单调队列」这种数据结构的 API 之前，先来对比一下 [普通的队列](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/) 的标准 API 和单调队列实现的 API：
+Before introducing the monotonic-queue API, compare a [standard queue](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/) with our monotonic queue:
 
 ```java
-// 普通队列的 API
+// Standard queue API
 class Queue {
-    // enqueue 操作，在队尾加入元素 n
+    // enqueue: add element n at the tail
     void push(int n);
-    // dequeue 操作，删除队头元素
+    // dequeue: remove the head element
     void pop();
 }
 
-// 单调队列的 API
+// Monotonic-queue API
 class MonotonicQueue {
-    // 在队尾添加元素 n
+    // Add element n at the tail
     void push(int n);
-    // 返回当前队列中的最大值
+    // Return the current max in the queue
     int max();
-    // 队头元素如果是 n，删除它
+    // If the head element is n, remove it
     void pop(int n);
 }
 ```
 
-当然，单调队列这几个 API 的实现方法肯定跟一般的 Queue 不一样，不过我们暂且不管，而且认为这几个操作的时间复杂度都是 O(1)，先把这道「滑动窗口」问题的解答框架搭出来：
+The implementation will differ from a regular queue, but assume for now that all these operations are O(1). First, the framework for the sliding-window problem:
 
 ```java
 int[] maxSlidingWindow(int[] nums, int k) {
@@ -109,19 +109,19 @@ int[] maxSlidingWindow(int[] nums, int k) {
     
     for (int i = 0; i < nums.length; i++) {
         if (i < k - 1) {
-            // 先把窗口的前 k - 1 填满
+            // Fill the first k - 1 window slots
             window.push(nums[i]);
         } else {
-            // 窗口开始向前滑动
-            // 移入新元素
+            // The window starts to slide
+            // Add the new element
             window.push(nums[i]);
-            // 将当前窗口中的最大元素记入结果
+            // Record the max of the current window
             res.add(window.max());
-            // 移出最后的元素
+            // Remove the oldest element
             window.pop(nums[i - k + 1]);
         }
     }
-    // 将 List 类型转化成 int[] 数组作为返回值
+    // Convert List to int[] for the return value
     int[] arr = new int[res.size()];
     for (int i = 0; i < res.size(); i++) {
         arr[i] = res.get(i);
@@ -134,23 +134,23 @@ int[] maxSlidingWindow(int[] nums, int k) {
 
 
 
-这个思路很简单吧，下面我们开始重头戏，单调队列的实现。
+The idea is simple. Now the main act: implementing the monotonic queue.
 
-### 二、实现单调队列数据结构
+### 2. Implementing the Monotonic Queue
 
-观察滑动窗口的过程就能发现，实现「单调队列」必须使用一种数据结构支持在头部和尾部进行插入和删除，很明显 [双链表](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/) 是满足这个条件的。
+Watching the sliding window in action, you can see that implementing a monotonic queue requires a structure supporting fast insert/remove at both ends — a [doubly linked list](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/) fits.
 
-「单调队列」的核心思路和「单调栈」类似，`push` 方法依然在队尾添加元素，但是要把前面比自己小的元素都删掉：
+The core idea is similar to the monotonic stack: `push` still appends at the tail, but first removes any preceding elements smaller than itself:
 
 ```java
 class MonotonicQueue {
-    // 双链表，支持快速在头部和尾部增删元素
-    // 维护其中的元素自尾部到头部单调递增
+    // Doubly linked list, fast head/tail insert/remove
+    // Maintained so elements are monotonically increasing from tail to head
     private LinkedList<Integer> maxq = new LinkedList<>();
 
-    // 在尾部添加一个元素 n，维护 maxq 的单调性质
+    // Push n at the tail, preserving the monotonic property
     public void push(int n) {
-        // 将前面小于自己的元素都删除
+        // Remove all preceding elements smaller than n
         while (!maxq.isEmpty() && maxq.getLast() < n) {
             maxq.pollLast();
         }
@@ -159,18 +159,18 @@ class MonotonicQueue {
 }
 ```
 
-你可以想象，加入数字的大小代表人的体重，体重大的会把前面体重不足的压扁，直到遇到更大的量级才停住。
+Imagine the value as the person's weight: a heavier person flattens lighter people in front until a heavier or equal one is found.
 
 ![](https://labuladong.online/algo/images/monotonic-queue/3.png)
 
-如果每个元素被加入时都这样操作，最终单调队列中的元素大小就会保持一个**单调递减**的顺序，因此我们的 `max` 方法就很好写了，只要把队头元素返回即可；`pop` 方法也是操作队头，如果队头元素是待删除元素 `n`，那么就删除它：
+If every element does this on insertion, the queue stays in **monotonically decreasing** order from head to tail. Then `max` is easy — return the head; `pop` also operates on the head: if the head equals the element to remove `n`, remove it:
 
 ```java
 class MonotonicQueue {
-    // 为了节约篇幅，省略上文给出的代码部分...
+    // Earlier code omitted for brevity...
 
     public int max() {
-        // 队头的元素肯定是最大的
+        // The head is the max
         return maxq.getFirst();
     }
 
@@ -182,22 +182,22 @@ class MonotonicQueue {
 }
 ```
 
-`pop` 方法之所以要判断 `n == maxq.getFirst()`，是因为我们想删除的队头元素 `n` 可能已经在 `push` 的过程中被「压扁」了，可能已经不存在了，这种情况就不用删除了：
+`pop` checks `n == maxq.getFirst()` because the element we want to remove may have already been "flattened away" during a `push`, so it might not be present — in that case we don't need to remove anything:
 
 ![](https://labuladong.online/algo/images/monotonic-queue/2.png)
 
-至此，单调队列设计完毕，看下完整的解题代码：
+That completes the design. Full solution:
 
 ```java
-// 单调队列的实现
+// Monotonic-queue implementation
 class MonotonicQueue {
     LinkedList<Integer> maxq = new LinkedList<>();
     public void push(int n) {
-        // 将小于 n 的元素全部删除
+        // Remove all elements smaller than n
         while (!maxq.isEmpty() && maxq.getLast() < n) {
             maxq.pollLast();
         }
-        // 然后将 n 加入尾部
+        // Then push n at the tail
         maxq.addLast(n);
     }
     
@@ -219,18 +219,18 @@ class Solution {
         
         for (int i = 0; i < nums.length; i++) {
             if (i < k - 1) {
-                // 先填满窗口的前 k - 1
+                // Fill the first k - 1 of the window
                 window.push(nums[i]);
             } else {
-                // 窗口向前滑动，加入新数字
+                // Window slides; add new number
                 window.push(nums[i]);
-                // 记录当前窗口的最大值
+                // Record the current max
                 res.add(window.max());
-                // 移出旧数字
+                // Remove the oldest number
                 window.pop(nums[i - k + 1]);
             }
         }
-        // 需要转成 int[] 数组再返回
+        // Convert to int[]
         int[] arr = new int[res.size()];
         for (int i = 0; i < res.size(); i++) {
             arr[i] = res.get(i);
@@ -240,58 +240,58 @@ class Solution {
 }
 ```
 
-有一点细节问题不要忽略，在实现 `MonotonicQueue` 时，我们使用了 Java 的 `LinkedList`，因为链表结构支持在头部和尾部快速增删元素；而在解法代码中的 `res` 则使用的 `ArrayList` 结构，因为后续会按照索引取元素，所以数组结构更合适。其他语言的实现也要注意这些细节。
+A small detail: we used Java's `LinkedList` for `MonotonicQueue` because it supports fast head/tail insert/remove; `res` uses `ArrayList` because we later index into it, where arrays are better. Implementations in other languages should pay attention to the same details.
 
-关于单调队列 API 的时间复杂度，读者可能有疑惑：`push` 操作中含有 while 循环，最坏情况下的时间复杂度应该 $O(N)$ 呀，再加上一层 for 循环，本算法的时间复杂度应该是 $O(N^2)$ 才对吧？
+You may wonder about complexity: `push` contains a `while` loop, with worst case $O(N)$. With the outer `for`, doesn't this make it $O(N^2)$?
 
-这里就用到了 [算法时空复杂度分析指南](https://labuladong.online/algo/essential-technique/complexity-analysis/) 中讲到的摊还分析：
+This is an amortized analysis (see [Practical Time/Space Complexity Analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/)):
 
-单独看 `push` 操作，最坏时间复杂度确实是 $O(N)$，但是平均时间复杂度是 $O(1)$。我们一般用平均复杂度而不是最坏时间复杂度来衡量 API 接口，所以这个算法整体的时间复杂度是 $O(N)$，而不是 $O(N^2)$。
+A single `push` is $O(N)$ in the worst case but $O(1)$ on average. We typically use average complexity to characterize APIs, so the algorithm is $O(N)$, not $O(N^2)$.
 
-也可以这样从整体上分析：整个算法做的事情就是把 `nums` 中的每个元素加入和移出 `window` **至多一次**，不可能把同一个元素多次移入移出 `window`，所以整体的时间复杂度是 $O(N)$。
+You can also analyze it holistically: the algorithm pushes and pops each element of `nums` **at most once**. No element enters/leaves the window more than once, so the total work is $O(N)$.
 
-空间复杂度很容易分析，就是窗口的大小 $O(k)$。
-
-
+Space complexity is the window size, $O(k)$.
 
 
 
 
 
-### 拓展延伸
 
-最后，我提出几个问题请大家思考：
 
-1、本文给出的 `MonotonicQueue` 类只实现了 `max` 方法，你是否能够再额外添加一个 `min` 方法，在 $O(1)$ 的时间返回队列中所有元素的最小值？
+### Extensions
 
-2、本文给出的 `MonotonicQueue` 类的 `pop` 方法还需要接收一个参数，这不那么优雅，而且有悖于标准队列的 API，请你修复这个缺陷。
+Some questions to ponder:
 
-3、请你实现 `MonotonicQueue` 类的 `size` 方法，返回单调队列中元素的个数（注意，由于每次 `push` 方法都可能从底层的 `q` 列表中删除元素，所以 `q` 中的元素个数并不是单调队列的元素个数）。
+1. The `MonotonicQueue` here only implements `max`. Can you add a `min` method that returns the min of all elements in the queue in $O(1)$ time?
 
-也就是说，你是否能够实现单调队列的通用实现：
+2. The `pop` method requires a parameter, which is inelegant and inconsistent with the standard queue API. Fix this defect.
+
+3. Implement `size`, returning the count of elements in the monotonic queue (note: each `push` may delete elements from the underlying `q`, so the size of `q` is not the size of the monotonic queue).
+
+That is, can you implement a general-purpose monotonic queue:
 
 ```java
-// 单调队列的通用实现，可以高效维护最大值和最小值
+// General-purpose monotonic queue, efficient max and min
 class MonotonicQueue<E extends Comparable<E>> {
 
-    // 标准队列 API，向队尾加入元素
+    // Standard queue API: enqueue at the tail
     public void push(E elem);
 
-    // 标准队列 API，从队头弹出元素，符合先进先出的顺序
+    // Standard queue API: dequeue from the head, FIFO
     public E pop();
 
-    // 标准队列 API，返回队列中的元素个数
+    // Standard queue API: return number of elements
     public int size();
 
-    // 单调队列特有 API，O(1) 时间计算队列中元素的最大值
+    // Monotonic-queue API: max in O(1)
     public E max();
 
-    // 单调队列特有 API，O(1) 时间计算队列中元素的最小值
+    // Monotonic-queue API: min in O(1)
     public E min();
 }
 ```
 
-我将在 [单调队列通用实现及应用](https://labuladong.online/algo/problem-set/monotonic-queue/) 中给出单调队列的通用实现和经典习题。更多数据结构设计类题目参见 [数据结构设计经典习题](https://labuladong.online/algo/problem-set/ds-design/)。
+I'll provide a general-purpose implementation and classic problems in [General-Purpose Monotonic Queue and Applications](https://labuladong.online/algo/problem-set/monotonic-queue/). For more data-structure-design problems, see [Classic Data-Structure Design Problems](https://labuladong.online/algo/problem-set/ds-design/).
 
 
 
@@ -301,10 +301,10 @@ class MonotonicQueue<E extends Comparable<E>> {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】单调队列的通用实现及经典习题](https://labuladong.online/algo/problem-set/monotonic-queue/)
- - [算法时空复杂度分析实用指南](https://labuladong.online/algo/essential-technique/complexity-analysis/)
+ - [[Practice] General-Purpose Monotonic Queue and Classic Problems](https://labuladong.online/algo/problem-set/monotonic-queue/)
+ - [Practical Guide to Time/Space Complexity Analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/)
 
 </details><hr>
 
@@ -313,17 +313,17 @@ class MonotonicQueue<E extends Comparable<E>> {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1425. Constrained Subsequence Sum](https://leetcode.com/problems/constrained-subsequence-sum/?show=1) | [1425. 带限制的子序列和](https://leetcode.cn/problems/constrained-subsequence-sum/?show=1) | 🔴 |
-| [1696. Jump Game VI](https://leetcode.com/problems/jump-game-vi/?show=1) | [1696. 跳跃游戏 VI](https://leetcode.cn/problems/jump-game-vi/?show=1) | 🟠 |
-| [862. Shortest Subarray with Sum at Least K](https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/?show=1) | [862. 和至少为 K 的最短子数组](https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/?show=1) | 🔴 |
-| [918. Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/?show=1) | [918. 环形子数组的最大和](https://leetcode.cn/problems/maximum-sum-circular-subarray/?show=1) | 🟠 |
-| - | [剑指 Offer 59 - I. 滑动窗口的最大值](https://leetcode.cn/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/?show=1) | 🔴 |
+| [1425. Constrained Subsequence Sum](https://leetcode.com/problems/constrained-subsequence-sum/?show=1) | [1425. Constrained Subsequence Sum](https://leetcode.cn/problems/constrained-subsequence-sum/?show=1) | 🔴 |
+| [1696. Jump Game VI](https://leetcode.com/problems/jump-game-vi/?show=1) | [1696. Jump Game VI](https://leetcode.cn/problems/jump-game-vi/?show=1) | 🟠 |
+| [862. Shortest Subarray with Sum at Least K](https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/?show=1) | [862. Shortest Subarray with Sum at Least K](https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/?show=1) | 🔴 |
+| [918. Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/?show=1) | [918. Maximum Sum Circular Subarray](https://leetcode.cn/problems/maximum-sum-circular-subarray/?show=1) | 🟠 |
+| - | [Sword to Offer 59 - I. Sliding Window Maximum](https://leetcode.cn/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/?show=1) | 🔴 |
 
 </details>
 <hr>

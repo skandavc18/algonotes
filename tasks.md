@@ -24,9 +24,9 @@ Decisions:
 
 ## Phase 3 — Translate contents folder-by-folder
 - [x] `dynamic-programming/` (17 files done)
-- [ ] `data-structures/` (~15 files)
-- [ ] `algorithmic-thinking/` (~17 files)
-- [ ] `interview-frequent/` (~17 files)
+- [x] `data-structures/` (~15 files)
+- [x] `algorithmic-thinking/` (~17 files)
+- [x] `interview-frequent/` (~17 files)
 - [x] `tech/` (7 files done)
 - [x] `multi-language-solutions/solution_code.md` (translated above)
 

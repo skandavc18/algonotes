@@ -1,7 +1,7 @@
-# 数据结构系列
+# Data Structures Series
 
-这一章主要是一些特殊的数据结构设计，比如单调栈解决 Next Greater Number，单调队列解决滑动窗口问题；还有常用数据结构的操作，比如链表、树、二叉堆。
+This chapter is mainly about some special data-structure designs — for example, using a monotonic stack to solve Next Greater Number, and a monotonic queue to solve the sliding-window problem — as well as operations on common data structures such as linked lists, trees, and binary heaps.
 
-欢迎关注我的公众号 labuladong，查看全部文章：
+Follow my public account `labuladong` to read all articles:
 
-![labuladong二维码](../pictures/qrcode.jpg)
+![labuladong QR code](../pictures/qrcode.jpg)

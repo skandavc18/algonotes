@@ -1,57 +1,55 @@
-# 回溯算法实践：集合划分
+# Backtracking in Practice: Set Partitioning
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [698. Partition to K Equal Sum Subsets](https://leetcode.com/problems/partition-to-k-equal-sum-subsets/) | [698. 划分为k个相等的子集](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/) | 🟠 |
+| [698. Partition to K Equal Sum Subsets](https://leetcode.com/problems/partition-to-k-equal-sum-subsets/) | [698. Partition to K Equal Sum Subsets](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [多叉树结构及遍历框架](https://labuladong.online/algo/data-structure-basic/n-ary-tree-traverse-basic/)
-> - [二叉树系列算法（纲领篇）](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
-> - [回溯算法框架套路](https://labuladong.online/algo/essential-technique/backtrack-framework/)
-> - [球盒模型：回溯算法的两种穷举视角](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/)
+> - [N-ary Tree Structure and Traversal Framework](https://labuladong.online/algo/data-structure-basic/n-ary-tree-traverse-basic/)
+> - [Binary Tree Algorithm Outline](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
+> - [Backtracking Framework](https://labuladong.online/algo/essential-technique/backtrack-framework/)
+> - [Box-and-Ball Model: Two Backtracking Perspectives](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/)
 
 
-我之前说过回溯算法是笔试中最好用的算法，只要你没什么思路，就用回溯算法暴力求解，即便不能通过所有测试用例，多少能过一点。回溯算法的技巧也不算难，就是穷举一棵决策树的过程，只要在递归之前「做选择」，在递归之后「撤销选择」就行了。
+I've said before: backtracking is the best algorithm in tests — when stuck, brute-force with backtracking. Even if it doesn't pass all tests, it gets some. The technique is simple — enumerate a decision tree by "making a choice" before recursion and "undoing" after.
 
-**但是，就算暴力穷举，不同的思路也有优劣之分**。本文就来看一道非常经典的回溯算法问题，力扣第 698 题「划分为k个相等的子集」。这道题可以帮你更深刻理解回溯算法的思维，得心应手地写出回溯函数。
+**But brute-force enumeration has good and bad versions.** Here's a classic backtracking problem — LeetCode 698 "Partition to K Equal Sum Subsets" — that helps you internalize backtracking thinking and write recursion fluently.
 
-题目非常简单：
+The problem:
 
-给你输入一个数组 `nums` 和一个正整数 `k`，请你判断 `nums` 是否能够被平分为元素和相同的 `k` 个子集。
-
-函数签名如下：
+Given `nums` and a positive integer `k`, decide if `nums` can be partitioned into `k` subsets of equal sum.
 
 ```java
 boolean canPartitionKSubsets(int[] nums, int k);
 ```
 
 > [!NOTE]
-> 我们之前 [背包问题之子集划分](https://labuladong.online/algo/dynamic-programming/knapsack2/) 写过一次子集划分问题，不过那道题只需要我们把集合划分成两个相等的集合，可以转化成背包问题用动态规划技巧解决。
+> We did the partition-into-2 case in [Knapsack: Subset Partition](https://labuladong.online/algo/dynamic-programming/knapsack2/), reducing it to a knapsack problem solvable by DP.
 > 
-> 为什么划分成两个相等的子集可以转化成背包问题用动态规划思路解决，而划分成 `k` 个相等的子集就不可以转化成背包问题，只能用回溯算法暴力穷举？请先尝试自己思考。
+> Why does the 2-subset case reduce to knapsack but the k-subset case doesn't, requiring backtracking? Try thinking before reading.
 
 > [!NOTE]
-> 为什么划分两个相等的子集可以转化成背包问题？
+> Why does the 2-subset case reduce to knapsack?
 > 
-> [背包问题之子集划分](https://labuladong.online/algo/dynamic-programming/knapsack2/) 的场景中，有一个背包和若干物品，每个物品有**两个选择**，分别是「装进背包」和「不装进背包」。把原集合 `S` 划分成两个相等子集 `S_1, S_2` 的场景下，`S` 中的每个元素也有**两个选择**，分别是「装进 `S_1`」和「不装进 `S_1`（装进 `S_2`）」，这时候的穷举思路其实和背包问题相同。
+> In [Knapsack: Subset Partition](https://labuladong.online/algo/dynamic-programming/knapsack2/), each item has **two choices**: include or exclude. Partitioning `S` into two equal subsets `S_1, S_2`: each element has **two choices** — go to `S_1` or `S_2`. Same as knapsack.
 > 
-> 但如果你想把 `S` 划分成 `k` 个相等的子集，相当于 `S` 中的每个元素有 **`k` 个选择**，这和标准背包问题的场景有本质区别，是无法套用背包问题的解题思路的。
+> But for `k` equal subsets, each element has **`k` choices**, fundamentally different from standard knapsack — you can't reduce.
 
 
 
@@ -59,37 +57,29 @@ boolean canPartitionKSubsets(int[] nums, int k);
 
 
 
-## 题目思路
+## Approach
 
-回到正题，这道算法题让我们求子集划分，子集问题和排列组合问题有所区别，但我们可以借鉴「球盒模型」的抽象，用两种不同的视角来解决这道子集划分问题。
+Subsets differ from permutations/combinations, but we can borrow the "box-and-ball model" abstraction with two perspectives.
 
-把装有 `n` 个数字的数组 `nums` 分成 `k` 个和相同的集合，你可以想象将 `n` 个数字分配到 `k` 个「桶」里，最后这 `k` 个「桶」里的数字之和要相同。
+Distribute `n` numbers into `k` "buckets" so each bucket has the same sum.
 
-前文 [用球盒模型理解回溯算法](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/) 说过，回溯算法的关键在哪里？
+The key in [Two Backtracking Perspectives](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/) is: how do we "make a choice" so recursion can enumerate?
 
-关键是要知道怎么「做选择」，这样才能利用递归函数进行穷举。
+By analogy with the permutation derivation, two perspectives:
 
-那么模仿排列公式的推导思路，将 `n` 个数字分配到 `k` 个桶里，我们也可以有两种视角：
-
-**视角一，如果我们切换到这 `n` 个数字的视角，每个数字都要选择进入到 `k` 个桶中的某一个**。
+**Perspective 1: switching to the `n` numbers' perspective — each number chooses one of the `k` buckets.**
 
 ![](https://labuladong.online/algo/images/set-split/5.jpeg)
 
-**视角二，如果我们切换到这 `k` 个桶的视角，对于每个桶，都要遍历 `nums` 中的 `n` 个数字，然后选择是否将当前遍历到的数字装进自己这个桶里**。
+**Perspective 2: switching to the `k` buckets' perspective — each bucket scans `nums`'s `n` numbers and decides whether to include each.**
 
 ![](https://labuladong.online/algo/images/set-split/6.jpeg)
 
-你可能问，这两种视角有什么不同？
+Why do they differ? Same reason as before — different perspectives produce identical results but different code logic and complexities. Pick the cheaper one.
 
-和前面讲的排列子集类似，用不同的视角进行穷举，虽然结果相同，但是解法代码的逻辑不同，具体的代码实现也不同，可能产生不同的时间、空间复杂度。我们需要选择复杂度更低的解法。
+## Numbers' Perspective
 
-## 以数字的视角
-
-用 for 循环迭代遍历 `nums` 数组大家肯定都会：
-
-
-
-
+Iterating `nums` with for is straightforward:
 
 ```java
 for (int index = 0; index < nums.length; index++) {
@@ -97,13 +87,7 @@ for (int index = 0; index < nums.length; index++) {
 }
 ```
 
-
-
-递归遍历数组你会不会？其实也很简单：
-
-
-
-
+Recursive equivalent:
 
 ```java
 void traverse(int[] nums, int index) {
@@ -115,113 +99,111 @@ void traverse(int[] nums, int index) {
 }
 ```
 
+`traverse(nums, 0)` is equivalent to the for loop.
 
-
-只要调用 `traverse(nums, 0)`，和 for 循环的效果是完全一样的。
-
-那么回到这道题，以数字的视角，选择 `k` 个桶，用 for 循环写出来是下面这样：
+For our problem, from the numbers' view, choose among `k` buckets. With for:
 
 ```java
-// k 个桶（集合），记录每个桶装的数字之和
+// k buckets — each bucket's running sum
 int[] bucket = new int[k];
 
-// 穷举 nums 中的每个数字
+// Enumerate each number in nums
 for (int index = 0; index < nums.length; index++) {
-    // 穷举每个桶
+    // Enumerate each bucket
     for (int i = 0; i < k; i++) {
-        // nums[index] 选择是否要进入第 i 个桶
+        // nums[index] decides whether to enter bucket i
         // ...
     }
 }
 ```
 
-如果改成递归的形式，就是下面这段代码逻辑：
+In recursive form:
 
 ```java
-// k 个桶（集合），记录每个桶装的数字之和
+// k buckets — each bucket's running sum
 int[] bucket = new int[k];
 
-// 穷举 nums 中的每个数字
+// Recurse over numbers in nums
 void backtrack(int[] nums, int index) {
     // base case
     if (index == nums.length) {
         return;
     }
-    // 穷举每个桶
+    // Enumerate each bucket
     for (int i = 0; i < bucket.length; i++) {
-        // 选择装进第 i 个桶
+        // Choice: place into bucket i
         bucket[i] += nums[index];
-        // 递归穷举下一个数字的选择
+        // Recurse for the next number
         backtrack(nums, index + 1);
-        // 撤销选择
+        // Undo
         bucket[i] -= nums[index];
     }
 }
 ```
 
-虽然上述代码仅仅是穷举逻辑，还不能解决我们的问题，但是只要略加完善即可：
+Just enumeration; flesh it out:
 
 ```java
 class Solution {
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        // 排除一些基本情况
+        // Quick checks
         if (k > nums.length) return false;
         int sum = 0;
         for (int v : nums) sum += v;
         if (sum % k != 0) return false;
 
-        // k 个桶（集合），记录每个桶装的数字之和
+        // k buckets — each bucket's running sum
         int[] bucket = new int[k];
-        // 理论上每个桶（集合）中数字的和
+        // Each bucket's target sum
         int target = sum / k;
-        // 穷举，看看 nums 是否能划分成 k 个和为 target 的子集
+        // Enumerate; can nums be split into k subsets each summing to target?
         return backtrack(nums, 0, bucket, target);
     }
 
-    // 递归穷举 nums 中的每个数字
+    // Recurse over each number in nums
     boolean backtrack(
         int[] nums, int index, int[] bucket, int target) {
 
         if (index == nums.length) {
-            // 检查所有桶的数字之和是否都是 target
+            // Check whether all buckets equal target
             for (int i = 0; i < bucket.length; i++) {
                 if (bucket[i] != target) {
                     return false;
                 }
             }
-            // nums 成功平分成 k 个子集
+            // nums was partitioned into k equal subsets
             return true;
         }
         
-        // 穷举 nums[index] 可能装入的桶
+        // Enumerate which bucket nums[index] goes into
         for (int i = 0; i < bucket.length; i++) {
-            // 剪枝，桶装装满了
+            // Prune: would overflow this bucket
             if (bucket[i] + nums[index] > target) {
                 continue;
             }
-            // 将 nums[index] 装入 bucket[i]
+            // Place nums[index] into bucket i
             bucket[i] += nums[index];
-            // 递归穷举下一个数字的选择
+            // Recurse for the next number
             if (backtrack(nums, index + 1, bucket, target)) {
                 return true;
             }
-            // 撤销选择
+            // Undo
             bucket[i] -= nums[index];
         }
 
-        // nums[index] 装入哪个桶都不行
+        // No bucket works
         return false;
     }
 }
 ```
 
-有之前的铺垫，相信这段代码是比较容易理解的，其实我们可以再做一个优化。
+Easy to follow. We can optimize.
 
-主要看 `backtrack` 函数的递归部分：
+Look at the recursive section:
 
 ```java
 for (int i = 0; i < bucket.length; i++) {
-    // 剪枝
+    // Pruning
     if (bucket[i] + nums[index] > target) {
         continue;
     }
@@ -232,21 +214,19 @@ for (int i = 0; i < bucket.length; i++) {
 }
 ```
 
-**如果我们让尽可能多的情况命中剪枝的那个 if 分支，就可以减少递归调用的次数，一定程度上减少时间复杂度**。
+**The more often the pruning branch fires, the fewer recursive calls, the better the time.**
 
-如何尽可能多的命中这个 if 分支呢？要知道我们的 `index` 参数是从 0 开始递增的，也就是递归地从 0 开始遍历 `nums` 数组。
+How? `index` walks `nums` from 0 in order. Sort `nums` in descending order so larger numbers go first; later numbers are more likely to overflow — pruning more often.
 
-如果我们提前对 `nums` 数组排序，把大的数字排在前面，那么大的数字会先被分配到 `bucket` 中，对于之后的数字，`bucket[i] + nums[index]` 会更大，更容易触发剪枝的 if 条件。
-
-所以可以在之前的代码中再添加一些代码：
+Add code:
 
 ```java
 boolean canPartitionKSubsets(int[] nums, int k) {
-    // 其他代码不变
+    // Same as before
     // ...
-    // 降序排序 nums 数组
+    // Sort nums in descending order
     Arrays.sort(nums);
-    // 翻转数组，得到降序数组
+    // Reverse to get descending
     for (i = 0, j = nums.length - 1; i < j; i++, j--) {
         int temp = nums[i];
         nums[i] = nums[j];
@@ -257,26 +237,26 @@ boolean canPartitionKSubsets(int[] nums, int k) {
 }
 ```
 
-这个解法可以得到正确答案，但耗时比较多，已经无法通过所有测试用例了，接下来看看另一种视角的解法。
+Correct, but slow — won't pass all tests. Let's try the other perspective.
 
-## 以桶的视角
+## Buckets' Perspective
 
-文章开头说了，**以桶的视角进行穷举，每个桶需要遍历 `nums` 中的所有数字，决定是否把当前数字装进桶中；当装满一个桶之后，还要装下一个桶，直到所有桶都装满为止**。
+As stated, **from the bucket's view, each bucket scans every `nums` element to decide whether to include; once a bucket is full, move on; until all are full**.
 
-这个思路可以用下面这段代码表示出来：
+Sketch:
 
 ```java
-// 装满所有桶为止
+// Until all k buckets are filled
 while (k > 0) {
-    // 记录当前桶中的数字之和
+    // This bucket's running sum
     int bucket = 0;
     for (int i = 0; i < nums.length; i++) {
-        // 决定是否将 nums[i] 放入当前桶中
+        // Decide whether to add nums[i]
         if (canAdd(bucket, num[i])) {
             bucket += nums[i];
         }
         if (bucket == target) {
-            // 装满了一个桶，装下一个桶
+            // Filled; next bucket
             k--;
             break;
         }
@@ -284,24 +264,24 @@ while (k > 0) {
 }
 ```
 
-那么我们也可以把这个 while 循环改写成递归函数，不过比刚才略微复杂一些，首先写一个 `backtrack` 递归函数出来：
+Convert to recursion. First the signature:
 
 ```java
 boolean backtrack(int k, int bucket, int[] nums, int start, boolean[] used, int target);
 ```
 
-不要被这么多参数吓到，我会一个个解释这些参数。如果你够透彻理解了前文 [用球盒模型理解回溯算法](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/)，也能得心应手地写出这样的回溯函数。
+A lot of parameters but manageable. With [Two Backtracking Perspectives](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/) understood, this should be doable.
 
-这个 `backtrack` 函数的参数可以这样解释：
+The parameters:
 
-现在 `k` 号桶正在思考是否应该把 `nums[start]` 这个元素装进来；目前 `k` 号桶里面已经装的数字之和为 `bucket`；`used` 标志某一个元素是否已经被装到桶中；`target` 是每个桶需要达成的目标和。
+Bucket `k` is currently deciding whether to add `nums[start]`; bucket `k`'s current sum is `bucket`; `used[i]` indicates whether `nums[i]` is used; `target` is each bucket's target.
 
-根据这个函数定义，可以这样调用 `backtrack` 函数：
+Initial call:
 
 ```java
 class Solution {
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        // 排除一些基本情况
+        // Quick checks
         if (k > nums.length) return false;
         int sum = 0;
         for (int v : nums) sum += v;
@@ -309,116 +289,108 @@ class Solution {
         
         boolean[] used = new boolean[nums.length];
         int target = sum / k;
-        // k 号桶初始什么都没装，从 nums[0] 开始做选择
+        // Bucket k is empty initially; start with nums[0]
         return backtrack(k, 0, nums, 0, used, target);
     }
 }
 ```
 
-实现 `backtrack` 函数的逻辑之前，再重复一遍，从桶的视角：
+Bucket-perspective logic:
 
-1、需要遍历 `nums` 中所有数字，决定哪些数字需要装到当前桶中。
+1. Iterate `nums`; decide which to add.
 
-2、如果当前桶装满了（桶内数字和达到 `target`），则让下一个桶开始执行第 1 步。
-
-下面的代码就实现了这个逻辑：
+2. If full (sum reaches `target`), move to the next bucket.
 
 ```java
 class Solution {
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        // 见上文
+        // See above
     }
 
     boolean backtrack(int k, int bucket, 
         int[] nums, int start, boolean[] used, int target) {
         // base case
         if (k == 0) {
-            // 所有桶都被装满了，而且 nums 一定全部用完了
-            // 因为 target == sum / k
+            // All buckets full; nums must be fully used
+            // because target == sum / k
             return true;
         }
         if (bucket == target) {
-            // 装满了当前桶，递归穷举下一个桶的选择
-            // 让下一个桶从 nums[0] 开始选数字
+            // Current bucket is full; recurse on next bucket
+            // Start the next bucket from nums[0]
             return backtrack(k - 1, 0 ,nums, 0, used, target);
         }
 
-        // 从 start 开始向后探查有效的 nums[i] 装入当前桶
+        // Probe nums[i] from `start` onward to add to current bucket
         for (int i = start; i < nums.length; i++) {
-            // 剪枝
+            // Prune
             if (used[i]) {
-                // nums[i] 已经被装入别的桶中
+                // Used elsewhere
                 continue;
             }
             if (nums[i] + bucket > target) {
-                // 当前桶装不下 nums[i]
+                // Would overflow this bucket
                 continue;
             }
-            // 做选择，将 nums[i] 装入当前桶中
+            // Choice: place nums[i] into current bucket
             used[i] = true;
             bucket += nums[i];
-            // 递归穷举下一个数字是否装入当前桶
+            // Recurse on the next number
             if (backtrack(k, bucket, nums, i + 1, used, target)) {
                 return true;
             }
-            // 撤销选择
+            // Undo
             used[i] = false;
             bucket -= nums[i];
         }
-        // 穷举了所有数字，都无法装满当前桶
+        // None worked
         return false;
     }
 }
 ```
 
-**这段代码是可以得出正确答案的，但是效率很低，我们可以思考一下是否还有优化的空间**。
+**Correct but slow — room to optimize.**
 
-首先，在这个解法中每个桶都可以认为是没有差异的，但是我们的回溯算法却会对它们区别对待，这里就会出现重复计算的情况。
+Buckets are interchangeable, but our algorithm treats them as distinct, leading to redundant work.
 
-什么意思呢？我们的回溯算法，说到底就是穷举所有可能的组合，然后看是否能找出和为 `target` 的 `k` 个桶（子集）。
+The algorithm enumerates combinations to find `k` buckets summing to `target`.
 
-那么，比如下面这种情况，`target = 5`，算法会在第一个桶里面装 `1, 4`：
+E.g. `target = 5`. Bucket 1 might contain `{1, 4}`:
 
 ![](https://labuladong.online/algo/images/set-split/1.jpeg)
 
-现在第一个桶装满了，就开始装第二个桶，算法会装入 `2, 3`：
+Bucket 2 starts; `{2, 3}` is added:
 
 ![](https://labuladong.online/algo/images/set-split/2.jpeg)
 
-然后以此类推，对后面的元素进行穷举，凑出若干个和为 5 的桶（子集）。
+And so on for the rest, trying to form buckets of sum 5.
 
-但问题是，如果最后发现无法凑出和为 `target` 的 `k` 个子集，算法会怎么做？
-
-回溯算法会回溯到第一个桶，重新开始穷举，现在它知道第一个桶里装 `1, 4` 是不可行的，它会尝试把 `2, 3` 装到第一个桶里：
+If it fails, the algorithm backtracks; trying `{2, 3}` for bucket 1:
 
 ![](https://labuladong.online/algo/images/set-split/3.jpeg)
 
-现在第一个桶装满了，就开始装第二个桶，算法会装入 `1, 4`：
+Bucket 2 then takes `{1, 4}`:
 
 ![](https://labuladong.online/algo/images/set-split/4.jpeg)
 
-好，到这里你应该看出来问题了，这种情况其实和之前的那种情况是一样的。也就是说，到这里你其实已经知道不需要再穷举了，必然凑不出来和为 `target` 的 `k` 个子集。
+You see — same situation as before. Useless work.
 
-但我们的算法还是会傻乎乎地继续穷举，因为在她看来，第一个桶和第二个桶里面装的元素不一样，那这就是两种不一样的情况呀。
+The algorithm doesn't notice because it treats the buckets as distinct.
 
-那么我们怎么让算法的智商提高，识别出这种情况，避免冗余计算呢？
+Both states share the same `used` array, which we can treat as the "state" of the recursion.
 
-你注意这两种情况的 `used` 数组肯定长得一样，所以 `used` 数组可以认为是回溯过程中的「状态」。
+**So memoize: when filling a bucket, record `used`. If we've seen this state, return the cached result.**
 
-**所以，我们可以用一个 `memo` 备忘录，在装满一个桶时记录当前 `used` 的状态，如果当前 `used` 的状态是曾经出现过的，那就不用再继续穷举，从而起到剪枝避免冗余计算的作用**。
-
-有读者肯定会问，`used` 是一个布尔数组，怎么作为键进行存储呢？这其实是小问题，比如我们可以把数组转化成字符串，这样就可以作为哈希表的键进行存储了。
-
-看下代码实现，只要稍微改一下 `backtrack` 函数即可：
+Booleans aren't naturally hashable; convert the array to a string.
 
 ```java
 class Solution {
 
-    // 备忘录，存储 used 数组的状态
+    // Memo of used states
     HashMap<String, Boolean> memo = new HashMap<>();
 
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        // 见上文
+        // See above
     }
 
     boolean backtrack(int k, int bucket, int[] nums, int start, boolean[] used, int target) {        
@@ -426,53 +398,52 @@ class Solution {
         if (k == 0) {
             return true;
         }
-        // 将 used 的状态转化成形如 [true, false, ...] 的字符串
-        // 便于存入 HashMap
+        // Convert used to a string like [true, false, ...]
         String state = Arrays.toString(used);
 
         if (bucket == target) {
-            // 装满了当前桶，递归穷举下一个桶的选择
+            // Full; recurse on next bucket
             boolean res = backtrack(k - 1, 0, nums, 0, used, target);
-            // 将当前状态和结果存入备忘录
+            // Cache
             memo.put(state, res);
             return res;
         }
         
         if (memo.containsKey(state)) {
-            // 如果当前状态曾今计算过，就直接返回，不要再递归穷举了
+            // Already computed; return
             return memo.get(state);
         }
 
-        // 其他逻辑不变...
+        // Same as before...
     }
 }
 ```
 
-这样提交解法，发现执行效率依然比较低，这次不是因为算法逻辑上的冗余计算，而是代码实现上的问题。
+Still slow — not algorithmic redundancy now but implementation overhead.
 
-**因为每次递归都要把 `used` 数组转化成字符串，这对于编程语言来说也是一个不小的消耗，所以我们还可以进一步优化**。
+**Converting `used` to a string each call is costly. Optimize further.**
 
-注意题目给的数据规模 `nums.length <= 16`，也就是说 `used` 数组最多也不会超过 16，那么我们完全可以用「位图」的技巧，用一个 int 类型的 `used` 变量来替代 `used` 数组。
+`nums.length <= 16` per the constraints; use a "bitmap" — an `int` `used` instead of a boolean array.
 
-具体来说，我们可以用整数 `used` 的第 `i` 位（`(used >> i) & 1`）的 1/0 来表示 `used[i]` 的 true/false。
+The `i`-th bit (`(used >> i) & 1`) being 1/0 represents `used[i]`'s true/false.
 
-这样一来，不仅节约了空间，而且整数 `used` 也可以直接作为键存入 HashMap，省去数组转字符串的消耗。
+Saves space, and `int` keys hash directly without string conversion.
 
-看下最终的解法代码：
+Final code:
 
 ```java
 class Solution {
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        // 排除一些基本情况
+        // Quick checks
         if (k > nums.length) return false;
         int sum = 0;
         for (int v : nums) sum += v;
         if (sum % k != 0) return false;
         
-        // 使用位图技巧
+        // Bitmap trick
         int used = 0;
         int target = sum / k;
-        // k 号桶初始什么都没装，从 nums[0] 开始做选择
+        // Bucket k empty initially; start with nums[0]
         return backtrack(k, 0, nums, 0, used, target);
     }
 
@@ -482,43 +453,43 @@ class Solution {
                     int[] nums, int start, int used, int target) {        
         // base case
         if (k == 0) {
-            // 所有桶都被装满了，而且 nums 一定全部用完了
+            // All buckets full; nums must be fully used
             return true;
         }
         if (bucket == target) {
-            // 装满了当前桶，递归穷举下一个桶的选择
-            // 让下一个桶从 nums[0] 开始选数字
+            // Current bucket full; recurse on next
+            // Next bucket starts from nums[0]
             boolean res = backtrack(k - 1, 0, nums, 0, used, target);
-            // 缓存结果
+            // Cache
             memo.put(used, res);
             return res;
         }
         
         if (memo.containsKey(used)) {
-            // 避免冗余计算
+            // Avoid redundant work
             return memo.get(used);
         }
 
         for (int i = start; i < nums.length; i++) {
-            // 剪枝
-            // 判断第 i 位是否是 1
+            // Prune
+            // Is bit i set?
             if (((used >> i) & 1) == 1) {
-                // nums[i] 已经被装入别的桶中
+                // Used elsewhere
                 continue;
             }
             if (nums[i] + bucket > target) {
                 continue;
             }
-            // 做选择
-            // 将第 i 位置为 1
+            // Choice
+            // Set bit i to 1
             used |= 1 << i;
             bucket += nums[i];
-            // 递归穷举下一个数字是否装入当前桶
+            // Recurse on the next number
             if (backtrack(k, bucket, nums, i + 1, used, target)) {
                 return true;
             }
-            // 撤销选择
-            // 使用异或运算将第 i 位恢复 0
+            // Undo
+            // Use XOR to clear bit i
             used ^= 1 << i;
             bucket -= nums[i];
         }
@@ -533,7 +504,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/partition-to-k-equal-sum-subsets/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Animated Code Visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -541,25 +512,25 @@ class Solution {
 
 
 
-至此，这道题的第二种思路也完成了。
+That's the second approach.
 
-## 最后总结
+## Wrap-Up
 
-本文写的这两种思路都可以算出正确答案，不过第一种解法即便经过了排序优化，也明显比第二种解法慢很多，这是为什么呢？
+Both approaches are correct, but the first — even with sorting — is much slower than the second. Why?
 
-我们来分析一下这两个算法的时间复杂度，假设 `nums` 中的元素个数为 `n`。
+Let `n = nums.length`.
 
-先说第一个解法，也就是从数字的角度进行穷举，`n` 个数字，每个数字有 `k` 个桶可供选择，所以组合出的结果个数为 `k^n`，时间复杂度也就是 $O(k^n)$。
+The first approach (numbers' view): `n` numbers, each picks one of `k` buckets, so `k^n` combinations — $O(k^n)$.
 
-第二个解法，每个桶要遍历 `n` 个数字，对每个数字有「装入」或「不装入」两种选择，所以组合的结果有 `2^n` 种；而我们有 `k` 个桶，所以总的时间复杂度为 $O(k*2^n)$。
+The second (buckets' view): each bucket scans `n` numbers, each with two choices (include/exclude), so `2^n` per bucket; with `k` buckets, $O(k \cdot 2^n)$ in the worst case.
 
-**当然，这是对最坏复杂度上界的粗略估算，实际的复杂度肯定要好很多，毕竟我们添加了这么多剪枝逻辑**。不过，从复杂度的上界已经可以看出第一种思路要慢很多了。
+**These are loose worst-case upper bounds; the pruning helps a lot.** Still, the first is asymptotically much worse.
 
-所以，谁说回溯算法没有技巧性的？虽然回溯算法就是暴力穷举，但穷举也分聪明的穷举方式和低效的穷举方式，关键看你以谁的「视角」进行穷举。
+So who said backtracking has no technique? Even brute-force has smart and dumb versions — depending on whose perspective you enumerate from.
 
-通俗来说，我们应该尽量「少量多次」，就是说宁可多做几次选择（乘法关系），也不要给太大的选择空间（指数关系）；做 `n` 次「`k` 选一」仅重复一次（$O(k^n)$），比 `n` 次「二选一」重复 `k` 次（$O(k*2^n)$）效率低很多。
+In other words, prefer "many small choices" (multiplication) to "few huge ones" (exponentiation): `n` rounds of "k-out-of-1" repeated once ($O(k^n)$) is far worse than `n` rounds of "2-out-of-1" repeated `k` times ($O(k \cdot 2^n)$).
 
-好了，这道题我们从两种视角进行穷举，虽然代码量看起来多，但核心逻辑都是类似的，相信你通过本文能够更深刻地理解回溯算法。
+The two perspectives, similar code, but very different efficiency. Hopefully this article cements your backtracking intuition.
 
 
 
@@ -569,10 +540,10 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】回溯算法经典习题 I](https://labuladong.online/algo/problem-set/backtrack-i/)
- - [谁能想到，斗地主也能玩出算法](https://labuladong.online/algo/practice-in-action/split-array-into-consecutive-subsequences/)
+ - [[Practice] Classic Backtracking Problems I](https://labuladong.online/algo/problem-set/backtrack-i/)
+ - [Algorithms in the Game of Doudizhu](https://labuladong.online/algo/practice-in-action/split-array-into-consecutive-subsequences/)
 
 </details><hr>
 
@@ -581,13 +552,13 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [473. Matchsticks to Square](https://leetcode.com/problems/matchsticks-to-square/?show=1) | [473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square/?show=1) | 🟠 |
+| [473. Matchsticks to Square](https://leetcode.com/problems/matchsticks-to-square/?show=1) | [473. Matchsticks to Square](https://leetcode.cn/problems/matchsticks-to-square/?show=1) | 🟠 |
 
 </details>
 <hr>

@@ -1,16 +1,16 @@
-# 动态规划解题套路框架
+# Dynamic programming problem-solving framework
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [322. Coin Change](https://leetcode.com/problems/coin-change/) | [322. 零钱兑换](https://leetcode.cn/problems/coin-change/) | 🟠 |
 | [509. Fibonacci Number](https://leetcode.com/problems/fibonacci-number/) | [509. 斐波那契数](https://leetcode.cn/problems/fibonacci-number/) | 🟢 |
@@ -20,44 +20,44 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [二叉树的遍历框架](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
-> - [多叉树结构及遍历框架](https://labuladong.online/algo/data-structure-basic/n-ary-tree-traverse-basic/)
+> - [Binary tree traversal framework](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
+> - [N-ary tree structure and traversal framework](https://labuladong.online/algo/data-structure-basic/n-ary-tree-traverse-basic/)
 
-> tip：本文有视频版：[动态规划框架套路详解](https://www.bilibili.com/video/BV1XV411Y7oE)。建议关注我的 B 站账号，我会用视频领读的方式带大家学习那些稍有难度的算法技巧。
-
-
-
-这篇文章是我多年前一篇 200 多赞赏的 [动态规划详解](https://mp.weixin.qq.com/s/1V3aHVonWBEXlNUvK3S28w) 的进阶版，我添加了更多干货内容，希望本文成为解决动态规划的一部「指导方针」。
-
-动态规划问题（Dynamic Programming）应该是很多读者头疼的，不过这类问题也是最具有技巧性，最有意思的。本书使用了整整一个章节专门来写这个算法，动态规划的重要性也可见一斑。
-
-本文解决几个问题：
-
-动态规划是什么？解决动态规划问题有什么技巧？如何学习动态规划？
-
-刷题刷多了就会发现，算法技巧就那几个套路，我们后续的动态规划系列章节，都在使用本文的解题框架思维，如果你心里有数，就会轻松很多。所以本文放在第一章，希望能够成为解决动态规划问题的一部指导方针，下面上干货。
-
-首先，**动态规划问题的一般形式就是求最值**。动态规划其实是运筹学的一种最优化方法，只不过在计算机问题上应用比较多，比如说让你求最长递增子序列呀，最小编辑距离呀等等。
-
-既然是要求最值，核心问题是什么呢？**求解动态规划的核心问题是穷举**。因为要求最值，肯定要把所有可行的答案穷举出来，然后在其中找最值呗。
-
-动态规划这么简单，就是穷举就完事了？我看到的动态规划问题都很难啊！
+> Tip: this article has a video version: [DP framework explained](https://www.bilibili.com/video/BV1XV411Y7oE). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
 
 
+
+This article is the upgraded version of an old, 200+ tipped [DP detailed explanation](https://mp.weixin.qq.com/s/1V3aHVonWBEXlNUvK3S28w) from years ago. I've added more substance, hoping this article serves as a "guide" to solving DP.
+
+DP is probably a headache for many readers, but it's also among the most technique-driven and most fun. This book devotes an entire chapter to this topic — its importance is clear.
+
+This article addresses:
+
+What is DP? What techniques solve DP problems? How do you learn DP?
+
+Grind enough problems and you'll find algorithm techniques fall into a few patterns. Our subsequent DP chapters all use this article's framework. With this in mind, your work becomes much easier. So this article goes in chapter one, intended as a guide. Substance below.
+
+First, **DP problems are generally optimization problems**. DP is actually an optimization method from operations research, often applied to computer problems — e.g. longest increasing subsequence, minimum edit distance, etc.
+
+Since we're optimizing, what's the core question? **The core of solving DP is enumeration**. To find an optimum, we must enumerate all feasible answers and pick the best.
+
+DP is so simple — just enumerate? But the DP problems I see are very hard!
 
 
 
 
 
-首先，虽然动态规划的核心思想就是穷举求最值，但是问题可以千变万化，穷举所有可行解其实并不是一件容易的事，需要你熟练掌握递归思维，只有列出**正确的「状态转移方程」**，才能正确地穷举。而且，你需要判断算法问题是否**具备「最优子结构」**，是否能够通过子问题的最值得到原问题的最值。另外，动态规划问题**存在「重叠子问题」**，如果暴力穷举的话效率会很低，所以需要你使用「备忘录」或者「DP table」来优化穷举过程，避免不必要的计算。
 
-以上提到的重叠子问题、最优子结构、状态转移方程就是动态规划三要素。具体什么意思等会会举例详解，但是在实际的算法问题中，写出状态转移方程是最困难的，这也就是为什么很多朋友觉得动态规划问题困难的原因，我来提供我总结的一个思维框架，辅助你思考状态转移方程：
 
-**明确「状态」-> 明确「选择」 -> 定义 `dp` 数组/函数的含义**。
+First, while DP's core idea is enumerate-then-pick-the-optimum, problems vary widely. Enumerating all feasible solutions isn't easy — you must be fluent in recursive thinking; only by listing the **correct "state-transition equation"** can you enumerate correctly. Plus you need to determine whether the algorithm has **optimal substructure** — whether you can derive the original problem's optimum from subproblem optima. Also, DP problems have **overlapping subproblems**; brute-force enumeration is inefficient, so you need a memo or DP table to avoid redundant computation.
 
-按上面的套路走，最后的解法代码就会是如下的框架：
+The three elements are: overlapping subproblems, optimal substructure, and state-transition equation. We'll detail each shortly. In practice, writing the state-transition equation is hardest — that's why many find DP hard. Here's my mental framework:
+
+**identify "state" -> identify "choice" -> define `dp` array/function meaning**.
+
+Following this routine, the solution code looks like:
 
 
 
@@ -66,32 +66,32 @@
 
 
 ```python
-# 自顶向下递归的动态规划
-def dp(状态1, 状态2, ...):
-    for 选择 in 所有可能的选择:
-        # 此时的状态已经因为做了选择而改变
-        result = 求最值(result, dp(状态1, 状态2, ...))
+# top-down recursive DP
+def dp(state1, state2, ...):
+    for choice in all possible choices:
+        # state changes after the choice is made
+        result = best(result, dp(state1, state2, ...))
     return result
 
-# 自底向上迭代的动态规划
-# 初始化 base case
+# bottom-up iterative DP
+# initialize base case
 dp[0][0][...] = base case
-# 进行状态转移
-for 状态1 in 状态1的所有取值：
-    for 状态2 in 状态2的所有取值：
+# perform state transition
+for state1 in all values of state1:
+    for state2 in all values of state2:
         for ...
-            dp[状态1][状态2][...] = 求最值(选择1，选择2...)
+            dp[state1][state2][...] = best(choice1, choice2, ...)
 ```
 
-下面通过斐波那契数列问题和凑零钱问题来详解动态规划的基本原理。前者主要是让你明白什么是重叠子问题（斐波那契数列没有求最值，所以严格来说不是动态规划问题），后者主要举集中于如何列出状态转移方程。
+We'll cover Fibonacci and coin-change problems to illustrate DP basics. The former mainly explains overlapping subproblems (Fibonacci doesn't seek an optimum, so strictly it's not a DP problem); the latter focuses on writing the state-transition equation.
 
-## 一、斐波那契数列
+## 1. Fibonacci
 
-力扣第 509 题「斐波那契数」就是这个问题，请读者不要嫌弃这个例子简单，**只有简单的例子才能让你把精力充分集中在算法背后的通用思想和技巧上，而不会被那些隐晦的细节问题搞的莫名其妙**。想要困难的例子，接下来的动态规划系列里有的是。
+LeetCode 509 "Fibonacci Number". Don't dismiss this example — **only simple examples let you focus on the universal ideas behind the algorithm, instead of being lost in obscure details**. Hard examples are coming in the DP chapter.
 
-### 暴力递归
+### Brute-force recursion
 
-斐波那契数列的数学形式就是递归的，写成代码就是这样：
+Fibonacci's mathematical form is recursive. Code:
 
 ```java
 int fib(int N) {
@@ -105,7 +105,7 @@ int fib(int N) {
 <a href="https://labuladong.online/algo-visualize/tutorial/mydata-fib/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌈 代码可视化动画🌈</strong>
+<strong>🌈 Code visualization 🌈</strong>
 </summary>
 </details>
 </a>
@@ -113,52 +113,52 @@ int fib(int N) {
 
 
 
-这个不用多说了，学校老师讲递归的时候似乎都是拿这个举例。我们也知道这样写代码虽然简洁易懂，但是十分低效，低效在哪里？假设 n = 20，请画出递归树：
+Nothing to add — recursion teachers in school all use this. Concise but very inefficient. Why? Suppose n = 20. Draw the recursion tree:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/1.jpg)
 
 > [!TIP]
-> 但凡遇到需要递归的问题，最好都画出递归树，这对你分析算法的复杂度，寻找算法低效的原因都有巨大帮助。
+> Whenever recursion is involved, draw the recursion tree — it greatly helps with complexity analysis and finding inefficiencies.
 
-这个递归树怎么理解？就是说想要计算原问题 `f(20)`，我就得先计算出子问题 `f(19)` 和 `f(18)`，然后要计算 `f(19)`，我就要先算出子问题 `f(18)` 和 `f(17)`，以此类推。最后遇到 `f(1)` 或者 `f(2)` 的时候，结果已知，就能直接返回结果，递归树不再向下生长了。
+How do we read this tree? To compute `f(20)`, we first compute `f(19)` and `f(18)`; for `f(19)` we compute `f(18)` and `f(17)`; and so on. Once we hit `f(1)` or `f(2)`, the result is known and we return — the tree stops growing.
 
-**递归算法的时间复杂度怎么计算？就是用子问题个数乘以解决一个子问题需要的时间**。
+**Recursive time complexity = subproblem count × time per subproblem**.
 
-首先计算子问题个数，即递归树中节点的总数。显然二叉树节点总数为指数级别，所以子问题个数为 O(2^n)。
+Subproblem count = total nodes in the recursion tree. For a binary tree it's exponential — O(2^n).
 
-然后计算解决一个子问题的时间，在本算法中，没有循环，只有 `f(n - 1) + f(n - 2)` 一个加法操作，时间为 O(1)。
+Time per subproblem: no loop, just `f(n-1) + f(n-2)` — O(1).
 
-所以，这个算法的时间复杂度为二者相乘，即 O(2^n)，指数级别，爆炸。
+So total complexity = O(2^n). Exponential — explosive.
 
-观察递归树，很明显发现了算法低效的原因：存在大量重复计算，比如 `f(18)` 被计算了两次，而且你可以看到，以 `f(18)` 为根的这个递归树体量巨大，多算一遍，会耗费巨大的时间。更何况，还不止 `f(18)` 这一个节点被重复计算，所以这个算法及其低效。
+Looking at the tree, the inefficiency is clear: enormous redundant computation. `f(18)` is computed twice; the subtree rooted at `f(18)` is huge — recomputing wastes a lot of time. And `f(18)` isn't the only repeated node, so the algorithm is extremely inefficient.
 
-这就是动态规划问题的第一个性质：**重叠子问题**。下面，我们想办法解决这个问题。
-
-
+This is DP's first property: **overlapping subproblems**. Now let's solve it.
 
 
 
 
 
-### 带备忘录的递归解法
 
-明确了问题，其实就已经把问题解决了一半。即然耗时的原因是重复计算，那么我们可以造一个「备忘录」，每次算出某个子问题的答案后别急着返回，先记到「备忘录」里再返回；每次遇到一个子问题先去「备忘录」里查一查，如果发现之前已经解决过这个问题了，直接把答案拿出来用，不要再耗时去计算了。
 
-一般使用一个数组充当这个「备忘录」，当然你也可以使用哈希表（字典），思想都是一样的。
+### Memoized recursive solution
+
+Once the problem is clear, it's half-solved. Since the cause is recomputation, build a "memo": after computing a subproblem, save the result before returning; before computing, check the memo first — if already solved, just return.
+
+Generally use an array as the memo (hash table works too). Same idea.
 
 ```java
 int fib(int N) {
-    // 备忘录全初始化为 0
+    // memo all initialized to 0
     int[] memo = new int[N + 1];
-    // 进行带备忘录的递归
+    // run the memoized recursion
     return dp(memo, N);
 }
 
-// 带着备忘录进行递归
+// recursion with memo
 int dp(int[] memo, int n) {
     // base case
     if (n == 0 || n == 1) return n;
-    // 已经计算过，不用再计算了
+    // already computed — no need to recompute
     if (memo[n] != 0) return memo[n];
     memo[n] = dp(memo, n - 1) + dp(memo, n - 2);
     return memo[n];
@@ -170,7 +170,7 @@ int dp(int[] memo, int n) {
 <a href="https://labuladong.online/algo-visualize/tutorial/mydata-fib2/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌈 代码可视化动画🌈</strong>
+<strong>🌈 Code visualization 🌈</strong>
 </summary>
 </details>
 </a>
@@ -178,37 +178,37 @@ int dp(int[] memo, int n) {
 
 
 
-现在，画出递归树，你就知道「备忘录」到底做了什么。
+Now draw the recursion tree to see what the memo did.
 
 ![](https://labuladong.online/algo/images/dynamic-programming/2.jpg)
 
-实际上，带「备忘录」的递归算法，把一棵存在巨量冗余的递归树通过「剪枝」，改造成了一幅不存在冗余的递归图，极大减少了子问题（即递归图中节点）的个数。
+The memoized version "prunes" the redundant tree, turning it into a redundancy-free graph — drastically fewer subproblems (nodes).
 
 ![](https://labuladong.online/algo/images/dynamic-programming/3.jpg)
 
-**递归算法的时间复杂度怎么计算？就是用子问题个数乘以解决一个子问题需要的时间**。
+**Recursive time = subproblem count × per-subproblem time**.
 
-子问题个数，即图中节点的总数，由于本算法不存在冗余计算，子问题就是 `f(1)`, `f(2)`, `f(3)` ... `f(20)`，数量和输入规模 n = 20 成正比，所以子问题个数为 O(n)。
+Subproblem count = nodes in this graph; with no redundancy, the subproblems are `f(1), f(2), ..., f(20)` — proportional to input size n = 20, so O(n).
 
-解决一个子问题的时间，同上，没有什么循环，时间为 O(1)。
+Per-subproblem time: same as before, O(1).
 
-所以，本算法的时间复杂度是 O(n)，比起暴力算法，是降维打击。
-
-
+Total: O(n) — vast improvement over brute force.
 
 
 
 
 
-至此，带备忘录的递归解法的效率已经和迭代的动态规划解法一样了。实际上，这种解法和常见的动态规划解法已经差不多了，只不过这种解法是「自顶向下」进行「递归」求解，我们更常见的动态规划代码是「自底向上」进行「递推」求解。
 
-啥叫「自顶向下」？注意我们刚才画的递归树（或者说图），是从上向下延伸，都是从一个规模较大的原问题比如说 `f(20)`，向下逐渐分解规模，直到 `f(1)` 和 `f(2)` 这两个 base case，然后逐层返回答案，这就叫「自顶向下」。
 
-啥叫「自底向上」？反过来，我们直接从最底下、最简单、问题规模最小、已知结果的 `f(1)` 和 `f(2)`（base case）开始往上推，直到推到我们想要的答案 `f(20)`。这就是「递推」的思路，这也是动态规划一般都脱离了递归，而是由循环迭代完成计算的原因。
+By now the memoized recursion is as efficient as the iterative DP. It's already similar to the common DP solution — the difference is "top-down recursion" vs the more common "bottom-up iteration".
 
-### `dp` 数组的迭代（递推）解法
+What's "top-down"? Notice the recursion tree (or graph) we drew extends downward — from a larger problem `f(20)` down to base cases `f(1)` and `f(2)`, then returns answers up the layers. That's "top-down".
 
-有了上一步「备忘录」的启发，我们可以把这个「备忘录」独立出来成为一张表，通常叫做 DP table，在这张表上完成「自底向上」的推算岂不美哉！
+What's "bottom-up"? Conversely, start from the smallest, simplest, base-case problems `f(1)` and `f(2)` and build up to `f(20)` — that's "iteration", which is why DP usually drops recursion in favor of loops.
+
+### Iterative `dp` array
+
+Inspired by the memo, separate the memo into a table called the DP table, and complete the bottom-up computation on it:
 
 ```java
 int fib(int N) {
@@ -216,7 +216,7 @@ int fib(int N) {
     int[] dp = new int[N + 1];
     // base case
     dp[0] = 0; dp[1] = 1;
-    // 状态转移
+    // state transition
     for (int i = 2; i <= N; i++) {
         dp[i] = dp[i - 1] + dp[i - 2];
     }
@@ -230,7 +230,7 @@ int fib(int N) {
 <a href="https://labuladong.online/algo-visualize/tutorial/mydata-fib3/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Code visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -238,43 +238,43 @@ int fib(int N) {
 
 
 
-画个图就很好理解了，而且你发现这个 DP table 特别像之前那个「剪枝」后的结果，只是反过来算而已：
+Drawing the diagram makes it clear — the DP table looks much like the pruned tree, just computed in reverse:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/4.jpg)
 
-实际上，带备忘录的递归解法中的那个「备忘录」`memo` 数组，最终完成后就是这个解法中的 `dp` 数组，你对比一下可视化面板中两个算法执行的过程可以更直观地看出它俩的联系。
+Actually, the `memo` array in the memoized solution becomes the `dp` array here — compare the two algorithms in the visualization panel.
 
-所以说自顶向下、自底向上两种解法本质其实是差不多的，大部分情况下，效率也基本相同。
-
-
+So top-down and bottom-up are essentially the same; mostly with similar efficiency.
 
 
 
 
 
-### 拓展延伸
 
-这里，引出「状态转移方程」这个名词，实际上就是描述问题结构的数学形式：
+
+### Extension
+
+We've introduced the term "state-transition equation" — really just describing the problem structure mathematically:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/fib.png)
 
-为啥叫「状态转移方程」？其实就是为了听起来高端。
+Why "state-transition equation"? Just to sound fancier.
 
-`f(n)` 的函数参数会不断变化，所以你把参数 `n` 想做一个状态，这个状态 `n` 是由状态 `n - 1` 和状态 `n - 2` 转移（相加）而来，这就叫状态转移，仅此而已。
+`f(n)`'s argument changes constantly; treat `n` as a state — state `n` transitions (sums) from states `n - 1` and `n - 2`. That's all.
 
-你会发现，上面的几种解法中的所有操作，例如 `return f(n - 1) + f(n - 2)`，`dp[i] = dp[i - 1] + dp[i - 2]`，以及对备忘录或 DP table 的初始化操作，都是围绕这个方程式的不同表现形式。
+You'll see all operations in the previous solutions — `return f(n - 1) + f(n - 2)`, `dp[i] = dp[i - 1] + dp[i - 2]`, and the memo/DP-table initialization — are different forms of this equation.
 
-可见列出「状态转移方程」的重要性，它是解决问题的核心，而且很容易发现，其实状态转移方程直接代表着暴力解法。
+That shows why writing the state-transition equation matters — it's the core, and it's also the brute-force solution.
 
-**千万不要看不起暴力解，动态规划问题最困难的就是写出这个暴力解，即状态转移方程**。
+**Don't underestimate the brute force. The hardest part of DP is writing this brute force, i.e. the state-transition equation**.
 
-只要写出暴力解，优化方法无非是用备忘录或者 DP table，再无奥妙可言。
+Once written, optimization is just memo or DP-table — no further mystery.
 
-这个例子的最后，讲一个细节优化。
+Final detail: a small optimization.
 
-细心的读者会发现，根据斐波那契数列的状态转移方程，当前状态 `n` 只和之前的 `n-1, n-2` 两个状态有关，其实并不需要那么长的一个 DP table 来存储所有的状态，只要想办法存储之前的两个状态就行了。
+Careful readers see that current state `n` only depends on previous states `n-1, n-2`; we don't need such a long DP table — just track the previous two states.
 
-所以，可以进一步优化，把空间复杂度降为 O(1)。这也就是我们最常见的计算斐波那契数的算法：
+So we can further optimize space to O(1) — the most common Fibonacci algorithm:
 
 ```java
 int fib(int n) {
@@ -282,12 +282,12 @@ int fib(int n) {
         // base case
         return n;
     }
-    // 分别代表 dp[i - 1] 和 dp[i - 2]
+    // represent dp[i - 1] and dp[i - 2]
     int dp_i_1 = 1, dp_i_2 = 0;
     for (int i = 2; i <= n; i++) {
         // dp[i] = dp[i - 1] + dp[i - 2];
         int dp_i = dp_i_1 + dp_i_2;
-        // 滚动更新
+        // rolling update
         dp_i_2 = dp_i_1;
         dp_i_1 = dp_i;
     }
@@ -300,7 +300,7 @@ int fib(int n) {
 <a href="https://labuladong.online/algo-visualize/leetcode/fibonacci-number/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Code visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -308,40 +308,40 @@ int fib(int n) {
 
 
 
-这一般是动态规划问题的最后一步优化，如果我们发现每次状态转移只需要 DP table 中的一部分，那么可以尝试缩小 DP table 的大小，只记录必要的数据，从而降低空间复杂度。
+This is usually DP's last optimization step: if each transition only needs part of the DP table, shrink the table to record only the necessary data, lowering space.
 
-上述例子就相当于把 DP table 的大小从 `n` 缩小到 2，即把空间复杂度下降了一个量级。我会在后文 [对动态规划发动降维打击](https://labuladong.online/algo/dynamic-programming/space-optimization/) 进一步讲解这个压缩空间复杂度的技巧，一般来说用来把一个二维的 DP table 压缩成一维，即把空间复杂度从 O(n^2) 压缩到 O(n)。
+Above shrunk DP table size from `n` to 2 — one order of magnitude space reduction. The later post [Dimensional reduction on DP](https://labuladong.online/algo/dynamic-programming/space-optimization/) explores space compression in depth — usually compressing 2D DP to 1D, from O(n^2) to O(n).
 
-有人会问，动态规划的另一个重要特性「最优子结构」，怎么没有涉及？下面会涉及。斐波那契数列的例子严格来说不算动态规划，因为没有涉及求最值，以上旨在说明重叠子问题的消除方法，演示得到最优解法逐步求精的过程。下面，看第二个例子，凑零钱问题。
+Some ask: DP's other key property "optimal substructure" — what about that? Coming below. The Fibonacci example strictly isn't DP since no optimum is sought; it's mainly to illustrate eliminating overlapping subproblems and the path to optimal solutions. Now the second example: coin change.
 
-## 二、凑零钱问题
+## 2. Coin change
 
-这是力扣第 322 题「零钱兑换」：
+LeetCode 322 "Coin Change":
 
-给你 `k` 种面值的硬币，面值分别为 `c1, c2 ... ck`，每种硬币的数量无限，再给一个总金额 `amount`，问你**最少**需要几枚硬币凑出这个金额，如果不可能凑出，算法返回 -1 。算法的函数签名如下：
+Given `k` coin denominations `c1, c2, ..., ck` (each in unlimited supply) and a target amount `amount`, what's the **minimum** number of coins needed to make up that amount? Return -1 if impossible. Function signature:
 
 ```java
-// coins 中是可选硬币面值，amount 是目标金额
+// coins are the available denominations; amount is the target
 int coinChange(int[] coins, int amount);
 ```
 
-比如说 `k = 3`，面值分别为 1，2，5，总金额 `amount = 11`。那么最少需要 3 枚硬币凑出，即 11 = 5 + 5 + 1。
+E.g. `k = 3`, denominations 1, 2, 5; `amount = 11`. Answer: 3 coins (11 = 5 + 5 + 1).
 
-你认为计算机应该如何解决这个问题？显然，就是把所有可能的凑硬币方法都穷举出来，然后找找看最少需要多少枚硬币。
+How should the computer solve this? Obviously, enumerate every possible coin combination and find the minimum.
 
-### 暴力递归
+### Brute-force recursion
 
-首先，这个问题是动态规划问题，因为它具有「最优子结构」的。**要符合「最优子结构」，子问题间必须互相独立**。啥叫相互独立？你肯定不想看数学证明，我用一个直观的例子来讲解。
+This is DP because it has **optimal substructure**. **For optimal substructure, subproblems must be mutually independent**. What does that mean? You don't want a math proof — let me give an intuitive example.
 
-比如说，假设你考试，每门科目的成绩都是互相独立的。你的原问题是考出最高的总成绩，那么你的子问题就是要把语文考到最高，数学考到最高…… 为了每门课考到最高，你要把每门课相应的选择题分数拿到最高，填空题分数拿到最高…… 当然，最终就是你每门课都是满分，这就是最高的总成绩。
+Suppose in an exam each subject's score is independent. Original problem: get the highest total. Subproblems: max Chinese, max math, etc. To max each subject, max each multiple-choice section, max each fill-in section, etc. Eventually, perfect on every subject = the highest total.
 
-得到了正确的结果：最高的总成绩就是总分。因为这个过程符合最优子结构，「每门科目考到最高」这些子问题是互相独立，互不干扰的。
+Correct result: highest total = total of perfect scores. Because each subproblem ("max each subject") is independent.
 
-但是，如果加一个条件：你的语文成绩和数学成绩会互相制约，不能同时达到满分，数学分数高，语文分数就会降低，反之亦然。
+But add a condition: your Chinese and math scores constrain each other — they can't both be perfect; higher math means lower Chinese, and vice versa.
 
-这样的话，显然你能考到的最高总成绩就达不到总分了，按刚才那个思路就会得到错误的结果。因为「每门科目考到最高」的子问题并不独立，语文数学成绩户互相影响，无法同时最优，所以最优子结构被破坏。
+Now you can't reach the total-perfect-score, and the previous approach gives a wrong result. The "max each subject" subproblems aren't independent — Chinese and math interact, so they can't be simultaneously optimal — optimal substructure breaks.
 
-回到凑零钱问题，为什么说它符合最优子结构呢？假设你有面值为 `1, 2, 5` 的硬币，你想求 `amount = 11` 时的最少硬币数（原问题），如果你知道凑出 `amount = 10, 9, 6` 的最少硬币数（子问题），你只需要把子问题的答案加一（再选一枚面值为 `1, 2, 5` 的硬币），求个最小值，就是原问题的答案。因为硬币的数量是没有限制的，所以子问题之间没有相互制，是互相独立的。
+Back to coin change: why does it have optimal substructure? Suppose denominations are `1, 2, 5` and we want the minimum coins for `amount = 11` (original). If we know the minimum coins for `amount = 10, 9, 6` (subproblems), just add 1 (one more coin of denomination 1, 2, or 5) and take the minimum — that's the original answer. Coins are unlimited, so subproblems don't constrain each other — independent.
 
 
 
@@ -350,32 +350,32 @@ int coinChange(int[] coins, int amount);
 
 
 > [!TIP]
-> 关于最优子结构的问题，后文 [动态规划答疑篇](https://labuladong.online/algo/dynamic-programming/faq-summary/) 还会再举例探讨。
+> The later post [DP FAQ](https://labuladong.online/algo/dynamic-programming/faq-summary/) explores optimal substructure further.
 
-那么，既然知道了这是个动态规划问题，就要思考如何列出正确的状态转移方程？
+Knowing this is DP, how do we write the right state-transition equation?
 
-**1、确定「状态」，也就是原问题和子问题中会变化的变量**。由于硬币数量无限，硬币的面额也是题目给定的，只有目标金额会不断地向 base case 靠近，所以唯一的「状态」就是目标金额 `amount`。
+**1. Identify "state" — the variable that changes between original and subproblems**. Coins are unlimited, denominations are given by the problem, only the target amount keeps approaching the base case. So the only "state" is the target amount `amount`.
 
-**2、确定「选择」，也就是导致「状态」产生变化的行为**。目标金额为什么变化呢，因为你在选择硬币，你每选择一枚硬币，就相当于减少了目标金额。所以说所有硬币的面值，就是你的「选择」。
+**2. Identify "choice" — the action that changes the state**. Why does the target change? Because you choose a coin — each choice reduces the target. So the "choice" is the set of all coin denominations.
 
-**3、明确 `dp` 函数/数组的定义**。我们这里讲的是自顶向下的解法，所以会有一个递归的 `dp` 函数，一般来说函数的参数就是状态转移中会变化的量，也就是上面说到的「状态」；函数的返回值就是题目要求我们计算的量。就本题来说，状态只有一个，即「目标金额」，题目要求我们计算凑出目标金额所需的最少硬币数量。
+**3. Clarify the `dp` function/array meaning**. We're doing the top-down version, so we have a recursive `dp` function. Generally, the parameters are the changing state (above), and the return value is what the problem asks for. Here, only one state (target amount), and we want the minimum coins.
 
-**所以我们可以这样定义 `dp` 函数：`dp(n)` 表示，输入一个目标金额 `n`，返回凑出目标金额 `n` 所需的最少硬币数量**。
+**So `dp(n)` = given target amount `n`, return the minimum coins needed**.
 
-那么根据这个定义，我们的最终答案就是 `dp(amount)` 的返回值。
+By this definition, the final answer is `dp(amount)`.
 
-搞清楚上面这几个关键点，解法的伪码就可以写出来了：
+With these clear, write the pseudocode:
 
 ```java
-// 伪码框架
+// pseudocode framework
 int coinChange(int[] coins, int amount) {
-    // 题目要求的最终结果是 dp(amount)
+    // the answer is dp(amount)
     return dp(coins, amount);
 }
 
-// 定义：要凑出金额 n，至少要 dp(coins, n) 个硬币
+// definition: to make up amount n, at least dp(coins, n) coins
 int dp(int[] coins, int n) {
-    // 做选择，选择需要硬币最少的那个结果
+    // make a choice — pick the one needing the fewest coins
     for (int coin : coins) {
         res = min(res, 1 + dp(coins, n - coin));
     }
@@ -383,16 +383,16 @@ int dp(int[] coins, int n) {
 }
 ```
 
-根据伪码，我们加上 base case 即可得到最终的答案。显然目标金额为 0 时，所需硬币数量为 0；当目标金额小于 0 时，无解，返回 -1：
+Add base cases: target 0 needs 0 coins; target < 0 has no solution, return -1:
 
 ```java
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        // 题目要求的最终结果是 dp(amount)
+        // the answer is dp(amount)
         return dp(coins, amount);
     }
 
-    // 定义：要凑出金额 n，至少要 dp(coins, n) 个硬币
+    // definition: to make up amount n, at least dp(coins, n) coins
     int dp(int[] coins, int amount) {
         // base case
         if (amount == 0) return 0;
@@ -400,11 +400,11 @@ class Solution {
 
         int res = Integer.MAX_VALUE;
         for (int coin : coins) {
-            // 计算子问题的结果
+            // compute the subproblem
             int subProblem = dp(coins, amount - coin);
-            // 子问题无解则跳过
+            // skip if the subproblem has no solution
             if (subProblem == -1) continue;
-            // 在子问题中选择最优解，然后加一
+            // pick the optimal subproblem result, then add one
             res = Math.min(res, subProblem + 1);
         }
 
@@ -414,40 +414,40 @@ class Solution {
 ```
 
 > [!NOTE]
-> 这里 `coinChange` 和 `dp` 函数的签名完全一样，所以理论上不需要额外写一个 `dp` 函数。但为了后文讲解方便，这里还是另写一个 `dp` 函数来实现主要逻辑。
+> `coinChange` and `dp` have identical signatures; in theory we don't need a separate `dp` function. But for clarity I kept it.
 > 
-> 另外，我经常看到有读者留言问，子问题的结果为什么要加 1（`subProblem + 1`），而不是加硬币金额之类的。我这里统一提示一下，动态规划问题的关键是 `dp` 函数/数组的定义，你这个函数的返回值代表什么？你回过头去搞清楚这一点，然后就知道为什么要给子问题的返回值加 1 了。
+> Readers often ask why we add 1 to the subproblem result (`subProblem + 1`) instead of the coin amount. Reminder: DP's key is the `dp` function/array's definition — what does the return value represent? Once clear, you'll see why we add 1 to the subproblem return.
 
 
 <hr/>
 <a href="https://labuladong.online/algo-visualize/tutorial/coin-change-brute-force/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Code visualization 🎃</strong>
 </summary>
 </details>
 </a>
 <hr/>
 
-至此，状态转移方程其实已经完成了，以上算法已经是暴力解法了，以上代码的数学形式就是状态转移方程：
+State-transition equation done — this is brute force. Math form:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/coin.png)
 
-至此，这个问题其实就解决了，只不过需要消除一下重叠子问题，比如 `amount = 11, coins = {1,2,5}` 时画出递归树看看：
+We just need to remove overlapping subproblems. With `amount = 11, coins = {1,2,5}`, draw the recursion tree:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/5.jpg)
 
-**递归算法的时间复杂度分析：子问题总数 x 解决每个子问题所需的时间**。
+**Recursive time = subproblem count × per-subproblem time**.
 
-子问题总数为递归树的节点个数，但算法会进行剪枝，剪枝的时机和题目给定的具体硬币面额有关，所以可以想象，这棵树生长的并不规则，确切算出树上有多少节点是比较困难的。对于这种情况，我们一般的做法是按照最坏的情况估算一个时间复杂度的上界。
+Subproblem count = recursion tree node count, but the algorithm prunes; pruning depends on coin denominations, so the tree grows irregularly — exact node count is hard to compute. We typically estimate worst-case upper bound.
 
-假设目标金额为 `n`，给定的硬币个数为 `k`，那么递归树最坏情况下高度为 `n`（全用面额为 1 的硬币），然后再假设这是一棵满 `k` 叉树，则节点的总数在 `k^n` 这个数量级。
+Suppose target `n` and `k` denominations. The tree's worst-case height is `n` (all denomination-1 coins); assume it's a perfect `k`-ary tree — total nodes ~`k^n`.
 
-接下来看每个子问题的复杂度，由于每次递归包含一个 for 循环，复杂度为 $O(k)$，相乘得到总时间复杂度为 $O(k^n)$，指数级别。
+Per-subproblem complexity: each call has a for-loop, $O(k)$. Total $O(k^n)$ — exponential.
 
-### 带备忘录的递归
+### Memoized recursion
 
-类似之前斐波那契数列的例子，只需要稍加修改，就可以通过备忘录消除子问题：
+Like Fibonacci, slight modification adds a memo:
 
 ```java
 class Solution {
@@ -455,7 +455,7 @@ class Solution {
 
     public int coinChange(int[] coins, int amount) {
         memo = new int[amount + 1];
-        // 备忘录初始化为一个不会被取到的特殊值，代表还未被计算
+        // initialize memo with a special value meaning not computed
         Arrays.fill(memo, -666);
 
         return dp(coins, amount);
@@ -464,20 +464,20 @@ class Solution {
     int dp(int[] coins, int amount) {
         if (amount == 0) return 0;
         if (amount < 0) return -1;
-        // 查备忘录，防止重复计算
+        // check memo to avoid recomputation
         if (memo[amount] != -666)
             return memo[amount];
 
         int res = Integer.MAX_VALUE;
         for (int coin : coins) {
-            // 计算子问题的结果
+            // compute subproblem
             int subProblem = dp(coins, amount - coin);
-            // 子问题无解则跳过
+            // skip if no solution
             if (subProblem == -1) continue;
-            // 在子问题中选择最优解，然后加一
+            // pick optimal subproblem, add one
             res = Math.min(res, subProblem + 1);
         }
-        // 把计算结果存入备忘录
+        // store in memo
         memo[amount] = (res == Integer.MAX_VALUE) ? -1 : res;
         return memo[amount];
     }
@@ -489,7 +489,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/coin-change/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🥳 代码可视化动画🥳</strong>
+<strong>🥳 Code visualization 🥳</strong>
 </summary>
 </details>
 </a>
@@ -497,30 +497,30 @@ class Solution {
 
 
 
-不画图了，很显然「备忘录」大大减小了子问题数目，完全消除了子问题的冗余，所以子问题总数不会超过金额数 `n`，即子问题数目为 $O(n)$。处理一个子问题的时间不变，仍是 $O(k)$，所以总的时间复杂度是 $O(kn)$。
+No diagram — clearly the memo greatly reduces the subproblem count, eliminating redundancy. Subproblem count is bounded by amount $n$, so $O(n)$. Per-subproblem time is still $O(k)$, so total $O(kn)$.
 
-### dp 数组的迭代解法
+### Iterative dp-array solution
 
-当然，我们也可以自底向上使用 dp table 来消除重叠子问题，关于「状态」「选择」和 base case 与之前没有区别，`dp` 数组的定义和刚才 `dp` 函数类似，也是把「状态」，也就是目标金额作为变量。不过 `dp` 函数体现在函数参数，而 `dp` 数组体现在数组索引：
+We can also use a bottom-up DP table. State, choices, base case unchanged. The `dp` array's meaning mirrors the `dp` function — target amount as the variable. The function uses parameters; the array uses indices:
 
-**`dp` 数组的定义：当目标金额为 `i` 时，至少需要 `dp[i]` 枚硬币凑出**。
+**`dp` array definition: at target amount `i`, at least `dp[i]` coins are needed**.
 
-根据我们文章开头给出的动态规划代码框架可以写出如下解法：
+By the framework above:
 
 ```java
 class Solution {
     public int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
-        // 数组大小为 amount + 1，初始值也为 amount + 1
+        // array size = amount + 1, init value = amount + 1
         Arrays.fill(dp, amount + 1);
 
         // base case
         dp[0] = 0;
-        // 外层 for 循环在遍历所有状态的所有取值
+        // outer for-loop iterates over all states and their values
         for (int i = 0; i < dp.length; i++) {
-            // 内层 for 循环在求所有选择的最小值
+            // inner for-loop takes the min over all choices
             for (int coin : coins) {
-                // 子问题无解，跳过
+                // skip if subproblem has no solution
                 if (i - coin < 0) {
                     continue;
                 }
@@ -533,25 +533,25 @@ class Solution {
 ```
 
 > [!NOTE]
-> 为啥 `dp` 数组中的值都初始化为 `amount + 1` 呢，因为凑成 `amount` 金额的硬币数最多只可能等于 `amount`（全用 1 元面值的硬币），所以初始化为 `amount + 1` 就相当于初始化为正无穷，便于后续取最小值。为啥不直接初始化为 int 型的最大值 `Integer.MAX_VALUE` 呢？因为后面有 `dp[i - coin] + 1`，这就会导致整型溢出。
+> Why initialize `dp` with `amount + 1`? The minimum coins to make `amount` is at most `amount` (all 1-denomination coins), so `amount + 1` is effectively positive infinity, convenient for taking minimums. Why not `Integer.MAX_VALUE`? Because `dp[i - coin] + 1` could overflow.
 
 ![](https://labuladong.online/algo/images/dynamic-programming/6.jpg)
 
-## 三、最后总结
+## 3. Final summary
 
-第一个斐波那契数列的问题，解释了如何通过「备忘录」或者「dp table」的方法来优化递归树，并且明确了这两种方法本质上是一样的，只是自顶向下和自底向上的不同而已。
+The first problem (Fibonacci) explained how to optimize the recursion tree via "memo" or "DP table" — they're essentially the same, just top-down vs bottom-up.
 
-第二个凑零钱的问题，展示了如何流程化确定「状态转移方程」，只要通过状态转移方程写出暴力递归解，剩下的也就是优化递归树，消除重叠子问题而已。
+The second problem (coin change) showed how to systematically derive the "state-transition equation". Once you have the equation, the rest is just optimizing the recursion tree to eliminate overlapping subproblems.
 
-如果你不太了解动态规划，还能看到这里，真得给你鼓掌，相信你已经掌握了这个算法的设计技巧。
+If you didn't know DP and made it this far, congrats — you've grasped the design technique.
 
-**计算机解决问题其实没有任何特殊的技巧，它唯一的解决办法就是穷举**，穷举所有可能性。算法设计无非就是先思考“如何穷举”，然后再追求“如何聪明地穷举”。
+**Computers have no special tricks for solving problems — the only method is enumeration**. Algorithm design is first about "how to enumerate", then "how to enumerate cleverly".
 
-列出状态转移方程，就是在解决“如何穷举”的问题。之所以说它难，一是因为很多穷举需要递归实现，二是因为有的问题本身的解空间复杂，不那么容易穷举完整。
+Listing the state-transition equation is "how to enumerate". It's hard because (1) most enumerations need recursion, (2) some problems' solution spaces are complex and not easily fully enumerated.
 
-备忘录、DP table 就是在追求“如何聪明地穷举”。用空间换时间的思路，是降低时间复杂度的不二法门，除此之外，试问，还能玩出啥花活？
+Memo and DP table are "how to enumerate cleverly". Trading space for time is the only way to lower time complexity. What other tricks could there be?
 
-之后我们会有一章专门讲解动态规划问题，如果有任何问题都可以随时回来重读本文，希望读者在阅读每个题目和解法时，多往「状态」和「选择」上靠，才能对这套框架产生自己的理解，运用自如。
+We have a chapter dedicated to DP problems later. Re-read this article anytime. When reading each problem and solution, lean on "state" and "choice" to internalize this framework.
 
 
 
@@ -561,47 +561,47 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [base case 和备忘录的初始值怎么定？](https://labuladong.online/algo/dynamic-programming/memo-fundamental/)
- - [【强化练习】BFS 经典习题 II](https://labuladong.online/algo/problem-set/bfs-ii/)
- - [【强化练习】二分搜索算法经典习题](https://labuladong.online/algo/problem-set/binary-search/)
- - [【强化练习】单调队列的通用实现及经典习题](https://labuladong.online/algo/problem-set/monotonic-queue/)
- - [【强化练习】同时运用两种思维解题](https://labuladong.online/algo/problem-set/binary-tree-combine-two-view/)
- - [【强化练习】数学技巧相关习题](https://labuladong.online/algo/problem-set/math-tricks/)
- - [一个方法团灭 LeetCode 打家劫舍问题](https://labuladong.online/algo/dynamic-programming/house-robber/)
- - [一个方法团灭 LeetCode 股票买卖问题](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/)
- - [二叉树基础及常见类型](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
- - [二叉树系列算法核心纲领](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
- - [分治算法解题套路框架](https://labuladong.online/algo/essential-technique/divide-and-conquer/)
- - [动态规划之子序列问题解题模板](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)
- - [动态规划之最小路径和](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/)
- - [动态规划和回溯算法的思维转换](https://labuladong.online/algo/dynamic-programming/word-break/)
- - [动态规划帮我通关了《辐射4》](https://labuladong.online/algo/dynamic-programming/freedom-trail/)
- - [动态规划帮我通关了《魔塔》](https://labuladong.online/algo/dynamic-programming/magic-tower/)
- - [动态规划穷举的两种视角](https://labuladong.online/algo/dynamic-programming/two-views-of-dp/)
- - [动态规划设计：最大子数组](https://labuladong.online/algo/dynamic-programming/maximum-subarray/)
- - [动态规划设计：最长递增子序列](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)
- - [学习数据结构和算法的框架思维](https://labuladong.online/algo/essential-technique/algorithm-summary/)
- - [对动态规划进行降维打击](https://labuladong.online/algo/dynamic-programming/space-optimization/)
- - [拓展：归并排序详解及应用](https://labuladong.online/algo/practice-in-action/merge-sort/)
- - [旅游省钱大法：加权最短路径](https://labuladong.online/algo/dynamic-programming/cheap-travel/)
- - [最优子结构原理和 dp 数组遍历方向](https://labuladong.online/algo/dynamic-programming/faq-summary/)
- - [算法学习和心流体验](https://labuladong.online/algo/fname.html?fname=心流)
- - [算法时空复杂度分析实用指南](https://labuladong.online/algo/essential-technique/complexity-analysis/)
- - [算法笔试「骗分」套路](https://labuladong.online/algo/other-skills/tips-in-exam/)
- - [经典动态规划：0-1 背包问题](https://labuladong.online/algo/dynamic-programming/knapsack1/)
- - [经典动态规划：博弈问题](https://labuladong.online/algo/dynamic-programming/game-theory/)
- - [经典动态规划：子集背包问题](https://labuladong.online/algo/dynamic-programming/knapsack2/)
- - [经典动态规划：完全背包问题](https://labuladong.online/algo/dynamic-programming/knapsack3/)
- - [经典动态规划：戳气球](https://labuladong.online/algo/dynamic-programming/burst-balloons/)
- - [经典动态规划：最长公共子序列](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
- - [经典动态规划：正则表达式](https://labuladong.online/algo/dynamic-programming/regular-expression-matching/)
- - [经典动态规划：编辑距离](https://labuladong.online/algo/dynamic-programming/edit-distance/)
- - [经典动态规划：高楼扔鸡蛋](https://labuladong.online/algo/dynamic-programming/egg-drop/)
- - [老司机加油算法](https://labuladong.online/algo/frequency-interview/gas-station-greedy/)
- - [背包问题的变体：目标和](https://labuladong.online/algo/dynamic-programming/target-sum/)
- - [贪心算法解题套路框架](https://labuladong.online/algo/essential-technique/greedy/)
+ - [How to choose base cases and memo initial values?](https://labuladong.online/algo/dynamic-programming/memo-fundamental/)
+ - [Practice: Classic BFS problems II](https://labuladong.online/algo/problem-set/bfs-ii/)
+ - [Practice: Classic binary-search problems](https://labuladong.online/algo/problem-set/binary-search/)
+ - [Practice: Generic monotonic-queue implementation and classic problems](https://labuladong.online/algo/problem-set/monotonic-queue/)
+ - [Practice: Solving with both mindsets at once](https://labuladong.online/algo/problem-set/binary-tree-combine-two-view/)
+ - [Practice: Math-trick problems](https://labuladong.online/algo/problem-set/math-tricks/)
+ - [One method demolishes the LeetCode House Robber series](https://labuladong.online/algo/dynamic-programming/house-robber/)
+ - [One method demolishes the LeetCode stock buy/sell series](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/)
+ - [Binary tree basics and common types](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
+ - [Core outline of the binary-tree algorithms series](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
+ - [Divide-and-conquer problem-solving framework](https://labuladong.online/algo/essential-technique/divide-and-conquer/)
+ - [DP template for subsequence problems](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)
+ - [DP: minimum path sum](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/)
+ - [Mental switch between DP and backtracking](https://labuladong.online/algo/dynamic-programming/word-break/)
+ - [DP helped me clear "Fallout 4"](https://labuladong.online/algo/dynamic-programming/freedom-trail/)
+ - [DP helped me clear "Magic Tower"](https://labuladong.online/algo/dynamic-programming/magic-tower/)
+ - [Two perspectives on DP enumeration](https://labuladong.online/algo/dynamic-programming/two-views-of-dp/)
+ - [DP design: maximum subarray](https://labuladong.online/algo/dynamic-programming/maximum-subarray/)
+ - [DP design: longest increasing subsequence](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)
+ - [The framework mindset for learning data structures and algorithms](https://labuladong.online/algo/essential-technique/algorithm-summary/)
+ - [Dimensional reduction on dynamic programming](https://labuladong.online/algo/dynamic-programming/space-optimization/)
+ - [Extension: merge sort in detail and applications](https://labuladong.online/algo/practice-in-action/merge-sort/)
+ - [Travel saving trick: weighted shortest path](https://labuladong.online/algo/dynamic-programming/cheap-travel/)
+ - [Optimal substructure and dp-array traversal direction](https://labuladong.online/algo/dynamic-programming/faq-summary/)
+ - [Algorithm learning and the flow experience](https://labuladong.online/algo/fname.html?fname=心流)
+ - [A practical guide to time/space-complexity analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/)
+ - [Cheap tricks for algorithm tests](https://labuladong.online/algo/other-skills/tips-in-exam/)
+ - [Classic DP: 0-1 knapsack](https://labuladong.online/algo/dynamic-programming/knapsack1/)
+ - [Classic DP: game theory](https://labuladong.online/algo/dynamic-programming/game-theory/)
+ - [Classic DP: subset-sum knapsack](https://labuladong.online/algo/dynamic-programming/knapsack2/)
+ - [Classic DP: unbounded knapsack](https://labuladong.online/algo/dynamic-programming/knapsack3/)
+ - [Classic DP: burst balloons](https://labuladong.online/algo/dynamic-programming/burst-balloons/)
+ - [Classic DP: longest common subsequence](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
+ - [Classic DP: regular expression matching](https://labuladong.online/algo/dynamic-programming/regular-expression-matching/)
+ - [Classic DP: edit distance](https://labuladong.online/algo/dynamic-programming/edit-distance/)
+ - [Classic DP: super-egg-drop](https://labuladong.online/algo/dynamic-programming/egg-drop/)
+ - [Veteran-driver gas-station algorithm](https://labuladong.online/algo/frequency-interview/gas-station-greedy/)
+ - [Knapsack variant: target sum](https://labuladong.online/algo/dynamic-programming/target-sum/)
+ - [Greedy problem-solving framework](https://labuladong.online/algo/essential-technique/greedy/)
 
 </details><hr>
 
@@ -610,15 +610,15 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems citing this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/?show=1) | [111. 二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/?show=1) | 🟢 |
 | [112. Path Sum](https://leetcode.com/problems/path-sum/?show=1) | [112. 路径总和](https://leetcode.cn/problems/path-sum/?show=1) | 🟢 |
-| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
+| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. 不同的subsequence](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
 | [139. Word Break](https://leetcode.com/problems/word-break/?show=1) | [139. 单词拆分](https://leetcode.cn/problems/word-break/?show=1) | 🟠 |
 | [1696. Jump Game VI](https://leetcode.com/problems/jump-game-vi/?show=1) | [1696. 跳跃游戏 VI](https://leetcode.cn/problems/jump-game-vi/?show=1) | 🟠 |
 | [221. Maximal Square](https://leetcode.com/problems/maximal-square/?show=1) | [221. 最大正方形](https://leetcode.cn/problems/maximal-square/?show=1) | 🟠 |
@@ -639,7 +639,7 @@ class Solution {
 | - | [剑指 Offer 14- I. 剪绳子](https://leetcode.cn/problems/jian-sheng-zi-lcof/?show=1) | 🟠 |
 | - | [剑指 Offer 46. 把数字翻译成字符串](https://leetcode.cn/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/?show=1) | 🟠 |
 | - | [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
-| - | [剑指 Offer II 097. 子序列的数目](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
+| - | [剑指 Offer II 097. subsequence的数目](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
 | - | [剑指 Offer II 098. 路径的数目](https://leetcode.cn/problems/2AoeFn/?show=1) | 🟠 |
 | - | [剑指 Offer II 103. 最少的硬币数目](https://leetcode.cn/problems/gaM7Ch/?show=1) | 🟠 |
 
@@ -649,7 +649,3 @@ class Solution {
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

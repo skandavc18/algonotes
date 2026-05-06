@@ -1,19 +1,19 @@
-# 如何高效解决接雨水问题
+# Solving the Trapping Rain Water Problem Efficiently
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | [11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/) | 🟠 |
-| [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/) | 🔴 |
+| [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | [11. Container With Most Water](https://leetcode.cn/problems/container-with-most-water/) | 🟠 |
+| [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | [42. Trapping Rain Water](https://leetcode.cn/problems/trapping-rain-water/) | 🔴 |
 
 **-----------**
 
@@ -21,48 +21,44 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [数组双指针技巧汇总](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
+> - [Array Two-Pointer Tricks Summary](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
 
-力扣第 42 题「接雨水」挺有意思，在面试题中出现频率还挺高的，本文就来步步优化，讲解一下这道题。
+LeetCode 42 "Trapping Rain Water" is fun and frequently appears in interviews. Let's improve it step by step.
 
-先看一下题目：
+The problem:
 
 <Problem slug="trapping-rain-water" />
 
-就是用一个数组表示一个条形图，问你这个条形图最多能接多少水。
+An array represents a bar chart; how much water can it trap?
 
 ```java
 int trap(int[] height);
 ```
 
-下面就来由浅入深介绍暴力解法 -> 备忘录解法 -> 双指针解法，在 O(N) 时间 O(1) 空间内解决这个问题。
+We'll progress: brute force → memoized → two-pointer (O(N) time, O(1) space).
 
-## 一、核心思路
+## 1. Core Idea
 
 > [!TIP]
-> 做算法题，如果对题目提出的问题没有思路，不妨尝试化简问题，先从局部思考，先写出最简单粗暴的解法，也许会有突破点。逐步优化后也许就能找到最优解。
+> If you have no idea how to start, simplify and write the most naive solution first; you may find a path to the optimal.
 
-比如这道题，先不考虑整个柱状图能装多少水，仅仅考虑位置 `i` 这一个位置能装下多少水？
+For position `i`, how much water can it trap?
 
 ![](https://labuladong.online/algo/images/rain-water/0.jpg)
 
-能装 2 格水，因为 `height[i]` 的高度为 0，而这里最多能盛 2 格水，2-0=2。
+Two units. `height[i] = 0`; the cell can hold 2 units.
 
-为什么位置 `i` 最多能盛 2 格水呢？因为，位置 `i` 能达到的水柱高度和其左边的最高柱子、右边的最高柱子有关，我们分别称这两个柱子高度为 `l_max` 和 `r_max`；**位置 `i` 最大的水柱高度就是 `min(l_max, r_max)`**。
+Why 2? Because the water column at `i` is bounded by the tallest bars to its left and right, `l_max` and `r_max`. **At `i`, the column height is `min(l_max, r_max)`.**
 
-也就是说，对于位置 `i`，能够装的水为：
-
-
-
-
+So:
 
 ```python
 water[i] = min(
-    # 左边最高的柱子
+    # Tallest bar to the left
     max(height[0..i]),  
-    # 右边最高的柱子
+    # Tallest bar to the right
     max(height[i..end]) 
 ) - height[i]
 ```
@@ -73,7 +69,7 @@ water[i] = min(
 
 
 
-这就是本问题的核心思路，我们可以简单写一个暴力算法：
+The brute force:
 
 ```java
 class Solution {
@@ -82,13 +78,13 @@ class Solution {
         int res = 0;
         for (int i = 1; i < n - 1; i++) {
             int l_max = 0, r_max = 0;
-            // 找右边最高的柱子
+            // Tallest bar to the right
             for (int j = i; j < n; j++)
                 r_max = Math.max(r_max, height[j]);
-            // 找左边最高的柱子
+            // Tallest bar to the left
             for (int j = i; j >= 0; j--)
                 l_max = Math.max(l_max, height[j]);
-            // 如果自己就是最高的话，
+            // If i itself is the tallest,
             // l_max == r_max == height[i]
             res += Math.min(l_max, r_max) - height[i];
         }
@@ -97,13 +93,13 @@ class Solution {
 }
 ```
 
-这个解法应该是很直接粗暴的，时间复杂度 O(N^2)，空间复杂度 O(1)。但是很明显这种计算 `r_max` 和 `l_max` 的方式非常笨拙，每次都要用 for 循环去遍历，我们是不是可以优化一下这个过程？
+O(N²) time, O(1) space. Recomputing `l_max` and `r_max` is wasteful — let's optimize.
 
-## 二、备忘录优化
+## 2. Memoized
 
-之前的暴力解法，不是在每个位置 `i` 都要计算 `r_max` 和 `l_max` 吗？我们直接把结果都提前计算出来，别傻不拉几的每次都遍历，这时间复杂度不就降下来了嘛。
+Precompute the maxima:
 
-**我们开两个数组 `r_max` 和 `l_max` 充当备忘录，`l_max[i]` 表示位置 `i` 左边最高的柱子高度，`r_max[i]` 表示位置 `i` 右边最高的柱子高度**。预先把这两个数组计算好，避免重复计算：
+**Two arrays `l_max` and `r_max`: `l_max[i]` is the tallest bar at or before `i`; `r_max[i]` is the tallest at or after `i`**:
 
 ```java
 class Solution {
@@ -113,19 +109,19 @@ class Solution {
         }
         int n = height.length;
         int res = 0;
-        // 数组充当备忘录
+        // Memo arrays
         int[] l_max = new int[n];
         int[] r_max = new int[n];
-        // 初始化 base case
+        // Base cases
         l_max[0] = height[0];
         r_max[n - 1] = height[n - 1];
-        // 从左向右计算 l_max
+        // Compute l_max left-to-right
         for (int i = 1; i < n; i++)
             l_max[i] = Math.max(height[i], l_max[i - 1]);
-        // 从右向左计算 r_max
+        // Compute r_max right-to-left
         for (int i = n - 2; i >= 0; i--)
             r_max[i] = Math.max(height[i], r_max[i + 1]);
-        // 计算答案
+        // Compute the answer
         for (int i = 1; i < n - 1; i++)
             res += Math.min(l_max[i], r_max[i]) - height[i];
         return res;
@@ -138,7 +134,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/trapping-rain-water/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Animated Code Visualization 🎃</strong>
 </summary>
 </details>
 </a>
@@ -146,18 +142,18 @@ class Solution {
 
 
 
-这个优化其实和暴力解法思路差不多，就是避免了重复计算，把时间复杂度降低为 O(N)，已经是最优了，但是空间复杂度是 O(N)。下面来看一个精妙一些的解法，能够把空间复杂度降低到 O(1)。
+Same idea, no recomputation. O(N) time but O(N) space. We can reduce space to O(1).
 
-## 三、双指针解法
+## 3. Two-Pointer Solution
 
 > [!NOTE]
-> 这个解法作为思路拓展，看看就好，不必过于执着最优解。因为对于大部分人，在真实的面试/笔试中，能够使用朴实无华的方法见招拆招，写出上面的解法就可以了。虽然多了一些空间复杂度，但一般判题平台还是能过的。
+> Treat this as a stretch — don't obsess over the optimum. The simpler memoized version is usually accepted in interviews.
 > 
-> 除非过不了所有测试用例，且你写完了其他题目还有富余的时间，再花时间针对上面的解法进行优化也不迟。
+> Only optimize further if needed.
 
-这种解法的思路是完全相同的，但在实现手法上非常巧妙，我们这次也不要用备忘录提前计算了，而是用双指针**边走边算**，节省下空间复杂度。
+Same idea, but compute on the fly with two pointers.
 
-首先，看一部分代码：
+A first pass:
 
 ```java
 int trap(int[] height) {
@@ -167,17 +163,17 @@ int trap(int[] height) {
     while (left < right) {
         l_max = Math.max(l_max, height[left]);
         r_max = Math.max(r_max, height[right]);
-        // 此时 l_max 和 r_max 分别表示什么？
+        // What do l_max and r_max mean here?
         left++; right--;
     }
 }
 ```
 
-对于这部分代码，请问 `l_max` 和 `r_max` 分别表示什么意义呢？
+What do `l_max` and `r_max` mean?
 
-很容易理解，**`l_max` 是 `height[0..left]` 中最高柱子的高度，`r_max` 是 `height[right..end]` 的最高柱子的高度**。
+**`l_max` is the tallest in `height[0..left]`; `r_max` is the tallest in `height[right..end]`.**
 
-明白了这一点，直接看解法：
+Solution:
 
 ```java
 class Solution {
@@ -204,9 +200,9 @@ class Solution {
 }
 ```
 
-你看，其中的核心思想和之前一模一样，换汤不换药。但是细心的读者可能会发现次解法还是有点细节差异：
+Same idea, slightly different mechanics.
 
-之前的备忘录解法，`l_max[i]` 和 `r_max[i]` 分别代表 `height[0..i]` 和 `height[i..end]` 的最高柱子高度。
+In the memoized version, `l_max[i]` and `r_max[i]` were the maxima over `height[0..i]` and `height[i..end]`:
 
 ```java
 res += Math.min(l_max[i], r_max[i]) - height[i];
@@ -214,7 +210,7 @@ res += Math.min(l_max[i], r_max[i]) - height[i];
 
 ![](https://labuladong.online/algo/images/rain-water/3.jpg)
 
-但是双指针解法中，`l_max` 和 `r_max` 代表的是 `height[0..left]` 和 `height[right..end]` 的最高柱子高度。比如这段代码：
+Here `l_max` and `r_max` are over `height[0..left]` and `height[right..end]`:
 
 ```java
 if (l_max < r_max) {
@@ -225,54 +221,42 @@ if (l_max < r_max) {
 
 ![](https://labuladong.online/algo/images/rain-water/4.jpg)
 
-此时的 `l_max` 是 `left` 指针左边的最高柱子，但是 `r_max` 并不一定是 `left` 指针右边最高的柱子，这真的可以得到正确答案吗？
+`l_max` is the tallest left of `left`, but `r_max` may not be the tallest right of `left`. Is this still correct?
 
-其实这个问题要这么思考，我们只在乎 `min(l_max, r_max)`。**对于上图的情况，我们已经知道 `l_max < r_max` 了，至于这个 `r_max` 是不是右边最大的，不重要。重要的是 `height[i]` 能够装的水只和较低的 `l_max` 之差有关**：
+Yes — we only care about `min(l_max, r_max)`. **Above, we already know `l_max < r_max`; whether `r_max` is the absolute right max doesn't matter — `height[i]`'s water depends only on the smaller side `l_max`**:
 
 ![](https://labuladong.online/algo/images/rain-water/5.jpg)
 
-这样，接雨水问题就解决了。
+Trapping rain water solved.
 
-## 扩展：盛最多水的容器
+## Extension: Container With Most Water
 
-下面我们看一道和接雨水问题非常类似的题目，力扣第 11 题「盛最多水的容器」：
-
-
-
-
+A similar problem — LeetCode 11:
 
 <Problem slug="container-with-most-water" />
 
 ```java
-// 函数签名如下
+// Signature
 int maxArea(int[] height);
 ```
 
-这题和接雨水问题很类似，可以完全套用前文的思路，而且还更简单。两道题的区别在于：
+Similar idea, but **the previous problem was a bar chart with bar widths; here each line has no width**.
 
-**接雨水问题给出的类似一幅直方图，每个横坐标都有宽度，而本题给出的每个横坐标是一条竖线，没有宽度**。
+In the previous problem, `l_max` and `r_max` were needed to compute the water at each `i`. Without widths, that's simpler.
 
-我们前文讨论了半天 `l_max` 和 `r_max`，实际上都是为了计算 `height[i]` 能够装多少水；而本题中 `height[i]` 没有了宽度，那自然就好办多了。
+If you knew `height[left]` and `height[right]` in trapping rain water, could you compute the water between them? No — you'd need to know each interior bar's `l_max` and `r_max`.
 
-举个例子，如果在接雨水问题中，你知道了 `height[left]` 和 `height[right]` 的高度，你能算出 `left` 和 `right` 之间能够盛下多少水吗？
-
-不能，因为你不知道 `left` 和 `right` 之间每个柱子具体能盛多少水，你得通过每个柱子的 `l_max` 和 `r_max` 来计算才行。
-
-反过来，就本题而言，你知道了 `height[left]` 和 `height[right]` 的高度，能算出 `left` 和 `right` 之间能够盛下多少水吗？
-
-可以，因为本题中竖线没有宽度，所以 `left` 和 `right` 之间能够盛的水就是：
+In this problem, you can:
 
 ```python
 min(height[left], height[right]) * (right - left)
 ```
 
-类似接雨水问题，高度是由 `height[left]` 和 `height[right]` 较小的值决定的。
+Like before, the smaller side bounds the height.
 
-解决这道题的思路依然是双指针技巧：
+Two pointers:
 
-**用 `left` 和 `right` 两个指针从两端向中心收缩，一边收缩一边计算 `[left, right]` 之间的矩形面积，取最大的面积值即是答案**。
-
-先直接看解法代码吧：
+**`left` and `right` close in from both ends; track the area between them; take the maximum.**
 
 ```java
 class Solution {
@@ -280,10 +264,10 @@ class Solution {
         int left = 0, right = height.length - 1;
         int res = 0;
         while (left < right) {
-            // [left, right] 之间的矩形面积
+            // Area between left and right
             int cur_area = Math.min(height[left], height[right]) * (right - left);
             res = Math.max(res, cur_area);
-            // 双指针技巧，移动较低的一边
+            // Two-pointer: move the lower side
             if (height[left] < height[right]) {
                 left++;
             } else {
@@ -300,7 +284,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/container-with-most-water/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Animated Code Visualization 🎃</strong>
 </summary>
 </details>
 </a>
@@ -308,14 +292,10 @@ class Solution {
 
 
 
-代码和接雨水问题大致相同，不过肯定有读者会问，下面这段 if 语句为什么要移动较低的一边：
-
-
-
-
+Why move the lower side?
 
 ```java
-// 双指针技巧，移动较低的一边
+// Two-pointer: move the lower side
 if (height[left] < height[right]) {
     left++;
 } else {
@@ -323,13 +303,11 @@ if (height[left] < height[right]) {
 }
 ```
 
+**Because the rectangle's height is bounded by the lower side: `min(height[left], height[right])`.**
 
+Moving the lower side may raise it, possibly increasing the area. Moving the higher side never increases the height — so the area can't grow.
 
-**其实也好理解，因为矩形的高度是由 `min(height[left], height[right])` 即较低的一边决定的**：
-
-你如果移动较低的那一边，那条边可能会变高，使得矩形的高度变大，进而就「有可能」使得矩形的面积变大；相反，如果你去移动较高的那一边，矩形的高度是无论如何都不会变大的，所以不可能使矩形的面积变得更大。
-
-至此，这道题也解决了。
+Done.
 
 
 

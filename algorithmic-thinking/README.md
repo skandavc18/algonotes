@@ -1,8 +1,8 @@
-# 算法思维系列
+# Algorithmic Thinking Series
 
-本章包含一些常用的算法技巧，比如前缀和、回溯思想、位操作、双指针、如何正确书写二分查找等等。
+This chapter contains a number of commonly used algorithmic techniques, such as prefix sums, the backtracking mindset, bitwise operations, two pointers, how to correctly write binary search, and so on.
 
-欢迎关注我的公众号 labuladong，查看全部文章：
+Follow my public account `labuladong` to read all articles:
 
-![labuladong二维码](../pictures/table_qr2.jpg)
-![labuladong二维码](../pictures/qrcode.jpg)
+![labuladong QR code](../pictures/table_qr2.jpg)
+![labuladong QR code](../pictures/qrcode.jpg)

@@ -1,35 +1,35 @@
-# 单链表的花式反转方法汇总
+# A Compendium of Reversal Tricks for Singly Linked Lists
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) | [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/) | 🟢 |
-| [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) | [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/) | 🔴 |
-| [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/) | [92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/) | 🟠 |
+| [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) | [206. Reverse Linked List](https://leetcode.cn/problems/reverse-linked-list/) | 🟢 |
+| [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) | [25. Reverse Nodes in k-Group](https://leetcode.cn/problems/reverse-nodes-in-k-group/) | 🔴 |
+| [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/) | [92. Reverse Linked List II](https://leetcode.cn/problems/reverse-linked-list-ii/) | 🟠 |
 
 **-----------**
 
 
 
-反转单链表的迭代解法不是一个困难的事情，但是递归实现就有点难度了。如果再加一点难度，让你仅仅反转单链表中的一部分，你是否能够同时用迭代和递归实现呢？再进一步，如果让你 k 个一组反转链表，阁下又应如何应对？
+The iterative solution to reversing a singly linked list isn't hard, but the recursive one is more challenging. If we add the twist of reversing only part of a linked list — can you do both iteratively and recursively? And taking it further, what about reversing nodes k at a time?
 
-本文就来由浅入深，一次性解决这些链表操作的问题。我会同时使用递归和迭代的方式，并结合可视化面板帮助你理解，以此强化你的递归思维以及操作链表指针的能力。
+This article tackles these problems step by step. We'll use both recursion and iteration, with visualization panels to strengthen your recursive intuition and pointer skills.
 
-## 反转整个单链表
+## Reversing the Whole Singly Linked List
 
-在 力扣/LeetCode 中，单链表的通用结构是这样的：
+On LeetCode, the standard `ListNode` is:
 
 ```java
-// 单链表节点的结构
+// Singly linked list node
 class ListNode {
     int val;
     ListNode next;
@@ -37,40 +37,40 @@ class ListNode {
 }
 ```
 
-单链表反转是一个比较基础的算法题，力扣第 206 题「反转链表」就是这个问题：
+Reversing a singly linked list is a basic problem — LeetCode 206 "Reverse Linked List":
 
 <Pronlem slug="reverse-linked-list" />
 
-下面我们来尝试用多种方法解决这个问题。
+We'll try several approaches.
 
-### 迭代解法
+### Iterative Solution
 
-这道题的常规做法就是迭代解法，通过操作几个指针，将链表中的每个节点的指针方向反转，没什么难点，主要是指针操作的细节问题。
+The standard approach uses a few pointers to flip each node's `next`. Nothing tricky, just pointer details.
 
-这里直接给出代码，结合注释和可视化面板应该不难理解：
+Code (with comments and the visualization, this should be clear):
 
 ```java
 class Solution {
-    // 反转以 head 为起点的单链表
+    // Reverse the list starting at head
     public ListNode reverseList(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
-        // 由于单链表的结构，至少要用三个指针才能完成迭代反转
-        // cur 是当前遍历的节点，pre 是 cur 的前驱结点，nxt 是 cur 的后继结点
+        // For a singly linked list we need three pointers
+        // cur is the current node, pre is its predecessor, nxt its successor
         ListNode pre, cur, nxt;
         pre = null; cur = head; nxt = head.next;
         while (cur != null) {
-            // 逐个结点反转
+            // Reverse one node at a time
             cur.next = pre;
-            // 更新指针位置
+            // Advance pointers
             pre = cur;
             cur = nxt;
             if (nxt != null) {
                 nxt = nxt.next;
             }
         }
-        // 返回反转后的头结点
+        // Return the new head
         return pre;
     }
 }
@@ -78,34 +78,30 @@ class Solution {
 
 <visual slug="reverse-linked-list-iter" >
 
-你可以点开下面的可视化面板，多次点击 <code type="click">cur.next = pre</code> 这一行代码，即可直观地看到单链表的反转过程：
+Click the visualization below; click the line <code type="click">cur.next = pre</code> repeatedly to see the reversal step by step:
 
 </visual>
 
 > [!TIP]
-> 上面操作单链表的代码逻辑不复杂，而且也不止我这一种正确的写法。但是操作指针的时候，有一些很基本、很简单的小技巧，可以让你写代码的思路更清晰：
+> The pointer logic isn't complex and there are other correct ways to write it. Two simple tips help keep things clear:
 > 
-> 1、一旦出现类似 `nxt.next` 这种操作，就要条件反射地想到，先判断 `nxt` 是否为 null，否则容易出现空指针异常。
+> 1. As soon as you write something like `nxt.next`, reflexively check whether `nxt` is null first — otherwise you risk a null pointer exception.
 > 
-> 2、注意循环的终止条件。你要知道循环终止时，各个指针的位置，这样才能保返回正确的答案。如果你觉得有点复杂想不清楚，那就动手画一个最简单的场景跑一下算法，比如这道题就可以画一个只有两个节点的单链表 `1->2`，然后就能确定循环终止后各个指针的位置了。
+> 2. Pay attention to loop termination conditions. Know where each pointer ends up when the loop exits, so you return the right answer. If it gets confusing, draw the simplest case (e.g. `1->2`) and trace through.
 
-### 递归解法
+### Recursive Solution
 
-上面的迭代解法操作指针虽然有些繁琐，但是思路还是比较清晰的。如果现在让你用递归来反转单链表，你有啥想法没？
+Iteration is fiddly but straightforward. What about recursion?
 
-对于初学者来说可能很难想到，这很正常。如果你学习了后文的二叉树系列算法思维，回头再来看这道题，才有可能自己想出这个算法。
+Beginners may not see the trick — that's normal. After studying recursive thinking via the binary-tree series, you may come back and figure it out yourself.
 
-因为二叉树结构本身就是单链表的延伸，相当于是二叉链表嘛，所以二叉树上的递归思维，套用到单链表上是一样的。
+Binary trees are essentially an extension of singly linked lists (a "binary linked list"), so the same recursive thinking applies.
 
-**递归反转单链表的关键在于，这个问题本身是存在子问题结构的**。
+**The key to recursive list reversal: the problem itself has subproblem structure.**
 
-比方说，现在给你输入一个以 `1` 为头结点单链表 `1->2->3->4`，那么如果我忽略这个头结点 `1`，只拿出 `2->3->4` 这个子链表，它也是个单链表对吧？
+Given a list `1->2->3->4`, ignore the head `1` and look at the sublist `2->3->4` — that's also a singly linked list.
 
-那么你这个 `reverseList` 函数，只要输入一个单链表，就能给我反转对吧？那么你能不能用这个函数先来反转 `2->3->4` 这个子链表呢，然后再想办法把 `1` 接到反转后的 `4->3->2` 的最后面，是不是就完成了整个链表的反转？
-
-
-
-
+So if `reverseList` reverses any singly linked list, can we use it to reverse `2->3->4` first, then attach `1` to the end of the reversed `4->3->2`? That gives the full reversal.
 
 ```java
 reverseList(1->2->3->4) = reverseList(2->3->4) -> 1
@@ -113,15 +109,15 @@ reverseList(1->2->3->4) = reverseList(2->3->4) -> 1
 
 
 
-**这就是「分解问题」的思路，通过递归函数的定义，把原问题分解成若干规模更小、结构相同的子问题，最后通过子问题的答案组装原问题的解**。
+**This is the "decomposition" mindset: use the recursion's definition to break the original problem into smaller, structurally identical subproblems, then assemble the answer.**
 
-在后面的教程中会有专门的章节讲解和练习这种思维，这里不展开。
+We have a chapter dedicated to this mindset later; here we won't go deeper.
 
-先来看看递归反转单链表的代码实现：
+Code:
 
 ```java
 class Solution {
-    // 定义：输入一个单链表头结点，将该链表反转，返回新的头结点
+    // Definition: given the head of a singly linked list, reverse it and return the new head
     public ListNode reverseList(ListNode head) {
         if (head == null || head.next == null) {
             return head;
@@ -134,39 +130,33 @@ class Solution {
 }
 ```
 
-这个算法常常拿来显示递归的巧妙和优美，我们下面来详细解释一下这段代码，最后在给出可视化面板，你可以自己动手探究一下递归过程。
+This algorithm is often used to showcase the elegance of recursion. Let's walk through it; afterwards, the visualization panel lets you explore the recursion yourself.
 
-对于「分解问题」思路的递归算法，最重要的就是明确递归函数的定义。具体来说，我们的 `reverseList` 函数定义是这样的：
+For decomposition-style recursion, the most important thing is to nail down the function's definition. Here:
 
-**输入一个节点 `head`，将「以 `head` 为起点」的链表反转，并返回反转之后的头结点**。
+**Given a node `head`, reverse the list starting at `head` and return the new head.**
 
-明白了函数的定义，再来看这个问题。比如说我们想反转这个链表：
+With this definition, consider reversing:
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/1.jpg)
 
-那么输入 `reverseList(head)` 后，会在这里进行递归：
-
-
-
-
+`reverseList(head)` recurses here:
 
 ```java
 ListNode last = reverseList(head.next);
 ```
 
-
-
-不要跳进递归（你的脑袋能压几个栈呀？），而是要根据刚才的函数定义，来弄清楚这段代码会产生什么结果：
+Don't dive into the recursion (your stack can only hold so much!) — instead, use the definition to figure out the result:
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/2.jpg)
 
-这个 `reverseList(head.next)` 执行完成后，整个链表就成了这样：
+After `reverseList(head.next)`, the list looks like:
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/3.jpg)
 
-并且根据函数定义，`reverseList` 函数会返回反转之后的头结点，我们用变量 `last` 接收了。
+By definition, `reverseList` returns the new head; we capture it in `last`.
 
-现在再来看下面的代码：
+Now this line:
 
 ```java
 head.next.next = head;
@@ -174,7 +164,7 @@ head.next.next = head;
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/4.jpg)
 
-接下来：
+Then:
 
 ```java
 head.next = null;
@@ -183,15 +173,9 @@ return last;
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/5.jpg)
 
+The list is fully reversed! Recursion is concise and elegant. Two things to watch for:
 
-
-
-
-
-
-神不神奇，这样整个链表就反转过来了！递归代码就是这么简洁优雅，不过其中有两个地方需要注意：
-
-1、递归函数要有 base case，也就是这句：
+1. The base case:
 
 ```java
 if (head == null || head.next == null) {
@@ -199,59 +183,53 @@ if (head == null || head.next == null) {
 }
 ```
 
-意思是如果链表为空或者只有一个节点的时候，反转结果就是它自己，直接返回即可。
+If the list is empty or has a single node, the reversal is itself; return as is.
 
-2、当链表递归反转之后，新的头结点是 `last`，而之前的 `head` 变成了最后一个节点，别忘了链表的末尾要指向 null：
+2. After reversal, the new head is `last` and the old `head` becomes the tail; remember to set its `next` to null:
 
 ```java
 head.next = null;
 ```
 
-这样，整个单链表就完成反转了，神不神奇？下面是递归反转链表的可视化过程：
+The list is now fully reversed. Visualization of the recursive reversal:
 
 
 <hr/>
 <a href="https://labuladong.online/algo-visualize/leetcode/reverse-linked-list/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Animated Code Visualization 🎃</strong>
 </summary>
 </details>
 </a>
 <hr/>
 
 > [!NOTE]
-> 虽然可视化面板可以展示整个递归过程的所有细节，但我不建议初学者过于执着于细节。建议先依照上面图示讲解的思维方式理解递归，然后再通过可视化面板加深理解。
+> The visualization shows every detail, but I don't recommend beginners obsess over them. Understand the recursion using the figures above first, then use the visualization to deepen the understanding.
 
 > [!NOTE]
-> 值得一提的是，递归操作链表并不高效。
+> Recursion is not efficient for linked lists.
 > 
-> 递归解法和迭代解法相比，时间复杂度都是 O(N)，但是迭代解法的空间复杂度是 O(1)，而递归解法需要堆栈，空间复杂度是 O(N)。
+> Both versions are O(N) time, but the iterative version uses O(1) extra space, while the recursive version uses O(N) for the call stack.
 > 
-> 所以递归操作链表可以用来练习递归思维，但是考虑效率的话还是使用迭代算法更好。
+> Use recursion to practice recursive thinking, but for performance use iteration.
 
-## 反转链表前 N 个节点
+## Reverse the First N Nodes
 
-这次我们实现一个这样的函数：
+Now implement:
 
 ```java
-// 将链表的前 n 个节点反转（n <= 链表长度）
+// Reverse the first n nodes (n <= length of the list)
 ListNode reverseN(ListNode head, int n)
 ```
 
-比如说对于下图链表，执行 `reverseN(head, 3)`：
+For the list below, `reverseN(head, 3)`:
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/6.jpg)
 
+### Iterative Solution
 
-
-
-
-
-
-### 迭代解法
-
-迭代解法应该比较好写，在之前实现的 `reverseList` 基础上稍加修改就可以了：
+Easy by tweaking the previous `reverseList`:
 
 ```java
 ListNode reverseN(ListNode head, int n) {
@@ -269,9 +247,9 @@ ListNode reverseN(ListNode head, int n) {
         }
         n--;
     }
-    // 此时的 cur 是第 n + 1 个节点，head 是反转后的尾结点
+    // cur is now the (n+1)-th node; head is the new tail of the reversed segment
     head.next = cur;
-    // 此时的 pre 是反转后的头结点
+    // pre is the new head of the reversed segment
     return pre;
 }
 ```
@@ -281,7 +259,7 @@ ListNode reverseN(ListNode head, int n) {
 <a href="https://labuladong.online/algo-visualize/tutorial/reverse-n-iter/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Animated Code Visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -289,40 +267,36 @@ ListNode reverseN(ListNode head, int n) {
 
 
 
-### 递归解法
+### Recursive Solution
 
-递归思路和递归反转整个链表差不多，只要稍加修改即可：
+Similar to the full reversal with small tweaks:
 
 ```java
-// 后驱节点
+// Successor node
 ListNode successor = null;
 
-// 反转以 head 为起点的 n 个节点，返回新的头结点
+// Reverse the first n nodes starting at head; return the new head
 ListNode reverseN(ListNode head, int n) {
     if (n == 1) {
-        // 记录第 n + 1 个节点
+        // Record the (n+1)-th node
         successor = head.next;
         return head;
     }
-    // 以 head.next 为起点，需要反转前 n - 1 个节点
+    // Reverse the first n - 1 nodes starting at head.next
     ListNode last = reverseN(head.next, n - 1);
 
     head.next.next = head;
-    // 让反转之后的 head 节点和后面的节点连起来
+    // Connect the reversed head to the rest
     head.next = successor;
     return last;
 }
 ```
 
-具体的区别：
+Differences:
 
-1、base case 变为 `n == 1`，反转一个元素，就是它本身，**同时要记录后驱节点**，即要记录第 `n + 1` 个节点。
+1. The base case becomes `n == 1`. Reversing one element gives itself; **also record the successor** — the (n+1)-th node.
 
-2、刚才我们直接把 `head.next` 设置为 null，因为整个链表反转后原来的 `head` 变成了整个链表的最后一个节点。但现在 `head` 节点在递归反转之后不一定是最后一个节点了，所以要记录后驱 `successor`（第 `n + 1` 个节点），反转之后将 `head` 连接上。
-
-
-
-
+2. Previously we set `head.next` to null because after full reversal `head` becomes the last node. Now `head` is not necessarily the last node, so we record `successor` (the (n+1)-th node) and connect `head` to it.
 
 ![](https://labuladong.online/algo/images/reverse-linked-list/7.jpg)
 
@@ -331,7 +305,7 @@ ListNode reverseN(ListNode head, int n) {
 <a href="https://labuladong.online/algo-visualize/tutorial/list-reverse-n/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🍭 代码可视化动画🍭</strong>
+<strong>🍭 Animated Code Visualization 🍭</strong>
 </summary>
 </details>
 </a>
@@ -339,29 +313,23 @@ ListNode reverseN(ListNode head, int n) {
 
 
 
-## 反转链表的一部分
+## Reversing Part of a Linked List
 
-我们可以再进一步，给你一个索引区间，让你把单链表中这部分元素反转，其他部分不变。
+We can go further: given an index range, reverse just that segment.
 
-力扣第 92 题「反转链表 II」就是这个问题：
-
-
-
-
+LeetCode 92 "Reverse Linked List II":
 
 <Problem slug="reverse-linked-list-ii" />
 
-
-
-题目输入索引区间 `[m, n]`（索引从 1 开始），仅仅反转区间中的链表元素，函数签名如下：
+Given indices `[m, n]` (1-indexed), reverse only that segment. Signature:
 
 ```java
 ListNode reverseBetween(ListNode head, int m, int n)
 ```
 
-### 迭代解法
+### Iterative Solution
 
-纯迭代的思路比较直接，可以先找到第 `m - 1` 个节点，然后复用之前实现的 `reverseN` 函数就行了：
+Find the (m-1)-th node, then reuse `reverseN`:
 
 ```java
 class Solution {
@@ -369,12 +337,12 @@ class Solution {
         if (m == 1) {
             return reverseN(head, n);
         }
-        // 找到第 m 个节点的前驱
+        // Find the predecessor of the m-th node
         ListNode pre = head;
         for (int i = 1; i < m - 1; i++) {
             pre = pre.next;
         }
-        // 从第 m 个节点开始反转
+        // Start reversing from the m-th node
         pre.next = reverseN(pre.next, n - m + 1);
         return head;
     }
@@ -394,9 +362,9 @@ class Solution {
             }
             n--;
         }
-        // 此时的 cur 是第 n + 1 个节点，head 是反转后的尾结点
+        // cur is now the (n+1)-th node; head is the new tail of the reversed segment
         head.next = cur;
-        // 此时的 pre 是反转后的头结点
+        // pre is the new head of the reversed segment
         return pre;
     }
 }
@@ -407,7 +375,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/tutorial/reverse-linked-list-ii-iter/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>👾 代码可视化动画👾</strong>
+<strong>👾 Animated Code Visualization 👾</strong>
 </summary>
 </details>
 </a>
@@ -415,35 +383,35 @@ class Solution {
 
 
 
-### 递归解法
+### Recursive Solution
 
-纯递归解法，依然是找到第 `m - 1` 个节点，然后复用之前实现的 `reverseN` 函数就行了。
+Same idea: find the (m-1)-th node, then reuse `reverseN`.
 
-关键是，如何通过递归的方式找到第 `m - 1` 个节点呢？
+How do we find the (m-1)-th node recursively?
 
-如果我们把 `head` 的索引视为 1，那么我们是想从第 `m` 个元素开始反转对吧；如果把 `head.next` 的索引视为 1 呢？那么相对于 `head.next`，反转的区间应该是从第 `m - 1` 个元素开始的；那么对于 `head.next.next` 呢……
+If we treat `head`'s index as 1, we want to start reversing at the m-th element. If we treat `head.next` as index 1, we'd be reversing starting from the (m-1)-th element relative to `head.next`. And for `head.next.next`...
 
-这其实就是用递归的方式来进行迭代。我们可以这样写代码：
+That's just iteration via recursion:
 
 ```java
 class Solution {
     public ListNode reverseBetween(ListNode head, int m, int n) {
-        // base case
+        // Base case
         if (m == 1) {
             return reverseN(head, n);
         }
-        // 前进到反转的起点触发 base case
+        // Advance to the start of the reversal to trigger the base case
         head.next = reverseBetween(head.next, m - 1, n - 1);
         return head;
     }
 
-    // 后驱节点
+    // Successor node
     ListNode successor = null;
 
-    // 反转以 head 为起点的 n 个节点，返回新的头结点
+    // Reverse the first n nodes starting at head; return the new head
     ListNode reverseN(ListNode head, int n) {
         if (n == 1) {
-            // 记录第 n + 1 个节点
+            // Record the (n+1)-th node
             successor = head.next;
             return head;
         }
@@ -461,7 +429,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/reverse-linked-list-ii/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Animated Code Visualization 🎃</strong>
 </summary>
 </details>
 </a>
@@ -469,73 +437,67 @@ class Solution {
 
 
 
-## K 个一组反转链表
+## Reverse Nodes in k-Group
 
-这个问题经常在面经中看到，而且力扣上难度是 Hard，看下题目：
+A classic interview problem; LeetCode rates it Hard:
 
 <Problem slug="reverse-nodes-in-k-group" />
 
-有了前面的层层铺垫，它真的有那么难吗？其实只要你运用一下「分解问题」的思维，然后直接复用前面的 `reverseN` 函数就行了。
+After all that buildup, is it really hard? Decomposition mindset + reuse of `reverseN` does it.
 
+### Idea
 
+This problem **has recursive structure**.
 
-
-
-
-
-### 思路分析
-
-认真思考一下可以发现**这个问题具有递归性质**。
-
-比如说我们对这个链表调用 `reverseKGroup(head, 2)`，即以 2 个节点为一组反转链表：
+Calling `reverseKGroup(head, 2)`:
 
 ![](https://labuladong.online/algo/images/kgroup/1.jpg)
 
-如果我设法把前 2 个节点反转，那么后面的那些节点怎么处理？后面的这些节点也是一条链表，而且规模（长度）比原来这条链表小，这就叫规模更小，结构相同的子问题。
+If we reverse the first 2 nodes, the rest is still a linked list — just shorter. That's a smaller, structurally identical subproblem.
 
-我们可以把原先的 `head` 指针移动到后面这一段链表的开头，然后继续递归调用 `reverseKGroup(head, 2)`：
+We move `head` to the start of the rest and recursively call `reverseKGroup(head, 2)`:
 
 ![](https://labuladong.online/algo/images/kgroup/2.jpg)
 
-发现了递归性质，就可以得到大致的算法流程：
+Sketch:
 
-**1、先反转以 `head` 开头的 `k` 个元素**。这里可以复用前面实现的 `reverseN` 函数。
+**1. Reverse the first `k` elements starting at `head`.** Reuse `reverseN`.
 
 ![](https://labuladong.online/algo/images/kgroup/3.jpg)
 
-**2、将第 `k + 1` 个元素作为 `head` 递归调用 `reverseKGroup` 函数**。
+**2. Recursively call `reverseKGroup` with the (k+1)-th element as the new head.**
 
 ![](https://labuladong.online/algo/images/kgroup/4.jpg)
 
-**3、将上述两个过程的结果连接起来**。
+**3. Stitch the two results together.**
 
 ![](https://labuladong.online/algo/images/kgroup/5.jpg)
 
-### 代码实现
+### Code
 
-结合上面的逐步讲解，代码就可以直接写出来了。我这里就用迭代形式的 `reverseN` 函数，你想用递归形式的也可以：
+I'll use the iterative `reverseN`; recursive works too:
 
 ```java
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
         if (head == null) return null;
-        // 区间 [a, b) 包含 k 个待反转元素
+        // Range [a, b) covers the k elements to reverse
         ListNode a, b;
         a = b = head;
         for (int i = 0; i < k; i++) {
-            // 不足 k 个，不需要反转了
+            // Less than k elements left; no need to reverse
             if (b == null) return head;
             b = b.next;
         }
-        // 反转前 k 个元素
+        // Reverse the first k elements
         ListNode newHead = reverseN(a, k);
-        // 此时 b 指向下一组待反转的头结点
-        // 递归反转后续链表并连接起来
+        // b now points to the head of the next group
+        // Recursively reverse the rest and connect
         a.next = reverseKGroup(b, k);
         return newHead;
     }
 
-    // 上文实现的反转前 N 个节点的函数
+    // The reverseN function defined above
     ListNode reverseN(ListNode head, int n) {
         if (head == null || head.next == null) {
             return head;
@@ -557,25 +519,25 @@ class Solution {
 }
 ```
 
-很快啊，这道题就解决了。
+Done.
 
 
 <hr/>
 <a href="https://labuladong.online/algo-visualize/leetcode/reverse-nodes-in-k-group/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌈 代码可视化动画🌈</strong>
+<strong>🌈 Animated Code Visualization 🌈</strong>
 </summary>
 </details>
 </a>
 <hr/>
 
 
-## 最后总结
+## Wrap-Up
 
-递归的思想相对迭代思想，稍微有点难以理解，处理的技巧是：不要跳进递归，而是利用明确的定义来实现算法逻辑。
+Recursion is harder to grasp than iteration. The trick: don't dive into the recursion — use a clear definition to drive the implementation.
 
-处理看起来比较困难的问题，可以尝试化整为零，把一些简单的解法进行修改，解决困难的问题。
+For a hard problem, try breaking it down: modify simpler solutions to handle harder cases.
 
 
 
@@ -585,13 +547,13 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】链表双指针经典习题](https://labuladong.online/algo/problem-set/linkedlist-two-pointers/)
- - [二叉树心法（思路篇）](https://labuladong.online/algo/data-structure/binary-tree-part1/)
- - [如何判断回文链表](https://labuladong.online/algo/data-structure/palindrome-linked-list/)
- - [烧饼排序算法](https://labuladong.online/algo/frequency-interview/pancake-sorting/)
- - [算法笔试「骗分」套路](https://labuladong.online/algo/other-skills/tips-in-exam/)
+ - [[Practice] Classic Two-Pointer Linked List Problems](https://labuladong.online/algo/problem-set/linkedlist-two-pointers/)
+ - [Binary Tree Tactics (Approach)](https://labuladong.online/algo/data-structure/binary-tree-part1/)
+ - [Determining a Palindrome Linked List](https://labuladong.online/algo/data-structure/palindrome-linked-list/)
+ - [Pancake Sorting](https://labuladong.online/algo/frequency-interview/pancake-sorting/)
+ - ["Trick" Patterns for Algorithm Quizzes](https://labuladong.online/algo/other-skills/tips-in-exam/)
 
 </details><hr>
 
@@ -600,18 +562,18 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [2. Add Two Numbers](https://leetcode.com/problems/add-two-numbers/?show=1) | [2. 两数相加](https://leetcode.cn/problems/add-two-numbers/?show=1) | 🟠 |
-| [24. Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs/?show=1) | [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/?show=1) | 🟠 |
-| [445. Add Two Numbers II](https://leetcode.com/problems/add-two-numbers-ii/?show=1) | [445. 两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/?show=1) | 🟠 |
-| - | [剑指 Offer 24. 反转链表](https://leetcode.cn/problems/fan-zhuan-lian-biao-lcof/?show=1) | 🟢 |
-| - | [剑指 Offer II 024. 反转链表](https://leetcode.cn/problems/UHnkqh/?show=1) | 🟢 |
-| - | [剑指 Offer II 025. 链表中的两数相加](https://leetcode.cn/problems/lMSNwu/?show=1) | 🟠 |
+| [2. Add Two Numbers](https://leetcode.com/problems/add-two-numbers/?show=1) | [2. Add Two Numbers](https://leetcode.cn/problems/add-two-numbers/?show=1) | 🟠 |
+| [24. Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs/?show=1) | [24. Swap Nodes in Pairs](https://leetcode.cn/problems/swap-nodes-in-pairs/?show=1) | 🟠 |
+| [445. Add Two Numbers II](https://leetcode.com/problems/add-two-numbers-ii/?show=1) | [445. Add Two Numbers II](https://leetcode.cn/problems/add-two-numbers-ii/?show=1) | 🟠 |
+| - | [Sword to Offer 24. Reverse Linked List](https://leetcode.cn/problems/fan-zhuan-lian-biao-lcof/?show=1) | 🟢 |
+| - | [Sword to Offer II 024. Reverse Linked List](https://leetcode.cn/problems/UHnkqh/?show=1) | 🟢 |
+| - | [Sword to Offer II 025. Add Two Numbers in Linked List](https://leetcode.cn/problems/lMSNwu/?show=1) | 🟠 |
 
 </details>
 <hr>

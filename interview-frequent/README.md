@@ -1,7 +1,7 @@
-# 高频面试系列
+# Frequently-Asked Interview Series
 
-8 说了，本章都是高频面试题，配合前面的动态规划系列，祝各位马到成功！
+No more chit-chat — this chapter is all high-frequency interview problems. Combined with the earlier dynamic-programming series, may you all hit the ground running!
 
-欢迎关注我的公众号 labuladong，查看全部文章：
+Follow my public account `labuladong` to read all articles:
 
-![labuladong二维码](../pictures/qrcode.jpg)
+![labuladong QR code](../pictures/qrcode.jpg)

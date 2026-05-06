@@ -1,191 +1,191 @@
-# 密码算法的前世今生
+# A history of cryptographic algorithms
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
 **-----------**
 
-说到密码，我们第一个想到的就是登陆账户的密码，但是从密码学的角度来看，这种根本就不算合格的密码。
+When we talk about passwords, the first thing that comes to mind is the password we use to log into our accounts. But from a cryptographic standpoint, that's not even a real "secret".
 
-为什么呢，因为我们的账户密码，是依靠隐蔽性来达到加密作用：密码藏在我心里，你不知道，所以你登不上我的账户。
+Why? Because account passwords rely on obscurity for their secrecy: the password is in my head; you don't know it, so you can't log in.
 
-然而密码技术认为，「保密」信息总有一天会被扒出来，所以加密算法不应该依靠「保密」来保证机密性，而应该做到：即便知道了加密算法，依然无计可施。说的魔幻一点就是，告诉你我的密码，你依然不知道我的密码。
- 
-最玄学的就是 Diffie-Hellman 密钥交换算法，我当初就觉得很惊奇，两个人当着你的面互相报几个数字，他们就可以拥有一个共同的秘密，而你却根本不可能算出来这个秘密。下文会着重介绍一下这个算法。
+But cryptography assumes that "secret" information will eventually be discovered. So encryption algorithms shouldn't depend on secrecy for confidentiality. They should achieve this: even if you know the algorithm, you still can't break it. Put dramatically: even if I tell you my password, you still won't know my password.
 
-本文讨论的密码技术要解决的主要是信息传输中的加密和解密问题。要假设数据传输过程是不安全的，所有信息都在被窃听的，所以发送端要把信息加密，接收方收到信息之后，肯定得知道如何解密。有意思的是，如果你能够让接收者知道如何解密，那么窃听者不是也能够知道如何解密了吗？
+The most magical of all is the Diffie-Hellman key exchange algorithm. I was floored when I first saw it: two people exchange a few numbers in plain sight in front of you, and they end up with a shared secret that you can't possibly compute. We'll dive into this algorithm below.
 
-下面，**我们会介绍对称加密算法、密钥交换算法、非对称加密算法、数字签名、公钥证书**，看看解决安全传输问题的一路坎坷波折。
+The cryptography we discuss here is mainly about encryption and decryption during data transmission. Assume the channel is insecure — every bit is being eavesdropped. So the sender encrypts before sending. When the receiver gets the data, they need to know how to decrypt. Funny thing — if you let the receiver know how to decrypt, can't the eavesdropper know too?
 
-### 一、对称性加密
+Below we'll cover **symmetric encryption, key exchange algorithms, asymmetric encryption, digital signatures, and public-key certificates** — and see the bumpy road of solving secure transmission.
 
-对称性密码，也叫共享密钥密码，顾名思义，这种加密方式用相同的密钥进行加密和解密。
+### 1. Symmetric encryption
 
-比如我说一种最简单的对称加密的方法。首先我们知道信息都可以表示成 0/1 比特序列，也知道相同的两个比特序列做异或运算的结果为 0。
+Symmetric encryption — also called shared-key encryption — uses the same key for encryption and decryption.
 
-那么我们就可以生成一个长度和原始信息一样的随机比特序列作为密钥，然后用它对原始信息做异或运算，就生成了密文。反之，再用该密钥对密文做一次异或运算，就可以恢复原始信息。
+Here's a simple example. Information can be represented as a 0/1 bit sequence, and the same two bit sequences XORed together yield 0.
 
-这是一个简单例子，不过有些过于简单，有很多问题。比如密钥的长度和原始信息完全一致，如果原始信息很大，密钥也会一样大，而且生成大量真随机比特序列的计算开销也比较大。
+So we can generate a random bit sequence the same length as the original message as our key, XOR it with the message to produce ciphertext. Then XOR the same key with the ciphertext to recover the original message.
 
-当然，有很多更复杂优秀的对称加密算法解决了这些问题，比如 Rijndael 算法、三重 DES 算法等等。**它们从算法上是无懈可击的，也就是拥有巨大的密钥空间，基本无法暴力破解，而且加密过程相对快速**。
+This is a simple example with several issues. The key length matches the message length — for big messages, the key is also big. And generating a lot of true random bits is computationally expensive.
 
-**但是，一切对称加密算法的软肋在于密钥的配送**。加密和解密用同一个密钥，发送方必须设法把密钥发送给接收方。如果窃听者有能力窃取密文，肯定也可以窃取密钥，那么再无懈可击的算法依然不攻自破。
+There are many more advanced and elegant symmetric algorithms that solve these issues — Rijndael, triple-DES, etc. **Algorithmically they're rock solid, with huge key spaces that are infeasible to brute-force, and encryption is relatively fast**.
 
-所以，下面介绍两种解决密钥配送问题最常见的算法，分别是 Diffie-Hellman 密钥交换算法和非对称加密算法。
+**But the Achilles' heel of every symmetric algorithm is key distribution**. Encryption and decryption use the same key, and the sender must somehow get the key to the receiver. If an eavesdropper can steal the ciphertext, they can probably also steal the key — and even the strongest algorithm collapses on its own.
 
-### 二、密钥交换算法
+Below we look at two common approaches that solve key distribution: the Diffie-Hellman key exchange and asymmetric encryption.
 
-我们所说的密钥一般就是一个很大的数字，算法用这个数加密、解密。问题在于，信道是不安全的，所有发出的数据都会被窃取。换句话说，有没有一种办法，能够让两个人在众目睽睽之下，光明正大地交换一个秘密，把对称性密钥安全地送到接收方的手中？
+### 2. Key exchange algorithms
 
-Diffie-Hellman 密钥交换算法可以做到。**准确的说，该算法并不是把一个秘密安全地「送给」对方，而是通过一些共享的数字，双方「心中」各自「生成」了一个相同的秘密，而且双方的这个秘密，是第三方窃听者无法生成的**。
+A "key" is usually just a big number — algorithms use it to encrypt and decrypt. The problem is the channel is insecure; everything you send can be intercepted. So is there a way for two people to publicly exchange a secret in front of an audience and still safely deliver a symmetric key to the receiver?
 
-也许这就是传说中的心有灵犀一点通吧。
+The Diffie-Hellman key exchange can do this. **Strictly speaking, it doesn't safely "send" a secret to the other party — it lets both parties, through some shared numbers, each "generate" the same secret in their own minds. And this secret cannot be generated by an eavesdropping third party**.
 
-这个算法规则不算复杂，你甚至都可以找个朋友尝试一下共享秘密，等会我会简单画出它的基本流程。在此之前，需要明确一个问题：**并不是所有运算都有逆运算**。
+Maybe this is what they call telepathy.
 
-最简单的例子就是我们熟知的单向散列函数，给一个数字 `a` 和一个散列函数 `f`，你可以很快计算出 `f(a)`，但是如果给你 `f(a)` 和 `f`，推出 `a` 是一件基本做不到的事。密钥交换算法之所以看起来如此玄幻，就是利用了这种不可逆的性质。
+The algorithm's rules aren't complex — you can even try it with a friend. I'll sketch the basic flow shortly. First, we need to be clear: **not every operation has an inverse**.
 
-下面，看下密钥交换算法的流程是什么，按照命名惯例，准备执行密钥交换算法的双方称为 Alice 和 Bob，在网络中企图窃取他俩通信内容的坏人称为 Hack 吧。
+The simplest example is a one-way hash function. Given a number `a` and a hash function `f`, you can quickly compute `f(a)`, but given `f(a)` and `f`, recovering `a` is essentially impossible. Key exchange's magic comes from this irreversibility.
 
-首先，Alice 和 Bob 协商出两个数字 `N` 和 `G` 作为生成元，当然协商过程可以被窃听者 Hack 窃取，所以我把这两个数画到中间，代表三方都知道：
+Below is the flow. By convention, the two parties running the exchange are Alice and Bob, and the bad guy trying to steal their communication on the network is Hack.
+
+First, Alice and Bob agree on two numbers `N` and `G` as generators. The negotiation can be eavesdropped by Hack, so I draw them in the middle to indicate all three know:
 
 ![](https://labuladong.online/algo/images/cryptography/1.jpg)
 
-现在 Alice 和 Bob **心中**各自想一个数字出来，分别称为 `A` 和 `B` 吧：
+Now Alice and Bob each pick a number **in their head**, called `A` and `B` respectively:
 
 ![](https://labuladong.online/algo/images/cryptography/2.jpg)
 
-现在 Alice 将自己心里的这个数字 `A` 和 `G` 通过某些运算得出一个数 `AG`，然后发给 Bob；Bob 将自己心里的数 `B` 和 `G` 通过相同的运算得出一个数 `BG`，然后发给 Alice：
+Alice combines `A` with `G` via some operation to compute `AG`, then sends `AG` to Bob. Bob combines `B` with `G` via the same operation to compute `BG`, then sends `BG` to Alice:
 
 ![](https://labuladong.online/algo/images/cryptography/3.jpg)
 
-现在的情况变成这样了：
+The situation is now:
 
 ![](https://labuladong.online/algo/images/cryptography/4.jpg)
 
-注意，类似刚才举的散列函数的例子，知道 `AG` 和 `G`，并不能反推出 `A` 是多少，`BG` 同理。
+Note that, like the hash function example, knowing `AG` and `G` doesn't let you recover `A`. Same for `BG`.
 
-那么，Alice 可以通过 `BG` 和自己的 `A` 通过某些运算得到一个数 `ABG`，Bob 也可以通过 `AG` 和自己的 `B` 通过某些运算得到 `ABG`，这个数就是 Alice 和 Bob 共有的秘密。
+Now Alice can combine `BG` with her `A` via some operation to get `ABG`. Bob can combine `AG` with his `B` to get `ABG`. This number is the shared secret between Alice and Bob.
 
-而对于 Hack，可以窃取传输过程中的 `G`，`AG`，`BG`，但是由于计算不可逆，怎么都无法结合出 `ABG` 这个数字。
+For Hack, the eavesdroppable values during transmission are `G`, `AG`, `BG` — but because the operations aren't reversible, there's no way to combine them into `ABG`.
 
 ![](https://labuladong.online/algo/images/cryptography/5.jpg)
 
-以上就是基本流程，至于具体的数字取值是有讲究的，运算方法在百度上很容易找到，限于篇幅我就不具体写了。
+That's the basic flow. The specific number choices have rules; the operations are easy to find online, so I won't write them out due to space.
 
-该算法可以在第三者窃听的前提下，算出一个别人无法算出的秘密作为对称性加密算法的密钥，开始对称加密的通信。
+This algorithm lets two parties — even with a third party eavesdropping — compute a secret that no one else can compute, and use it as the key for symmetric encryption.
 
-对于该算法，Hack 又想到一种破解方法，不是窃听 Alice 和 Bob 的通信数据，而是直接同时冒充 Alice 和 Bob 的身份，也就是我们说的「**中间人攻击**」：
+But Hack thinks of another attack: instead of eavesdropping on Alice and Bob's traffic, impersonate both Alice and Bob — the so-called **man-in-the-middle attack**:
 
 ![](https://labuladong.online/algo/images/cryptography/6.jpg)
 
-这样，双方根本无法察觉在和 Hack 共享秘密，后果就是 Hack 可以解密甚至修改数据。
+Now neither party realizes they're sharing a secret with Hack. Hack can decrypt and even modify the data.
 
-**可见，密钥交换算法也不算完全解决了密钥配送问题，缺陷在于无法核实对方身份**。所以密钥交换算法之前一般要核实对方身份，比如使用数字签名。
+**So key exchange doesn't fully solve the key distribution problem either — it can't verify the other party's identity**. That's why before key exchange you usually verify identity, e.g., with a digital signature.
 
-### 三、非对称加密
+### 3. Asymmetric encryption
 
-非对称加密的思路就是，干脆别偷偷摸摸传输密钥了，我把加密密钥和解密密钥分开，公钥用于加密，私钥用于解密。只把公钥传送给对方，然后对方开始给我发送加密的数据，我用私钥就可以解密。至于窃听者，拿到公钥和加密数据也没用，因为只有我手上的私钥才能解密。
+The asymmetric idea: stop sneaking around with the key — separate encryption and decryption keys. The public key is used for encryption, the private key for decryption. We send only the public key to the other side; they encrypt data and send it to me; I use my private key to decrypt. An eavesdropper getting the public key and ciphertext is useless; only my private key can decrypt.
 
-可以这样想，**私钥是钥匙，而公钥是锁，可以把锁公开出去，让别人把数据锁起来发给我；而钥匙一定要留在自己手里，用于解锁**。我们常见的 RSA 算法就是典型的非对称加密算法，具体实现比较复杂，我就不写了，网上很多资料。
+Think of it this way: **the private key is the key, and the public key is the lock. We can give the lock out so others can lock data and send it to us — the key stays in our hands**. RSA is a classic asymmetric algorithm; the implementation is complex, plenty of resources online.
 
-在实际应用中，非对称性加密的运算速度要比对称性加密慢很多的，所以传输大量数据时，一般不会用公钥直接加密数据，而是加密对称性加密的密钥，传输给对方，然后双方使用对称性加密算法传输数据。
+In practice, asymmetric encryption is much slower than symmetric, so for large data we don't encrypt directly with the public key. Instead, we encrypt the symmetric key with the public key, send it over, and the two parties then communicate using symmetric encryption.
 
-需要注意的是，类似 Diffie-Hellman 算法，**非对称加密算法也无法确定通信双方的身份，依然会遭到中间人攻击**。比如 Hack 拦截 Bob 发出的公钥，然后冒充 Bob 的身份给 Alice 发送自己的公钥，那么不知情的 Alice 就会把私密数据用 Hack 的公钥加密，Hack 可以通过私钥解密窃取。
+Note, like Diffie-Hellman, **asymmetric encryption alone can't verify identity either, and is also vulnerable to MITM**. For example, Hack intercepts Bob's public key and impersonates Bob, sending its own public key to Alice. Unsuspecting Alice encrypts private data with Hack's public key; Hack decrypts and steals.
 
-那么，Diffie-Hellman 算法和 RSA 非对称加密算法都可以一定程度上解决密钥配送的问题，也具有相同的缺陷，二者的应用场景有什么区别呢？
+So Diffie-Hellman and RSA both partially solve key distribution, with the same flaw. What's the difference in their use cases?
 
-简单来说，根据两种算法的基本原理就可以看出来：
+In short, looking at the basic principles:
 
-如果双方有一个对称加密方案，希望加密通信，而且不能让别人得到钥匙，那么可以使用 Diffie-Hellman 算法交换密钥。
+If both parties have a symmetric scheme they want to use to encrypt traffic and don't want anyone else to get the key, use Diffie-Hellman to exchange the key.
 
-如果你希望任何人都可以对信息加密，而只有你能够解密，那么就使用 RSA 非对称加密算法，公布公钥。
+If you want anyone to be able to encrypt messages but only you can decrypt them, use RSA asymmetric encryption — publish the public key.
 
-下面，我们尝试着解决认证发送方身份的问题。
+Now let's tackle authenticating the sender's identity.
 
-### 四、数字签名
+### 4. Digital signatures
 
-刚才说非对称加密，把公钥公开用于他人对数据加密然后发给你，只有用你手上对应的私钥才能将密文解密。其实，**私钥也可用用来加密数据的，对于 RSA 算法，私钥加密的数据只有公钥才能解开**。
+We just covered asymmetric encryption: publish the public key, others encrypt with it, only your private key can decrypt. But **the private key can also encrypt data — for RSA, data encrypted by the private key can only be decrypted by the public key**.
 
-数字签名也是利用了非对称性密钥的特性，但是和公钥加密完全颠倒过来：**仍然公布公钥，但是用你的私钥加密数据，然后把加密的数据公布出去，这就是数字签名**。
+Digital signatures also exploit asymmetric properties, but in a flipped way: **still publish the public key, but use the private key to encrypt data and publish that encrypted data — that's the digital signature**.
 
-你可能问，这有什么用，公钥可以解开私钥加密，我还加密发出去，不是多此一举吗？
+You might ask: what's the point? The public key can decrypt private-key-encrypted data, and I'm shipping that out. Isn't that pointless?
 
-是的，但是**数字签名的作用本来就不是保证数据的机密性，而是证明你的身份**，证明这些数据确实是由你本人发出的。
+Right — but **the purpose of a digital signature isn't confidentiality. It's to prove your identity** — to prove the data really came from you.
 
-你想想，你的私钥加密的数据，只有你的公钥才能解开，那么如果一份加密数据能够被你的公钥解开，不就说明这份数据是你（私钥持有者）本人发布的吗？
+Think about it: only your public key can decrypt data your private key encrypted. So if some encrypted blob can be decrypted by your public key, then it must have been published by you (the private-key holder), right?
 
-当然，加密数据仅仅是一个签名，签名应该和数据一同发出，具体流程应该是：
+Of course, the encrypted blob is just a signature; it should be sent alongside the data. The flow:
 
-1、Bob 生成公钥和私钥，然后把公钥公布出去，私钥自己保留。
+1. Bob generates a public/private key pair, publishes the public key, and keeps the private key.
 
-2、**用私钥加密数据作为签名，然后将数据附带着签名一同发布出去**。
+2. **Use the private key to encrypt the data as a signature, then send the data along with the signature**.
 
-3、Alice 收到数据和签名，需要检查此份数据是否是 Bob 所发出，于是用 Bob 之前发出的公钥尝试解密签名，将收到的数据和签名解密后的结果作对比，如果完全相同，说明数据没被篡改，且确实由 Bob 发出。
+3. Alice receives the data and signature. To verify the data was sent by Bob, she uses Bob's published public key to decrypt the signature and compares the decrypted result with the received data. If they match, the data wasn't tampered with and was indeed sent by Bob.
 
-为什么 Alice 这么肯定呢，毕竟数据和签名是两部分，都可以被掉包呀？原因如下：
+Why is Alice so sure? After all, the data and the signature are two separate things and either could be swapped. The reasons:
 
-1、如果有人修改了数据，那么 Alice 解密签名之后，对比发现二者不一致，察觉出异常。
+1. If someone tampered with the data, Alice's decrypted signature won't match the data, and she'll detect the anomaly.
 
-2、如果有人替换了签名，那么 Alice 用 Bob 的公钥只能解出一串乱码，显然和数据不一致。
+2. If someone replaced the signature, Alice decrypting with Bob's public key would yield garbage, clearly inconsistent with the data.
 
-3、也许有人企图修改数据，然后将修改之后的数据制成签名，使得 Alice 的对比无法发现不一致；但是一旦解开签名，就不可能再重新生成 Bob 的签名了，因为没有 Bob 的私钥。
+3. Maybe someone tampered with the data and then forged a matching signature so Alice's check passes — but once the signature is decrypted, you can't re-sign as Bob without Bob's private key.
 
-综上，**数字签名可以一定程度上认证数据的来源**。之所以说是一定程度上，是因为这种方式依然可能受到中间人攻击。一旦涉及公钥的发布，接收方就可能收到中间人的假公钥，进行错误的认证，这个问题始终避免不了。
+In summary, **digital signatures can authenticate the source of data — to a degree**. To a degree, because they're still vulnerable to MITM. Whenever public-key distribution is involved, the receiver might receive a fake public key from the man in the middle, and authenticate falsely. This problem can never be entirely avoided.
 
-说来可笑，数字签名就是验证对方身份的一种方式，但是前提是对方的身份必须是真的... 这似乎陷入一个先有鸡还是先有蛋的死循环，**要想确定对方的身份，必须有一个信任的源头，否则的话，再多的流程也只是在转移问题，而不是真正解决问题**。
+Funny enough, digital signatures are themselves a means of verifying identity — but the precondition is that the other party's identity must be true... It seems we hit a chicken-and-egg loop. **To verify someone's identity, there must be a trusted root; otherwise, no amount of process truly solves the problem — it just shifts it**.
 
-### 五、公钥证书
+### 5. Public-key certificates
 
-**证书其实就是公钥 + 签名，由第三方认证机构颁发**。引入可信任的第三方，是终结信任循环的一种可行方案。
+**A certificate is just a public key + a signature, issued by a trusted third-party authority**. Bringing in a trusted third party is one viable way to break the trust loop.
 
-证书认证的流程大致如下：
+Certificate flow:
 
-1、Bob 去可信任的认证机构证实本人真实身份，并提供自己的公钥。
+1. Bob goes to a trusted certificate authority to verify his real identity, and supplies his public key.
 
-2、Alice 想跟 Bob 通信，首先向认证机构请求 Bob 的公钥，认证机构会把一张证书（Bob 的公钥以及自己对其公钥的签名）发送给 Alice。
+2. Alice wants to communicate with Bob, so she requests Bob's public key from the authority. The authority sends her a certificate (Bob's public key plus the authority's signature on that public key).
 
-3、Alice 检查签名，确定该公钥确实由这家认证机构发送，中途未被篡改。
+3. Alice verifies the signature, confirming the public key was indeed sent by this authority and not tampered with in transit.
 
-4、Alice 通过这个公钥加密数据，开始和 Bob 通信。
+4. Alice encrypts data with this public key and starts communicating with Bob.
 
 ![](https://labuladong.online/algo/images/cryptography/7.jpg)
 
 > [!NOTE]
-> 以上只是为了说明，证书只需要安装一次，并不需要每次都向认证机构请求；一般是服务器直接给客户端发送证书，而不是认证机构。
+> The above is just for illustration. A certificate only needs to be installed once — you don't request it from the CA every time. Usually the server sends the certificate directly to the client, not the CA.
 
-也许有人问，Alice 要想通过数字签名确定证书的有效性，前提是要有该机构的（认证）公钥，这不是又回到刚才的死循环了吗？
+You might ask: for Alice to verify the certificate via signature, she needs the authority's (signing) public key — aren't we back in the loop?
 
-我们安装的正规浏览器中都预存了正规认证机构的证书（包含其公钥），用于确认机构身份，所以说证书的认证是可信的。
+Mainstream browsers come pre-loaded with the certificates (and public keys) of legitimate authorities, used to verify the authority's identity, so certificate verification is trustworthy.
 
-Bob 向机构提供公钥的过程中，需要提供很多个人信息进行身份验证，比较严格，所以说也算是可靠的。
+When Bob provides his public key to the authority, he provides a lot of personal info for identity verification — fairly strict, so it's also reliable.
 
-获得了 Bob 的可信公钥，Alice 和 Bob 之间的通信基于加密算法的保护，是完全无懈可击的。
+With Bob's trustworthy public key, communication between Alice and Bob, protected by the cryptographic algorithms, is rock-solid.
 
-现在的正规网站，大都使用 HTTPS 协议，就是在 HTTP 协议和 TCP 协议之间加了一个 SSL/TLS 安全层。在你的浏览器和网站服务器完成 TCP 握手后，SSL 协议层也会进行 SSL 握手交换安全参数，其中就包含该网站的证书，以便浏览器验证站点身份。SSL 安全层验证完成之后，上层的 HTTP 协议内容都会被加密，保证数据的安全传输。
+Today's legitimate sites mostly use HTTPS, which adds an SSL/TLS security layer between HTTP and TCP. After your browser and the server complete a TCP handshake, the SSL layer also handshakes to exchange security parameters, including the site's certificate, so the browser can verify the site's identity. After SSL verification, all upper-layer HTTP content is encrypted, ensuring secure data transmission.
 
-这样一来，传统的中间人攻击就几乎没有了生存空间，攻击手段只能由技术缺陷转变为坑蒙拐骗。事实上，这种手段的效果反而更高效，比如我就发现**网上不少下载网站发布的浏览器，不仅包含乱七八糟的导航和收藏网址，还包含一些不正规的认证机构证书。任何人都可以申请证书，这些不正规证书很可能造成安全隐患**。
+So traditional MITM has almost no room left. Attacks have shifted from technical flaws to social engineering. Indeed, this approach is more effective. For example, **I've noticed that some browsers downloaded from random sites bundle messy default search engines, bookmarks, and even unauthorized "authority" certificates. Anyone can apply for a certificate, and these dodgy ones can pose a real security risk**.
 
-### 六、最后总结
+### 6. Final summary
 
-对称性加密算法使用同一个密钥加密和解密，难以破解，加密速度较快，但是存在密钥配送问题。
+Symmetric encryption uses the same key for encryption and decryption. Hard to break, fast — but suffers from the key distribution problem.
 
-Diffie-Hellman 密钥交换算法可以让双方「心有灵犀一点通」，一定程度解决密钥配送问题，但是无法验证通信方的身份，所以可能受到中间人攻击。
+Diffie-Hellman key exchange lets two parties "share telepathy", partially solving key distribution — but it can't verify the parties' identity, so it's vulnerable to MITM.
 
-非对称性加密算法生成一对儿密钥，把加密和解密的工作分开了。
+Asymmetric encryption generates a key pair and separates encryption from decryption.
 
-RSA 算法作为经典的非对称加密算法，有两种用途：如果用于加密，可以把公钥发布出去用于加密，只有自己的私钥可以解密，保证了数据的机密性；如果用于数字签名，把公钥发布出去后，用私钥加密数据作为签名，以证明该数据由私钥持有者所发送。但是无论那种用法，涉及公钥的发布，都无法避免中间人攻击。
+RSA, the classic asymmetric algorithm, has two uses: for encryption, publish the public key; only your private key decrypts, ensuring confidentiality. For digital signatures, after publishing the public key, encrypt data with the private key as a signature to prove the data is from the private-key holder. But either way, public-key distribution is involved, so MITM can't be avoided.
 
-公钥证书就是公钥 + 签名，由可信任的第三方认证机构颁发。由于正规浏览器都预装了可信的认证机构的公钥，所以可以有效防止中间人攻击。
+A public-key certificate is a public key + signature, issued by a trusted third-party authority. Since legitimate browsers come with trusted authorities' public keys preinstalled, MITM can be effectively prevented.
 
-HTTPS 协议中的 SSL/TLS 安全层会组合使用以上几种加密方式，**所以说不要安装非正规的浏览器，不要乱安装未知来源的证书**。
+The SSL/TLS layer in HTTPS combines several encryption methods. **So don't install non-legitimate browsers, and don't randomly install certificates from unknown sources**.
 
-密码技术只是安全的一小部分，即便是通过正规机构认证的 HTTPS 站点，也不意味着可信任，只能说明其数据传输是安全的。技术永远不可能真正保护你，最重要的还是得提高个人的安全防范意识，多留心眼儿，谨慎处理敏感数据。
+Cryptography is only a small part of security. Even certified HTTPS sites aren't necessarily trustworthy; they only mean the data transmission is secure. Tech alone can never truly protect you. The most important thing is to raise your personal security awareness, stay alert, and handle sensitive data carefully.
 
 
 
@@ -193,6 +193,3 @@ HTTPS 协议中的 SSL/TLS 安全层会组合使用以上几种加密方式，**
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,16 +1,16 @@
-# 经典动态规划：博弈问题
+# Classic DP: game theory
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/) | [486. 预测赢家](https://leetcode.cn/problems/predict-the-winner/) | 🟠 |
 | [877. Stone Game](https://leetcode.com/problems/stone-game/) | [877. 石子游戏](https://leetcode.cn/problems/stone-game/) | 🟠 |
@@ -20,64 +20,64 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
-上一篇文章 [几道智力题](https://labuladong.online/algo/frequency-interview/one-line-solutions/) 中讨论到一个有趣的「石头游戏」，通过题目的限制条件，这个游戏是先手必胜的。但是智力题终究是智力题，真正的算法问题肯定不会是投机取巧能搞定的。所以，本文就借石头游戏来讲讲「假设两个人都足够聪明，最后谁会获胜」这一类问题该如何用动态规划算法解决。
+The earlier post [Brain teasers](https://labuladong.online/algo/frequency-interview/one-line-solutions/) discussed an interesting "stone game" — given the constraints, the first player always wins. But brain teasers are brain teasers. Real algorithm problems can't be cheesed by clever tricks. So this article uses the stone game to discuss how to use DP to solve "assuming both players are smart enough, who wins?" problems.
 
-博弈类问题的套路都差不多，下文参考 [这个 YouTube 视频](https://www.youtube.com/watch?v=WxpIHvsu1RI) 的思路讲解，其核心思路是在二维 dp 的基础上使用元组分别存储两个人的博弈结果。掌握了这个技巧以后，别人再问你什么俩海盗分宝石，俩人拿硬币的问题，你就告诉别人：我懒得想，直接给你写个算法算一下得了。
-
-
+Game-theory problems share patterns. The discussion below references the approach in [this YouTube video](https://www.youtube.com/watch?v=WxpIHvsu1RI). The core idea: on top of 2D dp, use a tuple to store both players' game results. With this technique, when someone asks you about pirates dividing gold or two people picking coins, you can say: I'm too lazy to think — let me write an algorithm to compute it.
 
 
 
 
 
-我们把力扣第 877 题「石头游戏」改的更具有一般性：
 
-你和你的朋友面前有一排石头堆，用一个数组 `piles` 表示，`piles[i]` 表示第 `i` 堆石子有多少个。你们轮流拿石头，一次拿一堆，但是只能拿走最左边或者最右边的石头堆。所有石头被拿完后，谁拥有的石头多，谁获胜。
 
-石头的堆数可以是任意正整数，石头的总数也可以是任意正整数，这样就能打破先手必胜的局面了。比如有三堆石头 `piles = [1, 100, 3]`，先手不管拿 1 还是 3，能够决定胜负的 100 都会被后手拿走，后手会获胜。
+Let's generalize LeetCode 877 "Stone Game":
 
-**假设两人都很聪明**，请你写一个 `stoneGame` 函数，返回先手和后手的最后得分（石头总数）之差。比如上面那个例子，先手能获得 4 分，后手会获得 100 分，你的算法应该返回 -96：
+You and a friend face a row of stone piles, given as an array `piles`, where `piles[i]` is the number of stones in pile `i`. You take turns taking one whole pile each turn — only the leftmost or rightmost pile. After all stones are taken, whoever has more wins.
+
+The number of piles can be any positive integer, and the total number of stones can be any positive integer too — breaking the "first player always wins" constraint. For example, with three piles `piles = [1, 100, 3]`, no matter whether the first player picks 1 or 3, the decisive 100 goes to the second player who wins.
+
+**Assuming both players are smart**, write a `stoneGame` function that returns the difference between the first and second player's final scores (totals of stones). For the example above, the first player gets 4 and the second gets 100; the algorithm returns -96:
 
 ```java
 int stoneGame(int[] nums);
 ```
 
-这样推广之后就变成了一道难度比较高的动态规划问题了，力扣第 486 题「预测赢家」就是一道类似的问题：
+Generalized like this, it becomes a fairly hard DP problem. LeetCode 486 "Predict the Winner" is a similar problem:
 
 <Problem slug="predict-the-winner" />
 
-函数签名如下：
+Function signature:
 
 ```java
 boolean predictTheWinner(int[] nums);
 ```
 
-那么如果有了一个计算先手和后手分差的 `stoneGame` 函数，这道题的解法就直接出来了：
+Given a `stoneGame` function that computes the score difference, this problem's solution falls right out:
 
 ```java
 public boolean predictTheWinner(int[] nums) {
-    // 先手的分数大于等于后手，则能赢
+    // first player wins iff first's score >= second's
     return stoneGame(nums) >= 0;
 }
 ```
 
-这个 `stoneGame` 函数怎么写呢？博弈问题的难点在于，两个人要轮流进行选择，而且都贼精明，应该如何编程表示这个过程呢？其实不难，还是按照 [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 中强调多次的套路，首先明确 `dp` 数组的含义，然后只要找到「状态」和「选择」，一切就水到渠成了。
+How do we write `stoneGame`? The challenge of game theory: two players take turns choosing, and both are super smart — how do we represent that in code? It's actually not hard. As emphasized many times in the [DP core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), first define the `dp` array, then identify "states" and "choices", and everything else falls into place.
 
-## 一、定义 `dp` 数组的含义
+## 1. Defining the `dp` array
 
-定义 `dp` 数组的含义是很有技术含量的，同一问题可能有多种定义方法，不同的定义会引出不同的状态转移方程，不过只要逻辑没有问题，最终都能得到相同的答案。
+Defining the `dp` array meaningfully is a real skill. The same problem may admit multiple definitions; different definitions lead to different state-transition equations, but as long as the logic is sound, you'll arrive at the same answer.
 
-我建议不要迷恋那些看起来很牛逼，代码很短小的解法思路，最好是稳一点，采取可解释性最好，最容易推广的解法思路。本文就给出一种博弈问题的通用设计框架。
+I recommend not falling for clever-looking, super-short solutions. Aim for something steady, with the best explainability and most generalizable approach. This article gives a general framework for game-theory problems.
 
-介绍 `dp` 数组的含义之前，我们先看一下 `dp` 数组最终的样子：
+Before introducing the `dp` definition, here's what the final `dp` array looks like:
 
 ![](https://labuladong.online/algo/images/stone-game/1.png)
 
-下文讲解时，认为元组是包含 `first` 和 `second` 属性的一个类，而且为了节省篇幅，将这两个属性简写为 `fir` 和 `sec`。比如按上图的数据，我们说 `dp[1][3].fir = 11`，`dp[0][1].sec = 2`。
+In what follows, treat the tuple as a class with `first` and `second` properties, abbreviated as `fir` and `sec` to save space. For example, with the figure above, `dp[1][3].fir = 11`, `dp[0][1].sec = 2`.
 
 
 
@@ -85,42 +85,42 @@ public boolean predictTheWinner(int[] nums) {
 
 
 
-先回答几个读者可能提出的问题：
+First answer a few likely reader questions:
 
-这个二维 dp table 中存储的是元组，怎么编程表示呢？这个 dp table 有一半根本没用上，怎么优化？很简单，都不要管，先把解题的思路想明白了再谈也不迟。
+The 2D dp table holds tuples — how do we represent that in code? Half the dp table is unused — how do we optimize? Easy — ignore those for now; first get the solution idea straight.
 
-**以下是对 dp 数组含义的解释：**
+**Here is the `dp` array definition:**
 
-`dp[i][j].fir = x` 表示，对于 `piles[i...j]` 这部分石头堆，先手能获得的最高分数为 `x`。
+`dp[i][j].fir = x` means: for piles `piles[i...j]`, the maximum score the first player can get is `x`.
 
-`dp[i][j].sec = y` 表示，对于 `piles[i...j]` 这部分石头堆，后手能获得的最高分数为 `y`。
+`dp[i][j].sec = y` means: for piles `piles[i...j]`, the maximum score the second player can get is `y`.
 
-举例理解一下，假设 `piles = [2, 8, 3, 5]`，索引从 0 开始，那么：
+Example: with `piles = [2, 8, 3, 5]` (0-indexed):
 
-`dp[0][1].fir = 8` 意味着：面对石头堆 `[2, 8]`，先手最多能够获得 8 分；`dp[1][3].sec = 5` 意味着：面对石头堆 `[8, 3, 5]`，后手最多能够获得 5 分。
+`dp[0][1].fir = 8` means: facing piles `[2, 8]`, the first player can get up to 8. `dp[1][3].sec = 5` means: facing piles `[8, 3, 5]`, the second player can get up to 5.
 
-我们想求的答案是先手和后手最终分数之差，按照这个定义也就是 `dp[0][n-1].fir - dp[0][n-1].sec`，即面对整个 `piles`，先手的最优得分和后手的最优得分之差。
-
-
+We want the difference between first and second players' final scores — by this definition, that's `dp[0][n-1].fir - dp[0][n-1].sec` — facing the whole `piles`, first's optimal score minus second's optimal score.
 
 
 
 
 
-## 二、状态转移方程
 
-写状态转移方程很简单，首先要找到所有「状态」和每个状态可以做的「选择」，然后择优。
 
-根据前面对 `dp` 数组的定义，**状态显然有三个：开始的索引 `i`，结束的索引 `j`，当前轮到的人。**
+## 2. State-transition equation
+
+Writing the state-transition equation is easy: find every "state" and the "choices" available at each state, then take the best.
+
+Per the `dp` definition above, **there are clearly three states: starting index `i`, ending index `j`, and whose turn it is.**
 
 ```python
 dp[i][j][fir or sec]
-其中：
+where:
 0 <= i < piles.length
 i <= j < piles.length
 ```
 
-对于这个问题的每个状态，可以做的**选择有两个：选择最左边的那堆石头，或者选择最右边的那堆石头。** 我们可以这样穷举所有状态：
+For each state, there are two **choices: take the leftmost pile or the rightmost.** We can enumerate every state:
 
 ```python
 n = piles.length
@@ -130,9 +130,9 @@ for 0 <= i < n:
             dp[i][j][who] = max(left, right)
 ```
 
-上面的伪码是动态规划的一个大致的框架，这道题的难点在于，两人足够聪明，而且是交替进行选择的，也就是说先手的选择会对后手有影响，这怎么表达出来呢？
+The pseudocode above is roughly the DP framework. The challenge here: both players are smart and they alternate. How do we express that?
 
-根据我们对 `dp` 数组的定义，很容易解决这个难点，**写出状态转移方程**：
+By our `dp` definition, this is easy. **State-transition equation**:
 
 
 
@@ -140,31 +140,31 @@ for 0 <= i < n:
 
 ```python
 dp[i][j].fir = max(piles[i] + dp[i+1][j].sec, piles[j] + dp[i][j-1].sec)
-dp[i][j].fir = max(     选择最左边的石头堆     ,     选择最右边的石头堆      )
-# 解释：我作为先手，面对 piles[i...j] 时，有两种选择：
+dp[i][j].fir = max(   pick the leftmost pile     ,   pick the rightmost pile  )
+# Explanation: as the first player facing piles[i...j], I have two choices:
 
-# 要么我选择最左边的那一堆石头 piles[i]，局面变成了 piles[i+1...j]，
-# 然后轮到对方选了，我变成了后手，此时我作为后手的最优得分是 dp[i+1][j].sec
+# Either pick the leftmost pile piles[i], the situation becomes piles[i+1...j],
+# then it's the opponent's turn — I'm now the second player; my optimal score as second is dp[i+1][j].sec
 
-# 要么我选择最右边的那一堆石头 piles[j]，局面变成了 piles[i...j-1]
-# 然后轮到对方选了，我变成了后手，此时我作为后手的最优得分是 dp[i][j-1].sec
+# Or pick the rightmost pile piles[j], the situation becomes piles[i...j-1],
+# then it's the opponent's turn — I'm now the second player; my optimal score as second is dp[i][j-1].sec
 
-if 先手选择左边:
+if first picks left:
     dp[i][j].sec = dp[i+1][j].fir
-if 先手选择右边:
+if first picks right:
     dp[i][j].sec = dp[i][j-1].fir
-# 解释：我作为后手，要等先手先选择，有两种情况：
+# Explanation: as the second player, I wait for the first player to choose. Two cases:
 
-# 如果先手选择了最左边那堆，给我剩下了 piles[i+1...j]
-# 此时轮到我，我变成了先手，此时的最优得分是 dp[i+1][j].fir
+# If the first player picked the leftmost pile, I get piles[i+1...j].
+# Now it's my turn — I become the first player; my optimal score is dp[i+1][j].fir
 
-# 如果先手选择了最右边那堆，给我剩下了 piles[i...j-1]
-# 此时轮到我，我变成了先手，此时的最优得分是 dp[i][j-1].fir
+# If the first player picked the rightmost pile, I get piles[i...j-1].
+# Now it's my turn — I become the first player; my optimal score is dp[i][j-1].fir
 ```
 
 
 
-根据 dp 数组的定义，我们也可以找出 **base case**，也就是最简单的情况：
+By the dp definition, we can also identify the **base case** — the simplest situation:
 
 
 
@@ -173,21 +173,21 @@ if 先手选择右边:
 ```python
 dp[i][j].fir = piles[i]
 dp[i][j].sec = 0
-其中 0 <= i == j < n
-# 解释：i 和 j 相等就是说面前只有一堆石头 piles[i]
-# 那么显然先手的得分为 piles[i]
-# 后手没有石头拿了，得分为 0
+where 0 <= i == j < n
+# Explanation: i == j means there's only one pile piles[i] in front
+# Obviously, the first player gets piles[i]
+# The second player has no piles to pick — score 0
 ```
 
 ![](https://labuladong.online/algo/images/stone-game/2.png)
 
 
 
-这里需要注意一点，我们发现 base case 是斜着的，而且我们推算 `dp[i][j]` 时需要用到 `dp[i+1][j]` 和 `dp[i][j-1]`：
+One thing to note: the base case is on the diagonal, and computing `dp[i][j]` requires `dp[i+1][j]` and `dp[i][j-1]`:
 
 ![](https://labuladong.online/algo/images/stone-game/3.png)
 
-根据前文 [动态规划答疑篇](https://labuladong.online/algo/dynamic-programming/faq-summary/) 判断 `dp` 数组遍历方向的原则，算法应该倒着遍历 `dp` 数组：
+By the principle in the earlier post [DP FAQ](https://labuladong.online/algo/dynamic-programming/faq-summary/) for choosing a `dp` traversal direction, we should iterate the `dp` array in reverse:
 
 ```java
 for (int i = n - 2; i >= 0; i--) {
@@ -199,9 +199,9 @@ for (int i = n - 2; i >= 0; i--) {
 
 ![](https://labuladong.online/algo/images/stone-game/4.png)
 
-## 三、代码实现
+## 3. Implementation
 
-如何实现这个 fir 和 sec 元组呢，你可以用 python，自带元组类型；或者使用 C++ 的 pair 容器；或者用一个三维数组 `dp[n][n][2]`，最后一个维度就相当于元组；或者我们自己写一个 Pair 类：
+How do we represent the (fir, sec) tuple? In Python, use the built-in tuple. In C++, use `pair`. Or use a 3D array `dp[n][n][2]` with the last dimension acting as the tuple. Or write a Pair class:
 
 ```java
 class Pair {
@@ -213,31 +213,31 @@ class Pair {
 }
 ```
 
-然后直接把我们的状态转移方程翻译成代码即可，注意我们要倒着遍历数组：
+Then translate the state-transition equation directly into code, remembering to iterate in reverse:
 
 ```java
-// 返回游戏最后先手和后手的得分之差
+// returns the score difference between first and second players at game's end
 int stoneGame(int[] piles) {
     int n = piles.length;
-    // 初始化 dp 数组
+    // initialize dp array
     Pair[][] dp = new Pair[n][n];
     for (int i = 0; i < n; i++) 
         for (int j = i; j < n; j++)
             dp[i][j] = new Pair(0, 0);
-    // 填入 base case
+    // fill in the base case
     for (int i = 0; i < n; i++) {
         dp[i][i].fir = piles[i];
         dp[i][i].sec = 0;
     }
 
-    // 倒着遍历数组
+    // iterate in reverse
     for (int i = n - 2; i >= 0; i--) {
         for (int j = i + 1; j < n; j++) {
-            // 先手选择最左边或最右边的分数
+            // first player's score for picking left or right
             int left = piles[i] + dp[i+1][j].sec;
             int right = piles[j] + dp[i][j-1].sec;
-            // 套用状态转移方程
-            // 先手肯定会选择更大的结果，后手的选择随之改变
+            // apply the state-transition equation
+            // first player will pick the larger result; second player follows
             if (left > right) {
                 dp[i][j].fir = left;
                 dp[i][j].sec = dp[i+1][j].fir;
@@ -252,17 +252,17 @@ int stoneGame(int[] piles) {
 }
 ```
 
-动态规划解法，如果没有状态转移方程指导，绝对是一头雾水，但是根据前面的详细解释，读者应该可以清晰理解这一大段代码的含义。
+DP solutions, without a state-transition equation as a guide, are pure mystery. With the detailed explanation above, you should be able to clearly understand this large block of code.
 
-而且，注意到计算 `dp[i][j]` 只依赖其左边和下边的元素，所以说肯定有优化空间，转换成一维 dp，想象一下把二维平面压扁，也就是投影到一维。但是，一维 `dp` 比较复杂，可解释性比较差，大家就不必浪费这个时间去理解了。
+Notice that computing `dp[i][j]` only depends on its left and bottom neighbors, so there's room for optimization — you could compress the 2D plane onto 1D. But 1D `dp` is more complex and harder to explain — don't waste time on that.
 
-## 四、最后总结
+## 4. Final summary
 
-本文给出了解决博弈问题的动态规划解法。博弈问题的前提一般都是在两个聪明人之间进行，编程描述这种游戏的一般方法是二维 dp 数组，数组中通过元组分别表示两人的最优决策。
+This article gave a DP solution for game-theory problems. Game-theory problems are usually played between two smart players; the general way to encode such games is a 2D dp array whose entries are tuples representing both players' optimal decisions.
 
-之所以这样设计，是因为先手在做出选择之后，就成了后手，后手在对方做完选择后，就变成了先手。**这种角色转换使得我们可以重用之前的结果，典型的动态规划标志**。
+The reason for this design: after the first player makes a choice, they become the second player; after the second player makes a choice (responding to first's), they become the first player. **This role swap lets us reuse previous results — a classic DP signature**.
 
-读到这里的朋友应该能理解算法解决博弈问题的套路了。学习算法，一定要注重算法的模板框架，而不是一些看起来牛逼的思路，也不要奢求上来就写一个最优的解法。不要舍不得多用空间，不要过早尝试优化，不要惧怕多维数组。`dp` 数组就是存储信息避免重复计算的，随便用，直到咱满意为止。
+By now you should understand the algorithmic pattern for game-theory problems. When learning algorithms, focus on templates and frameworks, not flashy ideas. Don't try to write the optimal solution on the first attempt. Don't be stingy with extra space, don't optimize prematurely, and don't fear multidimensional arrays. The `dp` array is for storing info to avoid recomputation — use it freely until you're satisfied.
 
 
 
@@ -272,9 +272,9 @@ int stoneGame(int[] piles) {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [贪心算法之区间调度问题](https://labuladong.online/algo/frequency-interview/interval-scheduling/)
+ - [Greedy: interval scheduling](https://labuladong.online/algo/frequency-interview/interval-scheduling/)
 
 </details><hr>
 
@@ -284,6 +284,3 @@ int stoneGame(int[] piles) {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

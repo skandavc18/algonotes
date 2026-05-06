@@ -1,57 +1,55 @@
-# 带权重的随机选择算法
+# Weighted Random Selection
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [528. Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight/) | [528. 按权重随机选择](https://leetcode.cn/problems/random-pick-with-weight/) | 🟠 |
-| - | [剑指 Offer II 071. 按权重生成随机数](https://leetcode.cn/problems/cuyjEf/) | 🟠 |
+| [528. Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight/) | [528. Random Pick with Weight](https://leetcode.cn/problems/random-pick-with-weight/) | 🟠 |
+| - | [Sword to Offer II 071. Random Number with Weight](https://leetcode.cn/problems/cuyjEf/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [前缀和算法技巧](https://labuladong.online/algo/data-structure/prefix-sum/)
-> - [二分查找框架详解](https://labuladong.online/algo/essential-technique/binary-search-framework/)
+> - [Prefix Sum Technique](https://labuladong.online/algo/data-structure/prefix-sum/)
+> - [Binary Search Framework](https://labuladong.online/algo/essential-technique/binary-search-framework/)
 
-写这篇的文章的原因是玩 LOL 手游。我有个朋友抱怨说打排位匹配的队友太菜了，我就说我打排位觉得队友都挺行的啊，好像不怎么坑？
+This article was inspired by playing LoL Mobile. A friend complained his ranked teammates were terrible. I said mine were fine — was I just lucky?
 
-朋友意味深长地说了句：一般隐藏分比较高的玩家，排位如果排不到实力相当的队友，就会排到一些菜狗。
+He said, "Players with high hidden MMR get matched with poor teammates if no equally-strong teammates are available."
 
-嗯？我想了几秒钟感觉这小伙子不对劲，他意思是说我隐藏分低，还是说我就是那条菜狗？
+Hmm — was he saying my hidden MMR is low, or that I'm the noob? I demanded a duo to prove him wrong.
 
-我立马要求和他开黑打一把，证明我不是菜狗，他才是菜狗。开黑结果这里不便透露，大家猜猜吧。
-
-打完之后我就来发文了，因为我对游戏的匹配机制有了一点思考。
+After playing, I had thoughts on matchmaking.
 
 ![](https://labuladong.online/algo/images/random-weight/images.png)
 
-**所谓「隐藏分」我不知道是不是真的，毕竟匹配机制是所有竞技类游戏的核心环节，想必非常复杂，不是简单几个指标就能搞定的**。
+**I don't know if "hidden MMR" is real; matchmaking is core to competitive games and probably much more complex than a few metrics.**
 
-但是如果把这个「隐藏分」机制简化，倒是一个值得思考的算法问题：系统如何以不同的随机概率进行匹配？
+But simplifying the mechanism, this is a worthwhile algorithmic question: how does the system match with different random probabilities?
 
-或者简单点说，如何带权重地做随机选择？
+In short: **weighted random selection**.
 
-不要觉得这个很容易，如果给你一个长度为 `n` 的数组，让你从中等概率随机抽取一个元素，你肯定会做，random 一个 `[0, n-1]` 的数字出来作为索引就行了，每个元素被随机选到的概率都是 `1/n`。
+It's not trivial. With a length-`n` array, picking uniformly at random is easy — random in `[0, n-1]`, each with probability `1/n`.
 
-但假设每个元素都有不同的权重，权重地大小代表随机选到这个元素的概率大小，你如何写算法去随机获取元素呢？
+But with weights, where larger weights mean larger selection probabilities, how would you write the algorithm?
 
-力扣第 528 题「按权重随机选择」就是这样一个问题：
+LeetCode 528 "Random Pick with Weight":
 
 <Problem slug="random-pick-with-weight" />
 
-我们就来思考一下这个问题，解决按照权重随机选择元素的问题。
+Let's solve it.
 
 
 
@@ -59,27 +57,27 @@
 
 
 
-## 解法思路
+## Approach
 
-首先回顾一下我们和随机算法有关的历史文章：
+A quick history:
 
-前文 [设计随机删除元素的数据结构](https://labuladong.online/algo/data-structure/random-set/) 主要考察的是数据结构的使用，每次把元素移到数组尾部再删除，可以避免数据搬移。
+[Designing a Random-Delete Data Structure](https://labuladong.online/algo/data-structure/random-set/) used clever data structures to avoid shifting elements.
 
-前文 [谈谈游戏中的随机算法](https://labuladong.online/algo/frequency-interview/random-algorithm/) 讲的是经典的「水塘抽样算法」，运用简单的数学运算，在无限序列中等概率选取元素。
+[Random Algorithms in Games](https://labuladong.online/algo/frequency-interview/random-algorithm/) covered "reservoir sampling" — uniform sampling from an infinite stream with simple math.
 
-前文 [算法笔试技巧](https://labuladong.online/algo/other-skills/tips-in-exam/) 中我还分享过一个巧用概率最大化测试用例通过率的骗分技巧。
+[Test Tricks](https://labuladong.online/algo/other-skills/tips-in-exam/) shared a probability-maximization trick to game test cases.
 
-**不过上述旧文并不能解决本文提出的问题，反而是前文 [前缀和技巧](https://labuladong.online/algo/data-structure/prefix-sum/) 加上 [二分搜索详解](https://labuladong.online/algo/essential-technique/binary-search-framework/) 能够解决带权重的随机选择算法**。
+**None of those help here. But [Prefix Sums](https://labuladong.online/algo/data-structure/prefix-sum/) plus [Binary Search](https://labuladong.online/algo/essential-technique/binary-search-framework/) does.**
 
-这个随机算法和前缀和技巧和二分搜索技巧能扯上啥关系？且听我慢慢道来。
+How do prefix sums and binary search relate to randomness?
 
-假设给你输入的权重数组是 `w = [1,3,2,1]`，我们想让概率符合权重，那么可以抽象一下，根据权重画出这么一条彩色的线段：
+Suppose `w = [1,3,2,1]`. Draw a colored line proportional to weights:
 
 ![](https://labuladong.online/algo/images/random-weight/1.jpeg)
 
-如果我在线段上面随机丢一个石子，石子落在哪个颜色上，我就选择该颜色对应的权重索引，那么每个索引被选中的概率是不是就是和权重相关联了？
+If I throw a stone at this line, the color it hits gives the index — and the probability of each index is proportional to its weight.
 
-**所以，你再仔细看看这条彩色的线段像什么？这不就是 [前缀和数组](https://labuladong.online/algo/data-structure/prefix-sum/) 嘛**：
+**Look closer — this colored line is a [prefix-sum array](https://labuladong.online/algo/data-structure/prefix-sum/)**:
 
 ![](https://labuladong.online/algo/images/random-weight/2.jpeg)
 
@@ -89,25 +87,25 @@
 
 
 
-那么接下来，如何模拟在线段上扔石子？
+How do we simulate "throwing a stone"?
 
-当然是随机数，比如上述前缀和数组 `preSum`，取值范围是 `[1, 7]`，那么我生成一个在这个区间的随机数 `target = 5`，就好像在这条线段中随机扔了一颗石子：
+A random number, of course. For `preSum`, valid range is `[1, 7]`; pick `target = 5`:
 
 ![](https://labuladong.online/algo/images/random-weight/3.jpeg)
 
-还有个问题，`preSum` 中并没有 5 这个元素，我们应该选择比 5 大的最小元素，也就是 6，即 `preSum` 数组的索引 3：
+But `preSum` doesn't contain 5; we want the smallest element ≥ 5, which is 6 at index 3:
 
 ![](https://labuladong.online/algo/images/random-weight/4.jpeg)
 
-**如何快速寻找数组中大于等于目标值的最小元素？[二分搜索算法](https://labuladong.online/algo/essential-technique/binary-search-framework/) 就是我们想要的**。
+**Finding the smallest element ≥ a target — [binary search](https://labuladong.online/algo/essential-technique/binary-search-framework/).**
 
-到这里，这道题的核心思路就说完了，主要分几步：
+Steps:
 
-1、根据权重数组 `w` 生成前缀和数组 `preSum`。
+1. Build `preSum` from `w`.
 
-2、生成一个取值在 `preSum` 之内的随机数，用二分搜索算法寻找大于等于这个随机数的最小元素索引。
+2. Generate a random number in `preSum`'s range; binary-search for the smallest index whose `preSum` ≥ target.
 
-3、最后对这个索引减一（因为前缀和数组有一位索引偏移），就可以作为权重数组的索引，即最终答案:
+3. Subtract 1 (because of the prefix-sum offset) to get the index in `w`:
 
 ![](https://labuladong.online/algo/images/random-weight/5.jpeg)
 
@@ -117,36 +115,32 @@
 
 
 
-## 解法代码
+## Code
 
-上述思路应该不难理解，但是写代码的时候坑可就多了。
+The idea is clear, but the code has pitfalls — open/closed intervals, off-by-one, binary search variants — get any wrong and you have hard-to-debug bugs.
 
-要知道涉及开闭区间、索引偏移和二分搜索的题目，需要你对算法的细节把控非常精确，否则会出各种难以排查的 bug。
-
-下面来抠细节，继续前面的例子：
+Continuing the example:
 
 ![](https://labuladong.online/algo/images/random-weight/3.jpeg)
 
-就比如这个 `preSum` 数组，你觉得随机数 `target` 应该在什么范围取值？闭区间 `[0, 7]` 还是左闭右开 `[0, 7)`？
+What's the valid range for `target`? `[0, 7]` or `[0, 7)`?
 
-都不是，应该在闭区间 `[1, 7]` 中选择，**因为前缀和数组中 0 本质上是个占位符**，仔细体会一下：
+Neither — `[1, 7]` (closed). **The 0 in `preSum` is just a sentinel**:
 
 ![](https://labuladong.online/algo/images/random-weight/6.jpeg)
 
-所以要这样写代码：
+So:
 
 ```java
 int n = preSum.length;
-// target 取值范围是闭区间 [1, preSum[n - 1]]
+// target ranges over [1, preSum[n - 1]]
 int target = rand.nextInt(preSum[n - 1]) + 1;
 ```
 
-接下来，在 `preSum` 中寻找大于等于 `target` 的最小元素索引，应该用什么品种的二分搜索？搜索左侧边界的还是搜索右侧边界的？
-
-实际上应该使用搜索左侧边界的二分搜索：
+Which binary-search variant? Search the left bound:
 
 ```java
-// 搜索左侧边界的二分搜索
+// Left-bound binary search
 int left_bound(int[] nums, int target) {
     if (nums.length == 0) return -1;
     int left = 0, right = nums.length;
@@ -164,31 +158,31 @@ int left_bound(int[] nums, int target) {
 }
 ```
 
-前文 [二分搜索详解](https://labuladong.online/algo/essential-technique/binary-search-framework/) 着重讲了数组中存在目标元素重复的情况，没仔细讲目标元素不存在的情况，这里补充一下。
+In [Binary Search Detailed](https://labuladong.online/algo/essential-technique/binary-search-framework/) I focused on duplicates. Here's the absent-target case:
 
-**当目标元素 `target` 不存在数组 `nums` 中时，搜索左侧边界的二分搜索的返回值可以做以下几种解读**：
+**When `target` isn't in `nums`, the left-bound search's return value can be interpreted as**:
 
-1、返回的这个值是 `nums` 中大于等于 `target` 的最小元素索引。
+1. The smallest index in `nums` whose value is ≥ `target`.
 
-2、返回的这个值是 `target` 应该插入在 `nums` 中的索引位置。
+2. The position where `target` should be inserted to keep the array sorted.
 
-3、返回的这个值是 `nums` 中小于 `target` 的元素个数。
+3. The number of elements in `nums` strictly less than `target`.
 
-比如在有序数组 `nums = [2,3,5,7]` 中搜索 `target = 4`，搜索左边界的二分算法会返回 2，你带入上面的说法，都是对的。
+E.g., `nums = [2,3,5,7]`, `target = 4` → return 2; all three interpretations are correct.
 
-所以以上三种解读都是等价的，可以根据具体题目场景灵活运用，显然这里我们需要的是第一种。
+Equivalent — pick the most useful one. Here we want interpretation 1.
 
-综上，我们可以写出最终解法代码：
+Final code:
 
 ```java
 class Solution {
-    // 前缀和数组
+    // Prefix-sum array
     private int[] preSum;
     private Random rand = new Random();
     
     public Solution(int[] w) {
         int n = w.length;
-        // 构建前缀和数组，偏移一位留给 preSum[0]
+        // Build prefix sums, offset by 1 with preSum[0] = 0
         preSum = new int[n + 1];
         preSum[0] = 0;
         // preSum[i] = sum(w[0..i-1])
@@ -199,15 +193,15 @@ class Solution {
     
     public int pickIndex() {
         int n = preSum.length;
-        // Java 的 nextInt(n) 方法在 [0, n) 中生成一个随机整数
-        // 再加一就是在闭区间 [1, preSum[n - 1]] 中随机选择一个数字
+        // Java's nextInt(n) returns [0, n)
+        // +1 maps to closed [1, preSum[n - 1]]
         int target = rand.nextInt(preSum[n - 1]) + 1;
-        // 获取 target 在前缀和数组 preSum 中的索引
-        // 别忘了前缀和数组 preSum 和原始数组 w 有一位索引偏移
+        // Find the index of target in preSum
+        // Don't forget the offset between preSum and w
         return left_bound(preSum, target) - 1;
     }
 
-    // 搜索左侧边界的二分搜索
+    // Left-bound binary search
     private int left_bound(int[] nums, int target) {
         int left = 0, right = nums.length;
         while (left < right) {
@@ -225,11 +219,9 @@ class Solution {
 }
 ```
 
-有了之前的铺垫，相信你能够完全理解上述代码，这道随机权重的题目就解决了。
+With the prep above, this should make sense — the weighted-random problem is solved.
 
-经常有读者留言调侃，每次都是看我的文章「云刷题」，看完就会了，也不用亲自动手刷了。
-
-但我想说的是，很多题目思路一说就懂，但是深入一些的话很多细节都可能有坑，本文讲的这道题就是一个例子，所以还是建议多实践，多总结。
+Readers often joke they "cloud-solve" by reading my articles. Many problems are clear once explained, but the details have traps — like this one. So practice and reflect.
 
 
 
@@ -241,10 +233,10 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [用数组加强哈希表（ArrayHashMap）](https://labuladong.online/algo/data-structure-basic/hashtable-with-array/)
- - [谈谈游戏中的随机算法](https://labuladong.online/algo/frequency-interview/random-algorithm/)
+ - [Boosting Hash Tables with Arrays (ArrayHashMap)](https://labuladong.online/algo/data-structure-basic/hashtable-with-array/)
+ - [Random Algorithms in Games](https://labuladong.online/algo/frequency-interview/random-algorithm/)
 
 </details><hr>
 

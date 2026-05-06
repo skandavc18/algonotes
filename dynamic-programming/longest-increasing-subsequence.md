@@ -1,18 +1,18 @@
-# 动态规划设计：最长递增子序列
+# DP design: longest increasing subsequence
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
-| [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/) | 🟠 |
+| [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | [300. 最长递增subsequence](https://leetcode.cn/problems/longest-increasing-subsequence/) | 🟠 |
 | [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/) | [354. 俄罗斯套娃信封问题](https://leetcode.cn/problems/russian-doll-envelopes/) | 🔴 |
 
 **-----------**
@@ -20,18 +20,18 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
 
-也许有读者看了前文 [动态规划详解](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)，学会了动态规划的套路：找到了问题的「状态」，明确了 `dp` 数组/函数的含义，定义了 base case；但是不知道如何确定「选择」，也就是找不到状态转移的关系，依然写不出动态规划解法，怎么办？
+Some readers may have read the [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) and learned the routine: identify the problem's "state", clarify the meaning of `dp` array/function, and define the base case. But they don't know how to identify the "choice" — i.e. the state-transition relation — and still can't write a DP solution. What now?
 
-不要担心，动态规划的难点本来就在于寻找正确的状态转移方程，本文就借助经典的「最长递增子序列问题」来讲一讲设计动态规划的通用技巧：**数学归纳思想**。
+Don't worry — the hard part of DP is finding the right state-transition equation. This article uses the classic "longest increasing subsequence" problem to teach a general DP-design technique: **mathematical induction**.
 
-最长递增子序列（Longest Increasing Subsequence，简写 LIS）是非常经典的一个算法问题，比较容易想到的是动态规划解法，时间复杂度 O(N^2)，我们借这个问题来由浅入深讲解如何找状态转移方程，如何写出动态规划解法。比较难想到的是利用二分查找，时间复杂度是 O(NlogN)，我们通过一种简单的纸牌游戏来辅助理解这种巧妙的解法。
+The longest increasing subsequence (LIS) is a very classic problem. The DP solution comes to mind relatively easily, with O(N^2) time complexity. We'll use this problem to walk through finding state transitions and writing DP solutions step by step. The harder-to-think-of solution uses binary search at O(N log N); we'll use a simple card game to help understand that clever solution.
 
-力扣第 300 题「最长递增子序列」就是这个问题：
+LeetCode 300 "Longest Increasing Subsequence" is exactly this problem:
 
 
 
@@ -40,40 +40,40 @@
 <Problem slug="longest-increasing-subsequence"/>
 
 ```java
-// 函数签名
+// function signature
 int lengthOfLIS(int[] nums);
 ```
 
-比如说输入 `nums=[10,9,2,5,3,7,101,18]`，其中最长的递增子序列是 `[2,3,7,101]`，所以算法的输出应该是 4。
+For `nums = [10,9,2,5,3,7,101,18]`, the longest increasing subsequence is `[2,3,7,101]`, so the algorithm should return 4.
 
-注意「子序列」和「子串」这两个名词的区别，子串一定是连续的，而子序列不一定是连续的。下面先来设计动态规划算法解决这个问题。
+Note the difference between "subsequence" and "substring": a substring must be contiguous; a subsequence may not be. Let's design a DP solution first.
 
-## 一、动态规划解法
+## 1. DP solution
 
-动态规划的核心设计思想是数学归纳法。
+The core of DP design is mathematical induction.
 
-相信大家对数学归纳法都不陌生，高中就学过，而且思路很简单。比如我们想证明一个数学结论，那么**我们先假设这个结论在 `k < n` 时成立，然后根据这个假设，想办法推导证明出 `k = n` 的时候此结论也成立**。如果能够证明出来，那么就说明这个结论对于 `k` 等于任何数都成立。
+Mathematical induction should be familiar — we learned it in high school. Idea is simple: **assume the conclusion holds for `k < n`, then derive that it also holds for `k = n`**. If that derivation works, the conclusion holds for any `k`.
 
-类似的，我们设计动态规划算法，不是需要一个 dp 数组吗？我们可以假设 `dp[0...i-1]` 都已经被算出来了，然后问自己：怎么通过这些结果算出 `dp[i]`？
+Similarly, when designing DP, we have a dp array. We can assume `dp[0...i-1]` are already computed and ask: how do we compute `dp[i]` from these results?
 
-直接拿最长递增子序列这个问题举例你就明白了。不过，首先要定义清楚 dp 数组的含义，即 `dp[i]` 的值到底代表着什么？
+Let's see this directly with the LIS problem. First, define `dp` clearly: what does `dp[i]` actually represent?
 
-**我们的定义是这样的：`dp[i]` 表示以 `nums[i]` 这个数结尾的最长递增子序列的长度**。
+**Our definition: `dp[i]` is the length of the longest increasing subsequence ending at `nums[i]`**.
 
 > [!NOTE]
-> 为什么这样定义呢？这是解决子序列问题的一个套路，后文 [动态规划之子序列问题解题模板](https://labuladong.online/algo/dynamic-programming/subsequence-problem/) 总结了几种常见套路。你读完本章所有的动态规划问题，就会发现 `dp` 数组的定义方法也就那几种。
+> Why this definition? It's a routine for subsequence problems; the later post [DP template for subsequence problems](https://labuladong.online/algo/dynamic-programming/subsequence-problem/) summarizes several common patterns. After reading all the DP problems in this chapter, you'll find there are only a few canonical `dp` definitions.
 
-根据这个定义，我们就可以推出 base case：`dp[i]` 初始值为 1，因为以 `nums[i]` 结尾的最长递增子序列起码要包含它自己。
+By this definition, the base case is: `dp[i]` initialized to 1, since the longest increasing subseq ending at `nums[i]` at minimum contains itself.
 
-举两个例子：
+Two examples:
 
 ![](https://labuladong.online/algo/images/lis/8.jpeg)
 
-这个 GIF 展示了算法演进的过程：
+This GIF shows the algorithm's evolution:
 
 ![](https://labuladong.online/algo/images/lis/gif1.gif)
 
-根据这个定义，我们的最终结果（子序列的最大长度）应该是 dp 数组中的最大值。
+By this definition, the final result (the maximum subsequence length) is the maximum entry in the dp array.
 
 
 
@@ -89,23 +89,23 @@ return res;
 
 
 
-读者也许会问，刚才的算法演进过程中每个 `dp[i]` 的结果是我们肉眼看出来的，我们应该怎么设计算法逻辑来正确计算每个 `dp[i]` 呢？
+Readers may ask: in the algorithm trace, we eyeballed each `dp[i]`. How do we design the algorithm to compute each `dp[i]` correctly?
 
-这就是动态规划的重头戏，如何设计算法逻辑进行状态转移，才能正确运行呢？这里需要使用数学归纳的思想：
+This is the crux of DP — how to design state-transition logic for correct execution. This is where mathematical induction helps:
 
-**假设我们已经知道了 `dp[0..4]` 的所有结果，我们如何通过这些已知结果推出 `dp[5]` 呢**？
+**Suppose we already know all of `dp[0..4]`. How do we derive `dp[5]`?**
 
 ![](https://labuladong.online/algo/images/lis/6.jpeg)
 
-根据刚才我们对 `dp` 数组的定义，现在想求 `dp[5]` 的值，也就是想求以 `nums[5]` 为结尾的最长递增子序列。
+By our `dp` definition, computing `dp[5]` means computing the longest increasing subseq ending at `nums[5]`.
 
-**`nums[5] = 3`，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到这些子序列末尾，就可以形成一个新的递增子序列，而且这个新的子序列长度加一**。
+**`nums[5] = 3`. Since this is an increasing subseq, just find earlier subsequences that end with a value smaller than 3, then append 3 to those subsequences — that forms a new increasing subseq with length one more**.
 
-`nums[5]` 前面有哪些元素小于 `nums[5]`？这个好算，用 for 循环比较一波就能把这些元素找出来。
+Which elements before `nums[5]` are smaller than `nums[5]`? Easy — a for-loop comparison finds them.
 
-以这些元素为结尾的最长递增子序列的长度是多少？回顾一下我们对 `dp` 数组的定义，它记录的正是以每个元素为末尾的最长递增子序列的长度。
+What's the longest-increasing-subseq length for those elements as endings? Recall the `dp` definition — that's exactly what `dp` records.
 
-以我们举的例子来说，`nums[0]` 和 `nums[4]` 都是小于 `nums[5]` 的，然后对比 `dp[0]` 和 `dp[4]` 的值，我们让 `nums[5]` 和更长的递增子序列结合，得出 `dp[5] = 3`：
+In our example, `nums[0]` and `nums[4]` are both less than `nums[5]`. Comparing `dp[0]` and `dp[4]`, we attach `nums[5]` to the longer subseq, yielding `dp[5] = 3`:
 
 
 
@@ -123,9 +123,9 @@ for (int j = 0; j < i; j++) {
 
 
 
-当 `i = 5` 时，这段代码的逻辑就可以算出 `dp[5]`。其实到这里，这道算法题我们就基本做完了。
+When `i = 5`, this code computes `dp[5]`. We're basically done with this problem.
 
-读者也许会问，我们刚才只是算了 `dp[5]` 呀，`dp[4]`, `dp[3]` 这些怎么算呢？类似数学归纳法，你已经可以算出 `dp[5]` 了，其他的就都可以算出来：
+Readers may ask: we only computed `dp[5]`. What about `dp[4]`, `dp[3]`, etc.? Like induction — if you can compute `dp[5]`, you can compute all the others:
 
 
 
@@ -134,10 +134,10 @@ for (int j = 0; j < i; j++) {
 ```java
 for (int i = 0; i < nums.length; i++) {
     for (int j = 0; j < i; j++) {
-        // 寻找 nums[0..i-1] 中比 nums[i] 小的元素
+        // find elements in nums[0..i-1] smaller than nums[i]
         if (nums[i] > nums[j]) {
-            // 把 nums[i] 接在后面，即可形成长度为 dp[j] + 1，
-            // 且以 nums[i] 为结尾的递增子序列
+            // append nums[i] after them, forming an increasing subseq
+            // of length dp[j] + 1 ending at nums[i]
             dp[i] = Math.max(dp[i], dp[j] + 1);
         }
     }
@@ -146,14 +146,14 @@ for (int i = 0; i < nums.length; i++) {
 
 
 
-结合我们刚才说的 base case，下面我们看一下完整代码：
+With our base case, the complete code:
 
 ```java
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        // 定义：dp[i] 表示以 nums[i] 这个数结尾的最长递增子序列的长度
+        // definition: dp[i] = length of LIS ending at nums[i]
         int[] dp = new int[nums.length];
-        // base case：dp 数组全都初始化为 1
+        // base case: initialize all dp entries to 1
         Arrays.fill(dp, 1);
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < i; j++) {
@@ -177,7 +177,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/longest-increasing-subsequence/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Code visualization 🎃</strong>
 </summary>
 </details>
 </a>
@@ -185,31 +185,31 @@ class Solution {
 
 
 
-至此，这道题就解决了，时间复杂度 $O(N^2)$。总结一下如何找到动态规划的状态转移关系：
+That solves it, in $O(N^2)$. Summary of how to find the DP state-transition relation:
 
-1、明确 `dp` 数组的定义。这一步对于任何动态规划问题都很重要，如果不得当或者不够清晰，会阻碍之后的步骤。
+1. Clearly define the `dp` array. This is critical for any DP problem; an inadequate or unclear definition blocks subsequent steps.
 
-2、根据 `dp` 数组的定义，运用数学归纳法的思想，假设 `dp[0...i-1]` 都已知，想办法求出 `dp[i]`，一旦这一步完成，整个题目基本就解决了。
+2. Per the `dp` definition, use induction: assume `dp[0...i-1]` are known; figure out `dp[i]`. Once this step is done, the problem is essentially solved.
 
-但如果无法完成这一步，很可能就是 `dp` 数组的定义不够恰当，需要重新定义 `dp` 数组的含义；或者可能是 `dp` 数组存储的信息还不够，不足以推出下一步的答案，需要把 `dp` 数组扩大成二维数组甚至三维数组。
+If you can't complete this step, the `dp` definition is probably inadequate — redefine it; or maybe `dp` doesn't store enough info to derive the next answer — extend `dp` to 2D or even 3D.
 
-目前的解法是标准的动态规划，但对最长递增子序列问题来说，这个解法不是最优的，可能无法通过所有测试用例了，下面讲讲更高效的解法。
-
-
+The current solution is standard DP, but for LIS this isn't optimal — it may not pass all test cases. Let's discuss a more efficient solution.
 
 
 
 
 
-## 二、二分查找解法
 
-这个解法的时间复杂度为 $O(NlogN)$，但是说实话，正常人基本想不到这种解法（也许玩过某些纸牌游戏的人可以想出来）。所以大家了解一下就好，正常情况下能够给出动态规划解法就已经很不错了。
 
-根据题目的意思，我都很难想象这个问题竟然能和二分查找扯上关系。其实最长递增子序列和一种叫做 patience game 的纸牌游戏有关，甚至有一种排序方法就叫做 patience sorting（耐心排序）。
+## 2. Binary-search solution
 
-为了简单起见，后文跳过所有数学证明，通过一个简化的例子来理解一下算法思路。
+This solution runs in $O(N \log N)$, but honestly, normal people basically don't think of it (maybe people who've played certain card games can). So just be aware of it; in normal interviews, giving the DP solution is already pretty good.
 
-首先，给你一排扑克牌，我们像遍历数组那样从左到右一张一张处理这些扑克牌，最终要把这些牌分成若干堆。
+It's hard to imagine LIS could be related to binary search. In fact, LIS connects to a card game called patience game, and there's even a sorting method called patience sorting.
+
+For simplicity, we'll skip all math proofs and use a simplified example to understand the algorithm.
+
+First, given a row of cards. Like iterating an array, we go through them left to right and finally divide them into several piles.
 
 ![](https://labuladong.online/algo/images/lis/poker1.jpeg)
 
@@ -219,38 +219,38 @@ class Solution {
 
 
 
-**处理这些扑克牌要遵循以下规则**：
+**The rules for handling the cards**:
 
-只能把点数小的牌压到点数比它大的牌上；如果当前牌点数较大没有可以放置的堆，则新建一个堆，把这张牌放进去；如果当前牌有多个堆可供选择，则选择最左边的那一堆放置。
+You can only place a smaller-rank card on top of a larger-rank card; if the current card has a large rank and no pile to place on, start a new pile and put the card there; if the current card can go on multiple piles, place it on the leftmost.
 
-比如说上述的扑克牌最终会被分成这样 5 堆（我们认为纸牌 A 的牌面是最大的，纸牌 2 的牌面是最小的）。
+For example, the cards above end up split into 5 piles (treating ace as the highest, 2 as the lowest).
 
 ![](https://labuladong.online/algo/images/lis/poker2.jpeg)
 
-为什么遇到多个可选择堆的时候要放到最左边的堆上呢？因为这样可以保证牌堆顶的牌有序（2, 4, 7, 8, Q），证明略。
+Why place on the leftmost when multiple piles are available? Because that way the pile-tops stay in sorted order (2, 4, 7, 8, Q). Proof omitted.
 
 ![](https://labuladong.online/algo/images/lis/poker3.jpeg)
 
-按照上述规则执行，可以算出最长递增子序列，牌的堆数就是最长递增子序列的长度，证明略。
+Following these rules, you can compute the LIS — the number of piles equals the LIS length. Proof omitted.
 
 ![](https://labuladong.online/algo/images/lis/poker4.jpeg)
 
-我们只要把处理扑克牌的过程编程写出来即可。每次处理一张扑克牌不是要找一个合适的牌堆顶来放吗，牌堆顶的牌不是**有序**吗，这就能用到二分查找了：用二分查找来搜索当前牌应放置的位置。
+We just need to code the card-handling process. For each card, we look for a suitable pile-top to place on; the pile-tops are **sorted**, which is where binary search comes in: search for where the current card should be placed.
 
 > [!TIP]
-> 前文 [二分查找算法详解](https://labuladong.online/algo/essential-technique/binary-search-framework/) 详细介绍了二分查找的细节及变体，这里就完美应用上了，如果没读过强烈建议阅读。
+> The earlier post [Binary search detailed](https://labuladong.online/algo/essential-technique/binary-search-framework/) covers binary search and its variants in detail — it's a perfect application here. Highly recommended if you haven't read it.
 
 ```java
 class Solution {
     public int lengthOfLIS(int[] nums) {
         int[] top = new int[nums.length];
-        // 牌堆数初始化为 0
+        // initialize the number of piles to 0
         int piles = 0;
         for (int i = 0; i < nums.length; i++) {
-            // 要处理的扑克牌
+            // the playing card to handle
             int poker = nums[i];
 
-            // ***** 搜索左侧边界的二分查找 *****
+            // ***** binary search for the left boundary *****
             int left = 0, right = piles;
             while (left < right) {
                 int mid = (left + right) / 2;
@@ -264,12 +264,12 @@ class Solution {
             }
             // *********************************
             
-            // 没找到合适的牌堆，新建一堆
+            // no suitable pile found - start a new pile
             if (left == piles) piles++;
-            // 把这张牌放到牌堆顶
+            // place this card on top of the pile
             top[left] = poker;
         }
-        // 牌堆数就是 LIS 长度
+        // the number of piles equals the LIS length
         return piles;
     }
 }
@@ -280,7 +280,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/tutorial/mydata-lis/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🍭 代码可视化动画🍭</strong>
+<strong>🍭 Code visualization 🍭</strong>
 </summary>
 </details>
 </a>
@@ -288,31 +288,31 @@ class Solution {
 
 
 
-至此，二分查找的解法也讲解完毕。
+That covers the binary-search solution.
 
-这个解法确实很难想到。首先涉及数学证明，谁能想到按照这些规则执行，就能得到最长递增子序列呢？其次还有二分查找的运用，要是对二分查找的细节不清楚，给了思路也很难写对。
+It's genuinely hard to come up with. First the math proof — who'd think these rules give the LIS? Then the binary search itself; without firm grasp of the details, even with the hint it's hard to write right.
 
-所以，这个方法作为思维拓展好了。但动态规划的设计方法应该完全理解：假设之前的答案已知，利用数学归纳的思想正确进行状态的推演转移，最终得到答案。
-
-
+So treat this as a thinking-expansion exercise. But fully understand the DP design technique: assume previous answers known and use induction to correctly derive state transitions.
 
 
 
 
 
-## 三、拓展到二维
 
-我们看一个经常出现在生活中的有趣问题，力扣第 354 题「俄罗斯套娃信封问题」，先看下题目：
+
+## 3. Extension to 2D
+
+Let's look at a fun problem that often shows up in life — LeetCode 354 "Russian Doll Envelopes":
 
 <Problem slug="russian-doll-envelopes" />
 
-**这道题目其实是最长递增子序列的一个变种，因为每次合法的嵌套是大的套小的，相当于在二维平面中找一个最长递增的子序列，其长度就是最多能嵌套的信封个数**。
+**This problem is a variant of LIS, because each valid nesting puts a smaller envelope inside a larger one — equivalent to finding the longest increasing subseq in a 2D plane, whose length is the maximum number of nested envelopes**.
 
-前面说的标准 LIS 算法只能在一维数组中寻找最长子序列，而我们的信封是由 `(w, h)` 这样的二维数对形式表示的，如何把 LIS 算法运用过来呢？
+Standard LIS finds the longest subseq in a 1D array, but our envelopes are 2D pairs `(w, h)`. How do we apply LIS?
 
 ![](https://labuladong.online/algo/images/nest-envelope/0.jpg)
 
-读者也许会想，通过 `w × h` 计算面积，然后对面积进行标准的 LIS 算法。但是稍加思考就会发现这样不行，比如 `1 × 10` 大于 `3 × 3`，但是显然这样的两个信封是无法互相嵌套的。
+Readers may think: compute area `w × h` and run standard LIS on the areas. With a moment's thought, this fails. E.g. `1 × 10` is bigger than `3 × 3`, but obviously these can't nest each other.
 
 
 
@@ -320,37 +320,37 @@ class Solution {
 
 
 
-这道题的解法比较巧妙：
+The trick:
 
-**先对宽度 `w` 进行升序排序，如果遇到 `w` 相同的情况，则按照高度 `h` 降序排序；之后把所有的 `h` 作为一个数组，在这个数组上计算 LIS 的长度就是答案**。
+**First sort by width `w` ascending; on equal `w`, sort by height `h` descending; then take all the `h`'s as an array and compute LIS on that — that's the answer**.
 
-画个图理解一下，先对这些数对进行排序：
+Visualize. First sort the pairs:
 
 ![](https://labuladong.online/algo/images/nest-envelope/1.jpg)
 
-然后在 `h` 上寻找最长递增子序列，这个子序列就是最优的嵌套方案：
+Then find the LIS in the `h`'s — that subseq is the optimal nesting plan:
 
 ![](https://labuladong.online/algo/images/nest-envelope/2.jpg)
 
-**那么为什么这样就可以找到可以互相嵌套的信封序列呢**？稍微思考一下就明白了：
+**Why does this find a sequence of mutually nestable envelopes?** A moment's thought:
 
-首先，对宽度 `w` 从小到大排序，确保了 `w` 这个维度可以互相嵌套，所以我们只需要专注高度 `h` 这个维度能够互相嵌套即可。
+First, sorting `w` ascending ensures the `w` dimension is mutually nestable, so we only need to focus on `h` being mutually nestable.
 
-其次，两个 `w` 相同的信封不能相互包含，所以对于宽度 `w` 相同的信封，对高度 `h` 进行降序排序，保证二维 LIS 中不存在多个 `w` 相同的信封（因为题目说了长宽相同也无法嵌套）。
+Second, two equal-`w` envelopes can't nest each other; for envelopes with the same `w`, sort `h` descending — so the 2D LIS won't include multiple envelopes with the same `w` (the problem says equal dimensions can't nest).
 
-下面看解法代码：
+Solution code:
 
 ```java
 class Solution {
     // envelopes = [[w, h], [w, h]...]
     public int maxEnvelopes(int[][] envelopes) {
         int n = envelopes.length;
-        // 按宽度升序排列，如果宽度一样，则按高度降序排列
+        // sort by width ascending; on equal widths, by height descending
         Arrays.sort(envelopes, (int[] a, int[] b) -> {
             return a[0] == b[0] ? 
                 b[1] - a[1] : a[0] - b[0];
         });
-        // 对高度数组寻找 LIS
+        // find LIS on the height array
         int[] height = new int[n];
         for (int i = 0; i < n; i++)
             height[i] = envelopes[i][1];
@@ -359,7 +359,7 @@ class Solution {
     }
 
     int lengthOfLIS(int[] nums) {
-        // 见前文
+        // see above
     }
 }
 ```
@@ -369,7 +369,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/russian-doll-envelopes/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Code visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -377,9 +377,9 @@ class Solution {
 
 
 
-为了复用之前的函数，我将代码分为了两个函数，你也可以合并代码，节省下 `height` 数组的空间。
+To reuse the previous function, I split into two functions; you could merge them and save the `height` array space.
 
-由于增加了测试用例，这里必须使用二分搜索版的 `lengthOfLIS` 函数才能通过所有测试用例。这样的话算法的时间复杂度为 $O(NlogN)$，因为排序和计算 LIS 各需要 $O(NlogN)$ 的时间，加到一起还是 $O(NlogN)$；空间复杂度为 $O(N)$，因为计算 LIS 的函数中需要一个 `top` 数组。
+Because the test cases are large, you must use the binary-search version of `lengthOfLIS` to pass them all. Total time complexity is $O(N \log N)$ — sorting and LIS each take $O(N \log N)$, so combined still $O(N \log N)$. Space is $O(N)$ since LIS needs a `top` array.
 
 
 
@@ -389,14 +389,14 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [【强化练习】单调队列的通用实现及经典习题](https://labuladong.online/algo/problem-set/monotonic-queue/)
- - [动态规划之子序列问题解题模板](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)
- - [动态规划穷举的两种视角](https://labuladong.online/algo/dynamic-programming/two-views-of-dp/)
- - [动态规划设计：最大子数组](https://labuladong.online/algo/dynamic-programming/maximum-subarray/)
- - [学习数据结构和算法的框架思维](https://labuladong.online/algo/essential-technique/algorithm-summary/)
- - [最优子结构原理和 dp 数组遍历方向](https://labuladong.online/algo/dynamic-programming/faq-summary/)
+ - [Generic monotonic-queue implementation and classic problems](https://labuladong.online/algo/problem-set/monotonic-queue/)
+ - [DP template for subsequence problems](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)
+ - [Two perspectives on DP enumeration](https://labuladong.online/algo/dynamic-programming/two-views-of-dp/)
+ - [DP design: maximum subarray](https://labuladong.online/algo/dynamic-programming/maximum-subarray/)
+ - [The framework mindset for learning data structures and algorithms](https://labuladong.online/algo/essential-technique/algorithm-summary/)
+ - [Optimal substructure and dp-array traversal direction](https://labuladong.online/algo/dynamic-programming/faq-summary/)
 
 </details><hr>
 
@@ -405,15 +405,15 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems citing this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
-| [1425. Constrained Subsequence Sum](https://leetcode.com/problems/constrained-subsequence-sum/?show=1) | [1425. 带限制的子序列和](https://leetcode.cn/problems/constrained-subsequence-sum/?show=1) | 🔴 |
+| [1425. Constrained Subsequence Sum](https://leetcode.com/problems/constrained-subsequence-sum/?show=1) | [1425. 带限制的subsequence和](https://leetcode.cn/problems/constrained-subsequence-sum/?show=1) | 🔴 |
 | [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. 粉刷房子](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
-| [368. Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/?show=1) | [368. 最大整除子集](https://leetcode.cn/problems/largest-divisible-subset/?show=1) | 🟠 |
+| [368. Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/?show=1) | [368. 最大整除subset](https://leetcode.cn/problems/largest-divisible-subset/?show=1) | 🟠 |
 | - | [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
 
 </details>
@@ -423,6 +423,3 @@ class Solution {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,30 +1,30 @@
-# 一文读懂 session 和 cookie
+# Understanding session and cookie
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
 **-----------**
 
-cookie 大家应该都熟悉，比如说登录某些网站一段时间后，就要求你重新登录；再比如有的同学很喜欢玩爬虫技术，有时候网站就是可以拦截住你的爬虫，这些都和 cookie 有关。如果你明白了服务器后端对于 cookie 和 session 的处理逻辑，就可以解释这些现象，甚至钻一些空子无限白嫖，待我慢慢道来。
+You're probably familiar with cookies — for instance, after logging into a site for a while you're asked to log in again; or, if you're into web scraping, sometimes the site blocks your scraper. All of this is related to cookies. Once you understand how the server handles cookies and sessions, you can explain these phenomena and even bend a few rules to get free use indefinitely. Let me walk you through it.
 
-### 一、session 和 cookie 简介
+### 1. Intro to session and cookie
 
-cookie 的出现是因为 HTTP 是无状态的一种协议，换句话说，服务器记不住你，可能你每刷新一次网页，就要重新输入一次账号密码进行登录。这显然是让人无法接受的，cookie 的作用就好比服务器给你贴个标签，然后你每次向服务器再发请求时，服务器就能够 cookie 认出你。
+Cookies exist because HTTP is a stateless protocol. In other words, the server can't remember you — every time you refresh the page you might have to log in again. That's clearly unacceptable. Cookies are like the server slapping a label on you, so when you make subsequent requests it can recognize you by that cookie.
 
-抽象地概括一下：**一个 cookie 可以认为是一个「变量」，形如 `name=value`，存储在浏览器；一个 session 可以理解为一种数据结构，多数情况是「映射」（键值对），存储在服务器上**。
+Abstractly: **a cookie can be thought of as a "variable" of the form `name=value`, stored in the browser; a session can be thought of as a data structure — usually a "map" (key-value pairs) — stored on the server**.
 
-注意，我说的是「一个」cookie 可以认为是一个变量，但是服务器可以一次设置多个 cookie，所以有时候说 cookie 是「一组」键值对儿，这也可以说得通。
+Note: I said "a" cookie can be thought of as a variable, but the server can set multiple cookies at once. So sometimes people say cookies are "a group" of key-value pairs — that works too.
 
-cookie 可以在服务器端通过 HTTP 的 SetCookie 字段设置 cookie，比如我用 Go 语言写的一个简单服务：
+The server can set cookies via the HTTP `Set-Cookie` header. For example, here's a simple service in Go:
 
 ```go
 func cookie(w http.ResponseWriter, r *http.Request) {
-    // 设置了两个 cookie 
+    // set two cookies
 	http.SetCookie(w, &http.Cookie{
 		Name:       "name1",
 		Value:      "value1",
@@ -34,105 +34,105 @@ func cookie(w http.ResponseWriter, r *http.Request) {
 		Name:  "name2",
 		Value: "value2",
 	})
-    // 将字符串写入网页
-	fmt.Fprintln(w, "页面内容")
+    // write a string to the page
+	fmt.Fprintln(w, "page content")
 }
 ```
 
-当浏览器访问对应网址时，通过浏览器的开发者工具查看此次 HTTP 通信的细节，可以看见服务器的回应发出了两次 `SetCookie` 命令：
+When the browser hits the URL, the browser dev tools show the HTTP exchange. You can see the server response issued two `Set-Cookie` directives:
 
 ![](https://labuladong.online/algo/images/session/1.png)
 
-在这之后，浏览器的请求中的 `Cookie` 字段就带上了这两个 cookie：
+After that, the browser's request includes both cookies in the `Cookie` field:
 
 ![](https://labuladong.online/algo/images/session/2.png)
 
-**cookie 的作用其实就是这么简单，无非就是服务器给每个客户端（浏览器）打的标签**，方便服务器辨认而已。当然，HTTP 还有很多参数可以设置 cookie，比如过期时间，或者让某个 cookie 只有某个特定路径才能使用等等。
+**Cookies are really that simple — they're just a label the server sticks on each client (browser) for identification**. HTTP also offers many parameters for cookies — expiration time, restricting a cookie to a certain path, and so on.
 
-但问题是，我们也知道现在的很多网站功能很复杂，而且涉及很多的数据交互，比如说电商网站的购物车功能，信息量大，而且结构也比较复杂，无法通过简单的 cookie 机制传递这么多信息，而且要知道 cookie 字段是存储在 HTTP header 中的，就算能够承载这些信息，也会消耗很多的带宽，比较消耗网络资源。
+But many of today's sites are complex and involve a lot of data exchange. Take a shopping cart on an e-commerce site — large in size and complex in structure. You can't fit all that into a simple cookie mechanism. And cookies live in HTTP headers; even if you could fit it, that would consume a lot of bandwidth.
 
-session 就可以配合 cookie 解决这一问题，比如说一个 cookie 存储这样一个变量 `sessionID=xxxx`，仅仅把这一个 cookie 传给服务器，然后服务器通过这个 ID 找到对应的 session，这个 session 是一个数据结构，里面存储着该用户的购物车等详细信息，服务器可以通过这些信息返回该用户的定制化网页，有效解决了追踪用户的问题。
+A session, combined with cookies, solves this. For example, a single cookie holds something like `sessionID=xxxx`. Only this one cookie is sent to the server. The server uses this ID to look up the corresponding session — a data structure containing the user's shopping cart and other detailed info. The server can then render a page customized for that user, neatly solving the user-tracking problem.
 
-**session 是一个数据结构，由网站的开发者设计，所以可以承载各种数据**，只要客户端的 cookie 传来一个唯一的 session ID，服务器就可以找到对应的 session，认出这个客户。
+**A session is a data structure designed by the site's developer, so it can carry arbitrary data**. As long as the client's cookie sends a unique session ID, the server finds the matching session and recognizes the client.
 
-当然，由于 session 存储在服务器中，肯定会消耗服务器的资源，所以 session 一般都会有一个过期时间，服务器一般会定期检查并删除过期的 session，如果后来该用户再次访问服务器，可能就会面临重新登录等等措施，然后服务器新建一个 session，将 session ID 通过 cookie 的形式传送给客户端。
+Of course, since sessions live on the server they consume server resources, so sessions usually have an expiration time. The server periodically checks and deletes expired sessions. If the user comes back later, they may have to log in again. The server creates a new session and sends the session ID back to the client as a cookie.
 
-那么，我们知道 cookie 和 session 的原理，有什么切实的好处呢？**除了应对面试，我给你说一个鸡贼的用处，就是可以白嫖某些服务**。
+So what real-world benefit comes from understanding cookies and sessions? **Apart from interviews, here's a sneaky use case — you can freeload off some services**.
 
-有些网站，你第一次使用它的服务，它直接免费让你试用，但是用一次之后，就让你登录然后付费继续使用该服务。而且你发现网站似乎通过某些手段记住了你的电脑，除非你换个电脑或者换个浏览器才能再白嫖一次。
+Some sites let you try the service for free the first time. After that, you have to log in and pay. And you'll notice the site somehow remembers your computer — unless you switch computers or browsers, you can't freeload again.
 
-那么问题来了，你试用的时候没有登录，网站服务器是怎么记住你的呢？这就很显然了，服务器一定是给你的浏览器打了 cookie，后台建立了对应的 session 记录你的状态。你的浏览器在每次访问该网站的时候都会听话地带着 cookie，服务器一查 session 就知道这个浏览器已经免费使用过了，得让它登录付费，不能让它继续白嫖了。
+Question: you didn't log in during the trial, so how does the server remember you? Obviously, the server set a cookie on your browser and built a corresponding session in the backend tracking your state. Your browser dutifully sends that cookie on every visit. The server checks the session and knows this browser has already had its free trial — it should pay up now, no more freeloading.
 
-那如果我不让浏览器发送 cookie，每次都伪装成一个第一次来试用的小萌新，不就可以不断白嫖了么？浏览器会把网站的 cookie 以文件的形式存在某些地方（不同的浏览器配置不同），你把他们找到然后删除就行了。但是对于 Firefox 和 Chrome 浏览器，有很多插件可以直接编辑 cookie，比如我的 Chrome 浏览器就用的一款叫做 EditThisCookie 的插件，这是他们官网：
+So if I stop the browser from sending the cookie and pretend each time to be a brand-new beginner, I can keep freeloading, right? Browsers store cookies as files in various locations (it varies by browser); you can find and delete them. But for Firefox and Chrome there are extensions that let you edit cookies directly. I use one called EditThisCookie on Chrome — here's their site:
 
 ![](https://labuladong.online/algo/images/session/3.png)
 
-这类插件可以读取浏览器在当前网页的 cookie，点开插件可以任意编辑和删除 cookie。**当然，偶尔白嫖一两次还行，不鼓励高频率白嫖，想常用还是掏钱吧，否则网站赚不到钱，就只能取消免费试用这个机制了**。
+These extensions can read the cookies for the current page and let you edit or delete them at will. **Of course, freeloading once or twice is fine; please don't do it heavily. If you want to use it regularly, just pay — otherwise the site loses revenue and ends the free trial entirely**.
 
-以上就是关于 cookie 和 session 的简单介绍，cookie 是 HTTP 协议的一部分，不算复杂，而 session 是可以定制的，所以下面详细看一下实现 session 管理的代码架构吧。
+That's the brief intro to cookies and sessions. Cookies are part of the HTTP protocol and aren't very complex. Sessions are customizable, so let's look more carefully at the code architecture for managing them.
 
-### 二、session 的实现
+### 2. Implementing sessions
 
-session 的原理不难，但是具体实现它可是很有技巧的，一般需要三个组件配合完成，它们分别是 `Manager`、`Provider` 和 `Session` 三个类（接口）。
+The principle of sessions isn't hard, but the actual implementation has some craft to it. It usually requires three components working together: classes (interfaces) called `Manager`, `Provider`, and `Session`.
 
 ![](https://labuladong.online/algo/images/session/4.jpg)
 
-1、浏览器通过 HTTP 协议向服务器请求路径 `/content` 的网页资源，对应路径上有一个 Handler 函数接收请求，解析 HTTP header 中的 cookie，得到其中存储的 sessionID，然后把这个 ID 发给 `Manager`。
+1. The browser requests, via HTTP, a page at `/content`. A handler function on that route receives the request, parses the cookie out of the HTTP header, gets the stored sessionID, and passes that ID to the `Manager`.
 
-2、`Manager` 充当一个 session 管理器的角色，主要存储一些配置信息，比如 session 的存活时间，cookie 的名字等等。而所有的 session 存在 `Manager` 内部的一个 `Provider` 中。所以 `Manager` 会把 `sid`（sessionID）传递给 `Provider`，让它去找这个 ID 对应的具体是哪个 session。
+2. The `Manager` plays the role of a session manager. It stores some configuration: how long sessions live, the cookie name, and so on. All sessions live inside a `Provider` held by the `Manager`. So `Manager` passes `sid` (the session ID) to `Provider`, asking it to find which session this ID corresponds to.
 
-3、`Provider` 就是一个容器，最常见的应该就是一个散列表，将每个 `sid` 和对应的 session 一一映射起来。收到 `Manager` 传递的 `sid` 之后，它就找到 `sid` 对应的 session 结构，也就是 `Session` 结构，然后返回它。
+3. `Provider` is a container — most commonly a hash table mapping each `sid` to its session. Given the `sid` from `Manager`, it finds the corresponding `Session` struct and returns it.
 
-4、`Session` 中存储着用户的具体信息，由 Handler 函数中的逻辑拿出这些信息，生成该用户的 HTML 网页，返回给客户端。
+4. `Session` holds the user's specific info. The handler retrieves this info, generates the user's HTML page, and returns it to the client.
 
-那么你也许会问，为什么搞这么麻烦，直接在 Handler 函数中搞一个哈希表，然后存储 `sid` 和 `Session` 结构的映射不就完事儿了？
+You might ask: why such a fuss? Couldn't we just keep a hash table in the handler mapping `sid` → `Session`?
 
-**这就是设计层面的技巧了**，下面就来说说，为什么分成 `Manager`、`Provider` 和 `Session`。
+**This is where design craft comes in.** Let's see why we split things into `Manager`, `Provider`, and `Session`.
 
-先从最底层的 `Session` 说。既然 session 就是键值对，为啥不直接用哈希表，而是要抽象出这么一个数据结构呢？
+Start with the lowest layer, `Session`. Since a session is just key-value pairs, why not use a hash table directly — why abstract it as a data structure?
 
-第一，因为 `Session` 结构可能不止存储了一个哈希表，还可以存储一些辅助数据，比如 `sid`，访问次数，过期时间或者最后一次的访问时间，这样便于实现想 LRU、LFU 这样的算法。
+First, because `Session` may store more than a hash table — also auxiliary data like `sid`, access count, expiration time, last access time, and so on. This makes implementing algorithms like LRU and LFU possible.
 
-第二，因为 session 可以有不同的存储方式。如果用编程语言内置的哈希表，那么 session 数据就是存储在内存中，如果数据量大，很容易造成程序崩溃，而且一旦程序结束，所有 session 数据都会丢失。所以可以有很多种 session 的存储方式，比如存入缓存数据库 Redis，或者存入 MySQL 等等。
+Second, because sessions can be stored in different places. If you use the language's built-in hash table, session data lives in memory; with lots of data the program can crash easily, and once the program ends, all session data is lost. So you might want different storage backends — a cache database like Redis, or MySQL, etc.
 
-因此，`Session` 结构提供一层抽象，屏蔽不同存储方式的差异，只要提供一组通用接口操纵键值对：
+So `Session` provides a layer of abstraction that hides the storage differences and just exposes a generic set of key-value operations:
 
 ```go
 type Session interface {
-    // 设置键值对
+    // set a key-value pair
     Set(key, val interface{})
-    // 获取 key 对应的值
+    // get the value for key
     Get(key interface{}) interface{}
-    // 删除键 key
+    // delete key
     Delete(key interface{})
 }
 ```
 
-再说 `Provider` 为啥要抽象出来。我们上面那个图的 `Provider` 就是一个散列表，保存 `sid` 到 `Session` 的映射，但是实际中肯定会更加复杂。我们不是要时不时删除一些 session 吗，除了设置存活时间之外，还可以采用一些其他策略，比如 LRU 缓存淘汰算法，这样就需要 `Provider` 内部使用哈希链表这种数据结构来存储 session。
+Now `Provider`. In the diagram above it's just a hash table mapping `sid` → `Session`, but in practice it's more complex. We periodically delete sessions; besides expiration, we may use other strategies like LRU caching, which means `Provider` internally needs a structure like a hash linked list to store sessions.
 
 > [!TIP]
-> 关于 LRU 算法的奥妙，参见前文 [LRU 算法详解](https://labuladong.online/algo/data-structure/lru-cache/)。
+> For the magic of LRU, see the earlier post [LRU explained](https://labuladong.online/algo/data-structure/lru-cache/).
 
-因此，`Provider` 作为一个容器，就是要屏蔽算法细节，以合理的数据结构和算法组织 `sid` 和 `Session` 的映射关系，只需要实现下面这几个方法实现对 session 的增删查改：
+So `Provider`, as a container, hides the algorithmic details. It uses suitable data structures and algorithms to organize the `sid → Session` mapping and exposes a few methods for CRUD on sessions:
 
 ```go
 type Provider interface {
-    // 新增并返回一个 session
+    // create and return a session
     SessionCreate(sid string) (Session, error)
-    // 删除一个 session
+    // delete a session
     SessionDestroy(sid string)
-    // 查找一个 session
+    // look up a session
     SessionRead(sid string) (Session, error)
-    // 修改一个session
+    // update a session
     SessionUpdate(sid string)
-    // 通过类似 LRU 的算法回收过期的 session
+    // garbage-collect expired sessions, similar to LRU
     SessionGC(maxLifeTime int64)
 }
 ```
 
-最后说 `Manager`，大部分具体工作都委托给 `Session` 和 `Provider` 承担了，`Manager` 主要就是一个参数集合，比如 session 的存活时间，清理过期 session 的策略，以及 session 的可用存储方式。`Manager` 屏蔽了操作的具体细节，我们可以通过 `Manager` 灵活地配置 session 机制。
+Finally, `Manager`. It delegates most of the actual work to `Session` and `Provider`. `Manager` is mostly a config bag: session lifetime, expiration policy, available session storage backends. `Manager` hides these details so we can flexibly configure the session mechanism.
 
-综上，session 机制分成几部分的最主要原因就是解耦，实现定制化。我在 Github 上看过几个 Go 语言实现的 session 服务，源码都很简单，有兴趣的朋友可以学习学习：
+In summary, the main reason for splitting the session mechanism into multiple parts is decoupling and customization. There are several Go session libraries on GitHub with simple source code worth studying:
 
 https://github.com/alexedwards/scs
 
@@ -144,6 +144,3 @@ https://github.com/astaxie/build-web-application-with-golang
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

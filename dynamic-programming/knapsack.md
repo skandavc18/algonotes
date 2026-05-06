@@ -1,10 +1,10 @@
-# 经典动态规划：0-1 背包问题
+# Classic DP: 0-1 knapsack
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
@@ -13,21 +13,21 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
-> tip：本文有视频版：[0-1背包问题详解](https://www.bilibili.com/video/BV15B4y1P7X7/)。建议关注我的 B 站账号，我会用视频领读的方式带大家学习那些稍有难度的算法技巧。
+> Tip: this article has a video version: [0-1 knapsack explained](https://www.bilibili.com/video/BV15B4y1P7X7/). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
 
 
 
-后台天天有人问背包问题，这个问题其实不难，借助动态规划的思维框架，无非还是状态 + 选择，没啥特别之处。今天就来说一下背包问题吧，就讨论最常见的 0-1 背包问题。描述：
+People keep asking about the knapsack problem in the comments. It's actually not that hard — using the DP framework, it's still just states + choices, nothing special. Today we'll cover the most common variant: 0-1 knapsack. Description:
 
-给你一个可装载重量为 `W` 的背包和 `N` 个物品，每个物品有重量和价值两个属性。其中第 `i` 个物品的重量为 `wt[i]`，价值为 `val[i]`。现在让你用这个背包装物品，每个物品只能用一次，在不超过背包容量的前提下，最多能装的价值是多少？
+You have a knapsack of capacity `W` and `N` items, each with a weight and a value. Item `i` has weight `wt[i]` and value `val[i]`. Use this knapsack to hold items, each item used at most once, without exceeding capacity. What's the maximum total value?
 
 ![](https://labuladong.online/algo/images/knapsack/1.png)
 
-举个简单的例子，输入如下：
+A simple example:
 
 ```py
 N = 3, W = 4
@@ -35,44 +35,44 @@ wt = [2, 1, 3]
 val = [4, 2, 3]
 ```
 
-算法返回 6，选择前两件物品装进背包，总重量 3 小于 `W`，可以获得最大价值 6。
+The algorithm returns 6: pick the first two items, total weight 3 ≤ W, max value 6.
 
-题目就是这么简单，一个典型的动态规划问题。这个题目中的物品不可以分割，要么装进包里，要么不装，不能说切成两块装一半。这就是 0-1 背包这个名词的来历。
+Simple problem statement, classic DP. The items can't be split — either packed whole or not at all. That's where the "0-1" name comes from.
 
-解决这个问题没有什么排序之类巧妙的方法，只能穷举所有可能，根据我们 [动态规划详解](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 中的套路，直接走流程就行了。
-
-
+There's no clever sorting trick — we have to enumerate all possibilities. Following our [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), just go through the steps.
 
 
 
 
 
-## 动规标准套路
 
-看来每篇动态规划文章都得重复一遍套路，历史文章中的动态规划问题都是按照下面的套路来的。
 
-**第一步要明确两点，「状态」和「选择」**。
+## Standard DP routine
 
-先说状态，如何才能描述一个问题局面？只要给几个物品和一个背包的容量限制，就形成了一个背包问题呀。**所以状态有两个，就是「背包的容量」和「可选择的物品」**。
+Looks like every DP article has to repeat the routine. The DP problems in earlier articles all follow the routine below.
 
-再说选择，也很容易想到啊，对于每件物品，你能选择什么？**选择就是「装进背包」或者「不装进背包」嘛**。
+**Step 1: identify the "state" and the "choice"**.
 
-明白了状态和选择，动态规划问题基本上就解决了，对于自底向上的思考方式，代码的一般框架是这样：
+State first. How do we describe a problem state? Given a set of items and a knapsack capacity, we have a knapsack problem. **So there are two states: "knapsack capacity" and "items available"**.
+
+Now choices. Easy too: for each item, what can you do? **Choices are "pack into the knapsack" or "don't pack"**.
+
+Once states and choices are clear, the DP problem is essentially solved. For the bottom-up approach, code skeleton is:
 
 ```python
-for 状态1 in 状态1的所有取值：
-    for 状态2 in 状态2的所有取值：
+for state1 in all values of state1:
+    for state2 in all values of state2:
         for ...
-            dp[状态1][状态2][...] = 择优(选择1，选择2...)
+            dp[state1][state2][...] = best(choice1, choice2, ...)
 ```
 
-**第二步要明确 `dp` 数组的定义**。
+**Step 2: define the `dp` array**.
 
-首先看看刚才找到的「状态」，有两个，也就是说我们需要一个二维 `dp` 数组。
+We have two states, so we need a 2D `dp` array.
 
-`dp[i][w]` 的定义如下：对于前 `i` 个物品，当前背包的容量为 `w`，这种情况下可以装的最大价值是 `dp[i][w]`。
+`dp[i][w]` is defined as: considering the first `i` items, with current knapsack capacity `w`, the maximum value we can pack.
 
-比如说，如果 `dp[3][5] = 6`，其含义为：对于给定的一系列物品中，若只对前 3 个物品进行选择，当背包容量为 5 时，最多可以装下的价值为 6。
+For example, if `dp[3][5] = 6`, it means: considering only the first 3 items and capacity 5, the maximum value packable is 6.
 
 
 
@@ -81,11 +81,11 @@ for 状态1 in 状态1的所有取值：
 
 
 > [!NOTE]
-> 为什么要这么定义？因为这样可以找到状态转移关系，或者说这就是背包问题的特殊定义方式，你当做套路记下来就行，未来遇到动态规划相关问题，都可以这样定义试一试。
+> Why this definition? Because it leads to a clean state-transition relation — or rather, this is the canonical definition for knapsack. Memorize it as part of the routine; for future DP problems, try this style of definition.
 
-根据这个定义，我们想求的最终答案就是 `dp[N][W]`。base case 就是 `dp[0][..] = dp[..][0] = 0`，因为没有物品或者背包没有空间的时候，能装的最大价值就是 0。
+By this definition, the final answer we want is `dp[N][W]`. Base case: `dp[0][..] = dp[..][0] = 0`, since with no items or no capacity, the max value is 0.
 
-细化上面的框架：
+Refined skeleton:
 
 ```python
 int[][] dp[N+1][W+1]
@@ -95,37 +95,37 @@ dp[..][0] = 0
 for i in [1..N]:
     for w in [1..W]:
         dp[i][w] = max(
-            把物品 i 装进背包,
-            不把物品 i 装进背包
+            pack item i,
+            don't pack item i
         )
 return dp[N][W]
 ```
 
-**第三步，根据「选择」，思考状态转移的逻辑**。
+**Step 3: from the "choice", figure out the state-transition logic**.
 
-简单说就是，上面伪码中「把物品 `i` 装进背包」和「不把物品 `i` 装进背包」怎么用代码体现出来呢？
+Simply put: how do we express "pack item `i`" and "don't pack item `i`" in code?
 
-这就要结合对 `dp` 数组的定义，看看这两种选择会对状态产生什么影响：
-
-
+We must connect this with the `dp` array's definition and see how each choice affects the state:
 
 
 
 
 
-先重申一下刚才我们的 `dp` 数组的定义：
 
-`dp[i][w]` 表示：对于前 `i` 个物品（从 1 开始计数），当前背包的容量为 `w` 时，这种情况下可以装下的最大价值是 `dp[i][w]`。
 
-**如果你没有把这第 `i` 个物品装入背包**，那么很显然，最大价值 `dp[i][w]` 应该等于 `dp[i-1][w]`，继承之前的结果。
+Restating our `dp` definition:
 
-**如果你把这第 `i` 个物品装入了背包**，那么 `dp[i][w]` 应该等于 `val[i-1] + dp[i-1][w - wt[i-1]]`。
+`dp[i][w]` represents: considering the first `i` items (1-indexed), with capacity `w`, the maximum packable value.
 
-首先，由于数组索引从 0 开始，而我们定义中的 `i` 是从 1 开始计数的，所以 `val[i-1]` 和 `wt[i-1]` 表示第 `i` 个物品的价值和重量。
+**If you don't pack item `i`**, then clearly `dp[i][w]` equals `dp[i-1][w]` — inheriting the prior result.
 
-你如果选择将第 `i` 个物品装进背包，那么第 `i` 个物品的价值 `val[i-1]` 肯定就到手了，接下来你就要在剩余容量 `w - wt[i-1]` 的限制下，在前 `i - 1` 个物品中挑选，求最大价值，即 `dp[i-1][w - wt[i-1]]`。
+**If you pack item `i`**, then `dp[i][w]` equals `val[i-1] + dp[i-1][w - wt[i-1]]`.
 
-综上就是两种选择，我们都已经分析完毕，也就是写出来了状态转移方程，可以进一步细化代码：
+Note that array indices are 0-based but our `i` is 1-based, so `val[i-1]` and `wt[i-1]` are item `i`'s value and weight.
+
+If you choose to pack item `i`, you secure value `val[i-1]`. Then, with remaining capacity `w - wt[i-1]`, you choose from the first `i - 1` items to maximize value, namely `dp[i-1][w - wt[i-1]]`.
+
+That covers both choices and gives us the state-transition equation:
 
 ```python
 for i in [1..N]:
@@ -137,22 +137,22 @@ for i in [1..N]:
 return dp[N][W]
 ```
 
-**最后一步，把伪码翻译成代码，处理一些边界情况**。
+**Final step: translate pseudocode into actual code, handle edge cases**.
 
-我用 Java 写的代码，把上面的思路完全翻译了一遍，并且处理了 `w - wt[i-1]` 可能小于 0 导致数组索引越界的问题：
+Here's a Java translation. It also handles `w - wt[i-1]` being negative (which would cause an out-of-bounds access):
 
 ```java
 int knapsack(int W, int N, int[] wt, int[] val) {
     assert N == wt.length;
-    // base case 已初始化
+    // base case is already initialized
     int[][] dp = new int[N + 1][W + 1];
     for (int i = 1; i <= N; i++) {
         for (int w = 1; w <= W; w++) {
             if (w - wt[i - 1] < 0) {
-                // 这种情况下只能选择不装入背包
+                // can only choose not to pack
                 dp[i][w] = dp[i - 1][w];
             } else {
-                // 装入或者不装入背包，择优
+                // pack or don't pack — take the best
                 dp[i][w] = Math.max(
                     dp[i - 1][w - wt[i-1]] + val[i-1], 
                     dp[i - 1][w]
@@ -170,7 +170,7 @@ int knapsack(int W, int N, int[] wt, int[] val) {
 <a href="https://labuladong.online/algo-visualize/tutorial/mydata-knapsack/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>👾 代码可视化动画👾</strong>
+<strong>👾 Code visualization 👾</strong>
 </summary>
 </details>
 </a>
@@ -179,9 +179,9 @@ int knapsack(int W, int N, int[] wt, int[] val) {
 
 
 > [!NOTE]
-> 其实函数签名中的物品数量 `N` 就是 `wt` 数组的长度，所以实际上这个参数 `N` 是多此一举的。但为了体现原汁原味的 0-1 背包问题，我就带上这个参数 `N` 了，你自己写的话可以省略。
+> Note that the `N` parameter in the signature is just `wt.length`, so passing `N` is technically redundant. But to keep the original 0-1 knapsack flavor, I kept it. You can omit it in your own code.
 
-至此，背包问题就解决了，相比而言，我觉得这是比较简单的动态规划问题，因为状态转移的推导比较自然，基本上你明确了 `dp` 数组的定义，就可以理所当然地确定状态转移了。
+That's it for the knapsack problem. Comparatively, this is one of the simpler DP problems because the state transition flows naturally — once the `dp` array's definition is clear, the transition follows almost automatically.
 
 
 
@@ -191,12 +191,12 @@ int knapsack(int W, int N, int[] wt, int[] val) {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [扫描线技巧：安排会议室](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
- - [经典动态规划：子集背包问题](https://labuladong.online/algo/dynamic-programming/knapsack2/)
- - [经典动态规划：完全背包问题](https://labuladong.online/algo/dynamic-programming/knapsack3/)
- - [背包问题的变体：目标和](https://labuladong.online/algo/dynamic-programming/target-sum/)
+ - [Sweep-line technique: scheduling meeting rooms](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
+ - [Classic DP: subset-sum knapsack](https://labuladong.online/algo/dynamic-programming/knapsack2/)
+ - [Classic DP: unbounded knapsack](https://labuladong.online/algo/dynamic-programming/knapsack3/)
+ - [Knapsack variant: target sum](https://labuladong.online/algo/dynamic-programming/target-sum/)
 
 </details><hr>
 
@@ -205,11 +205,11 @@ int knapsack(int W, int N, int[] wt, int[] val) {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems citing this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [1235. Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/?show=1) | [1235. 规划兼职工作](https://leetcode.cn/problems/maximum-profit-in-job-scheduling/?show=1) | 🔴 |
 
@@ -220,6 +220,3 @@ int knapsack(int W, int N, int[] wt, int[] val) {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

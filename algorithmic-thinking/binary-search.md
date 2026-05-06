@@ -1,61 +1,61 @@
-# 二分搜索算法核心代码模板
+# Binary Search Core Code Template
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [34. Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/) | [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/) | 🟠 |
-| [704. Binary Search](https://leetcode.com/problems/binary-search/) | [704. 二分查找](https://leetcode.cn/problems/binary-search/) | 🟢 |
-| - | [剑指 Offer 53 - I. 在排序数组中查找数字 I](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/) | 🟢 |
+| [34. Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/) | [34. Find First and Last Position of Element in Sorted Array](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/) | 🟠 |
+| [704. Binary Search](https://leetcode.com/problems/binary-search/) | [704. Binary Search](https://leetcode.cn/problems/binary-search/) | 🟢 |
+| - | [Sword to Offer 53 - I. Find a Number in a Sorted Array](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/) | 🟢 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [数组基础](https://labuladong.online/algo/data-structure-basic/array-basic/)
+> - [Array Basics](https://labuladong.online/algo/data-structure-basic/array-basic/)
 
-> tip：本文有视频版：[二分搜索核心框架套路](https://www.bilibili.com/video/BV1Gt4y1b79Q/)。建议关注我的 B 站账号，我会用视频领读的方式带大家学习那些稍有难度的算法技巧。
-
-
-
-本文是旧文 [二分搜索详解](https://mp.weixin.qq.com/s/uA2suoVykENmCQcKFMOSuQ) 的修订版，添加了对二分搜索算法更详细的分析。
-
-先给大家讲个笑话乐呵一下：
-
-有一天阿东到图书馆借了 `N` 本书，出图书馆的时候，警报响了，于是保安把阿东拦下，要检查一下哪本书没有登记出借。阿东正准备把每一本书在报警器下过一下，以找出引发警报的书，但是保安露出不屑的眼神：你连二分查找都不会吗？
-
-于是保安把书分成两堆，让第一堆过一下报警器，报警器响，这说明引起报警的书包含在里面；于是再把这堆书分成两堆，把第一堆过一下报警器，报警器又响，继续分成两堆…… 
-
-最终，检测了 `logN` 次之后，保安成功的找到了那本引起警报的书，露出了得意和嘲讽的笑容。于是阿东背着剩下的书走了。
-
-从此，图书馆丢了 `N - 1` 本书（手动狗头）。
+> tip: a video version is available: [Binary Search Core Framework](https://www.bilibili.com/video/BV1Gt4y1b79Q/). Follow my Bilibili account; I'll guide you through more difficult algorithm techniques on video.
 
 
+
+This is a revised version of the older article on binary search, with more detailed analysis.
+
+A joke first:
+
+One day Adong borrowed `N` books from the library. The alarm went off as he left, so the guard stopped him to find which book wasn't checked out. Adong was about to scan each book under the alarm one by one, but the guard sneered: "You don't even know binary search?"
+
+The guard split the books into two stacks; the first stack triggered the alarm — so the troublemaker is in there. Split it into two again; the first stack triggers the alarm — repeat...
+
+After `logN` checks, the guard found the culprit and grinned smugly. Adong walked off with the rest.
+
+The library lost `N - 1` books that day (j/k).
 
 
 
 
 
-二分查找并不简单，Knuth 大佬（发明 KMP 算法的那位）都说二分查找：**思路很简单，细节是魔鬼**。很多人喜欢拿整型溢出的 bug 说事儿，但是二分查找真正的坑根本就不是那个细节问题，而是在于到底要给 `mid` 加一还是减一，while 里到底用 `<=` 还是 `<`。
 
-你要是没有正确理解这些细节，写二分肯定就是玄学编程，有没有 bug 只能靠菩萨保佑，谁写谁知道。
 
-本文就来探究几个最常用的二分查找场景：寻找一个数、寻找左侧边界、寻找右侧边界。而且，我们就是要深入细节，比如不等号是否应该带等号，`mid` 是否应该加一等等。分析这些细节的差异以及出现这些差异的原因，保证你能灵活准确地写出正确的二分查找算法。
+Binary search isn't trivial. Knuth (yes, the KMP guy) said: **the idea is simple; the details are devilish**. People love to talk about integer overflow, but the real traps are: `mid + 1` or `mid - 1`? `<=` or `<` in `while`?
 
-另外再声明一下，对于二分搜索的每一个场景，本文还会探讨多种代码写法，目的是为了让你理解出现这些细微差异的本质原因，最起码你看到别人的代码时不会懵逼。实际上这些写法没有优劣之分，你喜欢哪种就用哪种好了。
+Without these details, your binary search is mystical programming — bugs are revealed only by chance.
 
-## 零、二分查找框架
+This article explores three common scenarios: searching one number, searching the left bound, searching the right bound. We dive into details — should the inequality include equality, do we add 1 to `mid`, etc.
+
+Also note: for each scenario we'll show several variants. They have no inherent superiority — pick the one you like.
+
+## 0. The Framework
 
 ```java
 int binarySearch(int[] nums, int target) {
@@ -75,28 +75,28 @@ int binarySearch(int[] nums, int target) {
 }
 ```
 
-**分析二分查找的一个技巧是：不要出现 else，而是把所有情况用 else if 写清楚，这样可以清楚地展现所有细节**。本文都会使用 else if，旨在讲清楚，读者理解后可自行简化。
+**Tip: don't use `else` — write all cases as `else if` for clarity.** Use `else if` throughout this article; once you understand, you can simplify.
 
-其中 `...` 标记的部分，就是可能出现细节问题的地方，当你见到一个二分查找的代码时，首先注意这几个地方。后文用实例分析这些地方能有什么样的变化。
+The `...` marks are where details lurk. We'll vary them with examples.
 
-**另外提前说明一下，计算 `mid` 时需要防止溢出**，代码中 `left + (right - left) / 2` 就和 `(left + right) / 2` 的结果相同，但是有效防止了 `left` 和 `right` 太大，直接相加导致溢出的情况。
-
-
+**Compute `mid` to avoid overflow**: `left + (right - left) / 2` equals `(left + right) / 2` but avoids overflow for large `left` and `right`.
 
 
 
 
 
-## 一、寻找一个数（基本的二分搜索）
 
-这个场景是最简单的，可能也是大家最熟悉的，即搜索一个数，如果存在，返回其索引，否则返回 -1。
+
+## 1. Searching for a Number (Standard Binary Search)
+
+The simplest scenario: search for a number; return its index, or -1 if absent.
 
 ```java
 class Solution {
-    // 标准的二分搜索框架，搜索目标元素的索引，若不存在则返回 -1
+    // Standard binary search; returns -1 if not found
     public int search(int[] nums, int target) {
         int left = 0;
-        // 注意
+        // Note
         int right = nums.length - 1;
 
         while(left <= right) {
@@ -104,10 +104,10 @@ class Solution {
             if(nums[mid] == target) {
                 return mid;   
             } else if (nums[mid] < target) {
-                // 注意
+                // Note
                 left = mid + 1;
             } else if (nums[mid] > target) {
-                // 注意
+                // Note
                 right = mid - 1;
             }
         }
@@ -121,7 +121,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/binary-search/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Animated Code Visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -129,7 +129,7 @@ class Solution {
 
 
 
-这段代码可以解决力扣第 704 题「二分查找」，但我们深入探讨一下其中的细节。
+This solves LeetCode 704. Let's dive into details.
 
 
 
@@ -137,38 +137,28 @@ class Solution {
 
 
 
-### 为什么 while 循环的条件是 `<=` 而不是 `<`？
+### Why `<=` and not `<` in `while`?
 
-答：因为初始化 `right` 的赋值是 `nums.length - 1`，即最后一个元素的索引，而不是 `nums.length`。
+`right` is initialized to `nums.length - 1`, the last index — not `nums.length`.
 
-这二者可能出现在不同功能的二分查找中，区别是：前者相当于两端都闭区间 `[left, right]`，后者相当于左闭右开区间 `[left, right)`。因为索引大小为 `nums.length` 是越界的，所以我们把 `right` 这一边视为开区间。
+These appear in different binary searches: the former is the closed interval `[left, right]`, the latter the half-open `[left, right)`. Index `nums.length` is out of bounds, so `right` is treated as the open end there.
 
-我们这个算法中使用的是前者 `[left, right]` 两端都闭的区间。**这个区间其实就是每次进行搜索的区间**。
+This algorithm uses the closed `[left, right]`. **The interval is what we search at each step.**
 
-什么时候应该停止搜索呢？当然，找到了目标值的时候可以终止：
-
-
-
-
+When to stop? When found:
 
 ```java
     if(nums[mid] == target)
         return mid; 
 ```
 
+Otherwise, terminate the `while` and return -1. **Terminate when the interval is empty** — meaning nothing left to search.
 
+`while(left <= right)` terminates at `left == right + 1`, i.e., interval `[right + 1, right]` — empty (e.g., `[3, 2]`). Correct: return -1.
 
-但如果没找到，就需要 while 循环终止，然后返回 -1。那 while 循环什么时候应该终止？**搜索区间为空的时候应该终止**，意味着你没得找了，就等于没找到嘛。
+`while(left < right)` terminates at `left == right`, i.e., `[right, right]` — non-empty (e.g., `[2, 2]` still has index 2). The loop terminates without checking index 2 — incorrect, since `-1` may be returned wrongly.
 
-`while(left <= right)` 的终止条件是 `left == right + 1`，写成区间的形式就是 `[right + 1, right]`，或者带个具体的数字进去 `[3, 2]`，可见**这时候区间为空**，因为没有数字既大于等于 3 又小于等于 2 的吧。所以这时候 while 循环终止是正确的，直接返回 -1 即可。
-
-`while(left < right)` 的终止条件是 `left == right`，写成区间的形式就是 `[right, right]`，或者带个具体的数字进去 `[2, 2]`，**这时候区间非空**，还有一个数 2，但此时 while 循环终止了。也就是说区间 `[2, 2]` 被漏掉了，索引 2 没有被搜索，如果这时候直接返回 -1 就是错误的。
-
-当然，如果你非要用 `while(left < right)` 也可以，我们已经知道了出错的原因，就打个补丁好了：
-
-
-
-
+If you insist on `<`, patch it:
 
 ```java
     // ...
@@ -178,17 +168,13 @@ class Solution {
     return nums[left] == target ? left : -1;
 ```
 
+### Why `left = mid + 1`, `right = mid - 1`?
 
+Some code uses `right = mid` or `left = mid` — when?
 
-### 为什么是 `left = mid + 1`，`right = mid - 1`？
+If you understand the "search interval" idea, this is easy. Here the interval is closed: `[left, right]`. After checking `mid` and not matching, where to search next?
 
-为什么 `left = mid + 1`，`right = mid - 1`？我看有的代码是 `right = mid` 或者 `left = mid`，没有这些加加减减，到底怎么回事，怎么判断？
-
-答：这也是二分查找的一个难点，不过只要你能理解前面的内容，就能够很容易判断。
-
-刚才明确了「搜索区间」这个概念，而且本算法的搜索区间是两端都闭的，即 `[left, right]`。那么当我们发现索引 `mid` 不是要找的 `target` 时，下一步应该去搜索哪里呢？
-
-当然是去搜索区间 `[left, mid-1]` 或者区间 `[mid+1, right]` 对不对？**因为 `mid` 已经搜索过，应该从搜索区间中去除**。
+`[left, mid - 1]` or `[mid + 1, right]` — **`mid` was checked; remove it**.
 
 
 
@@ -196,27 +182,27 @@ class Solution {
 
 
 
-### 此算法有什么缺陷？
+### Limitations
 
-答：至此，你应该已经掌握了该算法的所有细节，以及这样处理的原因。但是，这个算法存在局限性。
+You should now grasp the algorithm and the reasoning. But this version is limited.
 
-比如说给你有序数组 `nums = [1,2,2,2,3]`，`target` 为 2，此算法返回的索引是 2，没错。但是如果我想得到 `target` 的左侧边界，即索引 1，或者我想得到 `target` 的右侧边界，即索引 3，这样的话此算法是无法处理的。
+For `nums = [1,2,2,2,3]`, `target = 2`, it returns 2 — correct. But if you want the leftmost occurrence (index 1) or rightmost (index 3), this won't help.
 
-这样的需求很常见，**你也许会说，找到一个 `target`，然后向左或向右线性搜索不行吗？可以，但是不好，因为这样难以保证二分查找对数级的复杂度了**。
+You could find any occurrence and scan outward, but that breaks the logarithmic complexity.
 
-我们后续的算法就来讨论这两种二分查找的算法。
+We'll discuss those variants next.
 
-## 二、寻找左侧边界的二分搜索
+## 2. Searching for the Left Bound
 
-以下是最常见的代码形式，其中的标记是需要注意的细节：
+The most common form, with details to note:
 
 ```java
 int left_bound(int[] nums, int target) {
     int left = 0;
-    // 注意
+    // Note
     int right = nums.length;
     
-    // 注意
+    // Note
     while (left < right) {
         int mid = left + (right - left) / 2;
         if (nums[mid] == target) {
@@ -224,7 +210,7 @@ int left_bound(int[] nums, int target) {
         } else if (nums[mid] < target) {
             left = mid + 1;
         } else if (nums[mid] > target) {
-            // 注意
+            // Note
             right = mid;
         }
     }
@@ -232,107 +218,90 @@ int left_bound(int[] nums, int target) {
 }
 ```
 
-### 为什么 while 中是 `<` 而不是 `<=`？
+### Why `<` and not `<=`?
 
-答：用相同的方法分析，因为 `right = nums.length` 而不是 `nums.length - 1`。因此每次循环的「搜索区间」是 `[left, right)` 左闭右开。
+`right = nums.length`, not `nums.length - 1`. So the search interval is `[left, right)` — left-closed, right-open.
 
-`while(left < right)` 终止的条件是 `left == right`，此时搜索区间 `[left, left)` 为空，所以可以正确终止。
+`while(left < right)` terminates at `left == right`, where `[left, left)` is empty — correct termination.
 
 > [!NOTE]
-> 这里先要说一个搜索左右边界和上面这个算法的一个区别，也是很多读者问的：**刚才的 `right` 不是 `nums.length - 1` 吗，为啥这里非要写成 `nums.length` 使得「搜索区间」变成左闭右开呢**？
+> A frequent question: **earlier `right` was `nums.length - 1`; why now `nums.length` (half-open)?**
 > 
-> 因为对于搜索左右侧边界的二分查找，这种写法比较普遍，我就拿这种写法举例了，保证你以后遇到这类代码可以理解。你非要用两端都闭的写法反而更简单，我会在后面写相关的代码，把三种二分搜索都用一种两端都闭的写法统一起来，你耐心往后看就行了。
+> This is a common style for left/right-bound binary searches; learning it lets you understand similar code elsewhere. If you prefer the closed-interval form, that's simpler — we'll unify all three searches in closed form below.
 
-### `target` 不存在时返回什么？
+### What does `target` not existing mean?
 
-如果 `nums` 中不存在 `target` 这个值，计算出来的这个索引含义是什么？如果我想让它返回 -1，怎么做？
-
-
+If `nums` doesn't contain `target`, what does the returned index mean? How to return -1 instead?
 
 
 
 
 
-::: important 当 `target` 不存在时，`left_bound` 返回值的含义
-
-这是一个很好且很重要的问题，你把这个地方理解了，在二分搜索的实际应用场景中就不会懵逼。
-
-直接说结论：**如果 `target` 不存在，搜索左侧边界的二分搜索返回的索引是大于 `target` 的最小索引**。
-
-举个例子，`nums = [2,3,5,7], target = 4`，`left_bound` 函数返回值是 2，因为元素 5 是大于 4 的最小元素。
-
-有点绕晕了是吧？这个 `left_bound` 函数明明是搜索左边界的，但是当 `target` 不存在的时候，却返回的是大于 `target` 的最小索引。这个结论不用死记，你要是拿不准，简单举个例子就能得到这个结论了。
-
-所以跟你说二分搜索这个东西思路很简单，细节是魔鬼嘛，里面的坑太多了。要是真想考你，总有办法可以把你考到怀疑人生。
-
-不是我故意把代码模板总结的这么复杂，而是二分搜索本身就很复杂，这些细节是不可能绕开的，如果你之前没有了解过这些细节，只能说明你之前学得不扎实。就算不用我总结的模板，你也必须搞清楚当 `target` 不存在时算法的行为，否则出了 bug 你都不知道咋改，真有这么严重。
-
-话说回来，`left_bound` 的这个行为有一个好处。比方说现在让你写一个 `floor` 函数，就可以直接用 `left_bound` 函数来实现：
 
 
+::: important Meaning of `left_bound`'s return when `target` is absent
 
+A great and important question. With this understood, you won't be confused in real applications.
 
+Conclusion: **if `target` is absent, the left-bound search returns the smallest index with a value greater than `target`.**
+
+E.g., `nums = [2,3,5,7], target = 4`. `left_bound` returns 2 — element 5 is the smallest greater than 4.
+
+Confusing? `left_bound` searches the left bound, but returns the smallest index greater than `target` when `target` is absent. No need to memorize — try a small example.
+
+Binary search is conceptually simple; details are devilish — many traps.
+
+This isn't gratuitous complexity — binary search really has these details. If you didn't know the absent-`target` behavior, you'd struggle to debug.
+
+A nice consequence: implement `floor` using `left_bound`:
 
 ```java
-// 在一个有序数组中，找到「小于 target 的最大元素的索引」
-// 比如说输入 nums = [1,2,2,2,3]，target = 2，函数返回 0，因为 1 是小于 2 的最大元素。
-// 再比如输入 nums = [1,2,3,5,6]，target = 4，函数返回 2，因为 3 是小于 4 的最大元素。
+// In a sorted array, the largest index with value < target
+// nums = [1,2,2,2,3], target = 2 → returns 0 (1 is the largest < 2).
+// nums = [1,2,3,5,6], target = 4 → returns 2 (3 is the largest < 4).
 int floor(int[] nums, int target) {
-    // 当 target 不存在，比如输入 [4,6,8,10], target = 7
-    // left_bound 返回 2，减一就是 1，元素 6 就是小于 7 的最大元素
-    // 当 target 存在，比如输入 [4,6,8,8,8,10], target = 8
-    // left_bound 返回 2，减一就是 1，元素 6 就是小于 8 的最大元素
+    // Absent: nums = [4,6,8,10], target = 7 →
+    // left_bound = 2; 2 - 1 = 1; element 6 is the largest < 7.
+    // Present: nums = [4,6,8,8,8,10], target = 8 →
+    // left_bound = 2; 2 - 1 = 1; element 6 is the largest < 8.
     return left_bound(nums, target) - 1;
 }
 ```
 
-
-
-最后，我的建议是，如果你必须手写二分代码，那么你一定要了解清楚代码的种种行为，本文总结的框架就是在帮你理清这里面的细节。如果非必要，不要自己手写，尽肯能用编程语言提供的标准库函数，可以节约时间，而且标准库函数的行为在文档里都有明确的说明，不容易出错。
+If you must hand-write binary search, know the variants. If not, prefer the language's standard library — saves time and clearly documented.
 
 :::
 
-如果想让 `target` 不存在时返回 -1 其实很简单，在返回的时候额外判断一下 `nums[left]` 是否等于 `target` 就行了，如果不等于，就说明 `target` 不存在。需要注意的是，访问数组索引之前要保证索引不越界：
-
-
-
-
+To return -1 when absent, just check `nums[left] == target` after the loop, with bounds:
 
 ```java
 while (left < right) {
     // ...
 }
-// 如果索引越界，说明数组中无目标元素，返回 -1
+// Out of bounds → not present
 if (left < 0 || left >= nums.length) {
     return -1;
 }
-// 提示：其实上面的 if 中 left < 0 这个判断可以省略，因为对于这个算法，left 不可能小于 0
-// 你看这个算法执行的逻辑，left 初始化就是 0，且只可能一直往右走，那么只可能在右侧越界
-// 不过我这里就同时判断了，因为在访问数组索引之前保证索引在左右两端都不越界是一个好习惯，没有坏处
-// 另一个好处是让二分的模板更统一，降低你的记忆成本，因为等会儿寻找右边界的时候也有类似的出界判断
+// Note: left < 0 is unreachable here (left only increases from 0)
+// I include it anyway as a safety habit and for template uniformity (matching the right-bound variant).
 
-// 判断一下 nums[left] 是不是 target
 return nums[left] == target ? left : -1;
 ```
 
+### Why `left = mid + 1` and `right = mid`?
 
+The interval is `[left, right)`. After checking `mid`, search `[left, mid)` or `[mid + 1, right)`.
 
-### 为什么是 `left = mid + 1` 和 `right = mid`？
+### Why does it find the left bound?
 
-为什么 `left = mid + 1`，`right = mid` ？和之前的算法不一样？
-
-答：这个很好解释，因为我们的「搜索区间」是 `[left, right)` 左闭右开，所以当 `nums[mid]` 被检测之后，下一步应该去 `mid` 的左侧或者右侧区间搜索，即 `[left, mid)` 或 `[mid + 1, right)`。
-
-### 为什么该算法能够搜索左侧边界？
-
-答：关键在于对于 `nums[mid] == target` 这种情况的处理：
+The key is in the `nums[mid] == target` case:
 
 ```java
     if (nums[mid] == target)
         right = mid;
 ```
 
-可见，找到 target 时不要立即返回，而是缩小「搜索区间」的上界 `right`，在区间 `[left, mid)` 中继续搜索，即不断向左收缩，达到锁定左侧边界的目的。
+Don't return immediately; shrink the right bound to keep searching left.
 
 
 
@@ -340,21 +309,17 @@ return nums[left] == target ? left : -1;
 
 
 
-### 为什么返回 `left` 而不是 `right`？
+### Why return `left` not `right`?
 
-答：都是一样的，因为 while 终止的条件是 `left == right`。
+Same — the loop ends at `left == right`.
 
-### 能否统一成两端都闭的搜索区间？
+### Can we unify with closed-interval style?
 
-能不能想办法把 `right` 变成 `nums.length - 1`，也就是继续使用两边都闭的「搜索区间」？这样就可以和第一种二分搜索在某种程度上统一起来了。
-
-答：当然可以，只要你明白了「搜索区间」这个概念，就能有效避免漏掉元素，随便你怎么改都行。下面我们严格根据逻辑来修改：
-
-因为你非要让搜索区间两端都闭，所以 `right` 应该初始化为 `nums.length - 1`，while 的终止条件应该是 `left == right + 1`，也就是其中应该用 `<=`：
+Yes — keep `right = nums.length - 1`:
 
 ```java
 int left_bound(int[] nums, int target) {
-    // 搜索区间为 [left, right]
+    // Closed [left, right]
     int left = 0, right = nums.length - 1;
     while (left <= right) {
         int mid = left + (right - left) / 2;
@@ -363,55 +328,51 @@ int left_bound(int[] nums, int target) {
 }
 ```
 
-因为搜索区间是两端都闭的，且现在是搜索左侧边界，所以 `left` 和 `right` 的更新逻辑如下：
+For closed intervals searching the left bound:
 
 ```java
 if (nums[mid] < target) {
-    // 搜索区间变为 [mid+1, right]
+    // [mid+1, right]
     left = mid + 1;
 } else if (nums[mid] > target) {
-    // 搜索区间变为 [left, mid-1]
+    // [left, mid-1]
     right = mid - 1;
 } else if (nums[mid] == target) {
-    // 收缩右侧边界
+    // Shrink right
     right = mid - 1;
 }
 ```
 
-和刚才相同，如果想在找不到 `target` 的时候返回 -1，那么检查一下 `nums[left]` 和 `target` 是否相等即可：
+To return -1 when absent:
 
 ```java
-// 此时 target 比所有数都大，返回 -1
+// All numbers were less than target
 if (left == nums.length) return -1;
-// 判断一下 nums[left] 是不是 target
+// Check
 return nums[left] == target ? left : -1;
 ```
 
-至此，整个算法就写完了，完整代码如下：
+Full code:
 
 ```java
 int left_bound(int[] nums, int target) {
     int left = 0, right = nums.length - 1;
-    // 搜索区间为 [left, right]
+    // Closed
     while (left <= right) {
         int mid = left + (right - left) / 2;
         if (nums[mid] < target) {
-            // 搜索区间变为 [mid+1, right]
             left = mid + 1;
         } else if (nums[mid] > target) {
-            // 搜索区间变为 [left, mid-1]
             right = mid - 1;
         } else if (nums[mid] == target) {
-            // 收缩右侧边界
+            // Shrink right
             right = mid - 1;
         }
     }
-    // 判断 target 是否存在于 nums 中
-    // 如果越界，target 肯定不存在，返回 -1
+    // Bounds check
     if (left < 0 || left >= nums.length) {
         return -1;
     }
-    // 判断一下 nums[left] 是不是 target
     return nums[left] == target ? left : -1;
 }
 ```
@@ -421,7 +382,7 @@ int left_bound(int[] nums, int target) {
 <a href="https://labuladong.online/algo-visualize/tutorial/binary-search-left-bound/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Animated Code Visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -429,11 +390,11 @@ int left_bound(int[] nums, int target) {
 
 
 
-这样就和第一种二分搜索算法统一了，都是两端都闭的「搜索区间」，而且最后返回的也是 `left` 变量的值。只要把住二分搜索的逻辑，两种形式大家看自己喜欢哪种记哪种吧。
+Now both variants use closed intervals and return `left`. Pick whichever style you prefer.
 
-## 三、寻找右侧边界的二分查找
+## 3. Searching for the Right Bound
 
-类似寻找左侧边界的算法，这里也会提供两种写法，还是先写常见的左闭右开的写法，只有两处和搜索左侧边界不同：
+Same structure, two versions. First the half-open form — only two differences from the left bound:
 
 ```java
 int right_bound(int[] nums, int target) {
@@ -442,7 +403,7 @@ int right_bound(int[] nums, int target) {
     while (left < right) {
         int mid = left + (right - left) / 2;
         if (nums[mid] == target) {
-            // 注意
+            // Note
             left = mid + 1;
         } else if (nums[mid] < target) {
             left = mid + 1;
@@ -450,14 +411,12 @@ int right_bound(int[] nums, int target) {
             right = mid;
         }
     }
-    // 注意
+    // Note
     return left - 1;
 }
 ```
 
-### 为什么这个算法能够找到右侧边界？
-
-答：类似地，关键点还是这里：
+### Why does it find the right bound?
 
 ```java
 if (nums[mid] == target) {
@@ -465,7 +424,7 @@ if (nums[mid] == target) {
 }
 ```
 
-当 `nums[mid] == target` 时，不要立即返回，而是增大「搜索区间」的左边界 `left`，使得区间不断向右靠拢，达到锁定右侧边界的目的。
+Don't return immediately; expand `left` to keep searching right.
 
 
 
@@ -473,23 +432,19 @@ if (nums[mid] == target) {
 
 
 
-### 为什么返回 `left - 1`？
+### Why return `left - 1`?
 
-为什么最后返回 `left - 1` 而不像左侧边界的函数，返回 `left`？而且我觉得这里既然是搜索右侧边界，应该返回 `right` 才对。
+Why not `left`? Or `right` since this is the right bound?
 
-答：首先，while 循环的终止条件是 `left == right`，所以 `left` 和 `right` 是一样的，你非要体现右侧的特点，返回 `right - 1` 好了。
+`while` ends at `left == right`, so `left == right`; if you want to emphasize "right", return `right - 1`.
 
-至于为什么要减一，这是搜索右侧边界的一个特殊点，关键在锁定右边界时的这个条件判断：
-
-
-
-
+Why minus one? Because of the `nums[mid] == target` update:
 
 ```java
-// 增大 left，锁定右侧边界
+// Increase left to lock the right bound
 if (nums[mid] == target) {
     left = mid + 1;
-    // 这样想: mid = left - 1
+    // Think: mid = left - 1
 }
 ```
 
@@ -497,43 +452,39 @@ if (nums[mid] == target) {
 
 
 
-因为我们对 `left` 的更新必须是 `left = mid + 1`，就是说 while 循环结束时，`nums[left]` 一定不等于 `target` 了，而 `nums[left-1]` 可能是 `target`。
+Since `left = mid + 1`, when the loop ends `nums[left]` may not equal `target`, but `nums[left-1]` may.
 
-至于为什么 `left` 的更新必须是 `left = mid + 1`，当然是为了把 `nums[mid]` 排除出搜索区间，这里就不再赘述。
+`left = mid + 1` is required to remove `mid` from the search interval.
 
-### 如果 `target` 不存在时返回什么？
+### Return when `target` is absent?
 
-如果 `nums` 中不存在 `target` 这个值，计算出来的这个索引含义是什么？如果我想让它返回 -1，怎么做？
+If `nums` doesn't contain `target`, what does the returned index mean?
 
-::: important 当 `target` 不存在时，`right_bound` 返回值的含义
+::: important Meaning of `right_bound`'s return when `target` is absent
 
-直接说结论，和前面讲的 `left_bound` 相反：**如果 `target` 不存在，搜索右侧边界的二分搜索返回的索引是小于 `target` 的最大索引**。
+The opposite of `left_bound`: **if `target` is absent, the right-bound search returns the largest index with a value less than `target`.**
 
-这个结论不用死记，你要是拿不准，简单举个例子就能得到这个结论了。比如 `nums = [2,3,5,7], target = 4`，`right_bound` 函数返回值是 1，因为元素 3 是小于 4 的最大元素。
+E.g., `nums = [2,3,5,7], target = 4`. `right_bound` returns 1 — element 3 is the largest less than 4.
 
-与前面的建议相同，考虑到二分搜索代码细节的复杂性，如果非必要，不要自己手写，尽肯能用编程语言提供的标准库函数。
+As before, prefer the language's standard library when possible.
 
 :::
 
 
-如果你想在 `target` 不存在时返回 -1，很简单，只要在最后判断一下 `nums[left-1]` 是不是 `target` 就行了，类似之前的左侧边界搜索，做一点额外的判断即可：
+To return -1 when absent, check `nums[left-1]`:
 
 ```java
 while (left < right) {
     // ...
 }
-// 判断 target 是否存在于 nums 中
-// left - 1 索引越界的话 target 肯定不存在
+// left - 1 out of bounds → absent
 if (left - 1 < 0 || left - 1 >= nums.length) {
     return -1;
 }
-// 判断一下 nums[left - 1] 是不是 target
 return nums[left - 1] == target ? (left - 1) : -1;
 ```
 
-**4、是否也可以把这个算法的「搜索区间」也统一成两端都闭的形式呢？这样这三个写法就完全统一了，以后就可以闭着眼睛写出来了**。
-
-答：当然可以，类似搜索左侧边界的统一写法，其实只要改两个地方就行了：
+**Can we unify in closed form?** Yes — small tweaks:
 
 ```java
 int right_bound(int[] nums, int target) {
@@ -545,11 +496,11 @@ int right_bound(int[] nums, int target) {
         } else if (nums[mid] > target) {
             right = mid - 1;
         } else if (nums[mid] == target) {
-            // 这里改成收缩左侧边界即可
+            // Shrink left bound here
             left = mid + 1;
         }
     }
-    // 最后改成返回 left - 1
+    // Return left - 1
     if (left - 1 < 0 || left - 1 >= nums.length) {
         return -1;
     }
@@ -562,7 +513,7 @@ int right_bound(int[] nums, int target) {
 <a href="https://labuladong.online/algo-visualize/tutorial/binary-search-right-bound/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Animated Code Visualization 🎃</strong>
 </summary>
 </details>
 </a>
@@ -570,11 +521,7 @@ int right_bound(int[] nums, int target) {
 
 
 
-当然，由于 while 的结束条件为 `right == left - 1`，所以你把上述代码中的 `left - 1` 都改成 `right` 也没有问题，这样可能更有利于看出来这是在「搜索右侧边界」：
-
-
-
-
+Since the loop ends at `right == left - 1`, you can replace `left - 1` with `right`:
 
 ```java
 int right_bound(int[] nums, int target) {
@@ -586,11 +533,11 @@ int right_bound(int[] nums, int target) {
         } else if (nums[mid] > target) {
             right = mid - 1;
         } else if (nums[mid] == target) {
-            // 这里改成收缩左侧边界即可
+            // Shrink left
             left = mid + 1;
         }
     }
-    // 最后改成返回 right
+    // Return right
     if (right < 0 || right >= nums.length) {
         return -1;
     }
@@ -598,94 +545,70 @@ int right_bound(int[] nums, int target) {
 }
 ```
 
+Both right-bound variants are done. The closed form is easier to remember.
 
+## 4. Unified Logic
 
-至此，搜索右侧边界的二分查找的两种写法也完成了，其实将「搜索区间」统一成两端都闭反而更容易记忆，你说是吧？
+With these, you can solve LeetCode 34. Let's review the cause-effect:
 
-## 四、逻辑统一
-
-有了搜索左右边界的二分搜索，你可以去解决力扣第 34 题「在排序数组中查找元素的第一个和最后一个位置」。接下来梳理一下这些细节差异的因果逻辑：
-
-**第一个，最基本的二分查找算法**：
-
-
-
-
+**Standard binary search**:
 
 ```java
-因为我们初始化 right = nums.length - 1
-所以决定了我们的「搜索区间」是 [left, right]
-所以决定了 while (left <= right)
-同时也决定了 left = mid+1 和 right = mid-1
+right = nums.length - 1
+→ closed interval [left, right]
+→ while (left <= right)
+→ left = mid + 1, right = mid - 1
 
-因为我们只需找到一个 target 的索引即可
-所以当 nums[mid] == target 时可以立即返回
+We just need any index of target
+→ return immediately when nums[mid] == target
 ```
 
-
-
-**第二个，寻找左侧边界的二分查找**：
-
-
-
-
+**Left bound**:
 
 ```java
-因为我们初始化 right = nums.length
-所以决定了我们的「搜索区间」是 [left, right)
-所以决定了 while (left < right)
-同时也决定了 left = mid + 1 和 right = mid
+right = nums.length
+→ half-open [left, right)
+→ while (left < right)
+→ left = mid + 1, right = mid
 
-因为我们需找到 target 的最左侧索引
-所以当 nums[mid] == target 时不要立即返回
-而要收紧右侧边界以锁定左侧边界
+We need the leftmost index of target
+→ don't return immediately when nums[mid] == target
+→ shrink right to lock the left bound
 ```
 
-
-
-**第三个，寻找右侧边界的二分查找**：
-
-
-
-
+**Right bound**:
 
 ```java
-因为我们初始化 right = nums.length
-所以决定了我们的「搜索区间」是 [left, right)
-所以决定了 while (left < right)
-同时也决定了 left = mid + 1 和 right = mid
+right = nums.length
+→ half-open [left, right)
+→ while (left < right)
+→ left = mid + 1, right = mid
 
-因为我们需找到 target 的最右侧索引
-所以当 nums[mid] == target 时不要立即返回
-而要收紧左侧边界以锁定右侧边界
+We need the rightmost index of target
+→ don't return immediately when nums[mid] == target
+→ shrink left to lock the right bound
 
-又因为收紧左侧边界时必须 left = mid + 1
-所以最后无论返回 left 还是 right，必须减一
+Since shrinking left requires left = mid + 1
+→ return left - 1 (or right) at the end
 ```
 
+For left/right-bound searches, the half-open form is common; **but unifying in closed form is more memorable, with only two changes between variants**:
 
+If you've followed all this, congrats — binary search's details are behind you.
 
-对于寻找左右边界的二分搜索，比较常见的手法是使用左闭右开的「搜索区间」，**我们还根据逻辑将「搜索区间」全都统一成了两端都闭，便于记忆，只要修改两处即可变化出三种写法**：
+Lessons:
 
+1. While analyzing, expand to `else if` for clarity. Combine branches once you've got the logic right.
 
+2. Mind the search interval and the loop's termination; if elements may be missed, check at the end.
 
+3. For half-open intervals, only the `nums[mid] == target` case differs; the right bound returns minus one.
 
+4. For closed intervals, the unified form is easy: tweak the `nums[mid] == target` case and the return. Recommended template.
 
+Lastly, the framework above is the "art"; the "tao" is: **binary thinking aggressively halves the search space using known information**, accelerating enumeration.
 
-
-如果以上内容你都能理解，那么恭喜你，二分查找算法的细节不过如此。通过本文，你学会了：
-
-1、分析二分查找代码时，不要出现 else，全部展开成 else if 方便理解。把逻辑写对之后再合并分支，提升运行效率。
-
-2、注意「搜索区间」和 while 的终止条件，如果存在漏掉的元素，记得在最后检查。
-
-3、如需定义左闭右开的「搜索区间」搜索左右边界，只要在 `nums[mid] == target` 时做修改即可，搜索右侧时需要减一。
-
-4、如果将「搜索区间」全都统一成两端都闭，好记，只要稍改 `nums[mid] == target` 条件处的代码和返回的逻辑即可，推荐拿小本本记下，作为二分搜索模板。
-
-最后我想说，以上二分搜索的框架属于「术」的范畴，如果上升到「道」的层面，**二分思维的精髓就是：通过已知信息尽可能多地收缩（折半）搜索空间**，从而增加穷举效率，快速找到目标。
-
-理解本文能保证你写出正确的二分查找的代码，但实际题目中不会直接让你写二分代码，我会在 [二分查找的运用](https://labuladong.online/algo/frequency-interview/binary-search-in-action/) 和 [二分查找的更多习题](https://labuladong.online/algo/problem-set/binary-search/) 中进一步讲解如何把二分思维运用到更多算法题中。
+This article ensures you write correct binary searches. Real problems rarely ask for raw binary search — see [Binary Search in Action](https://labuladong.online/algo/frequency-interview/binary-search-in-action/) and [More Binary Search Practice](https://labuladong.online/algo/problem-set/binary-search/) for applications.
 
 
 
@@ -695,21 +618,21 @@ int right_bound(int[] nums, int target) {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [base case 和备忘录的初始值怎么定？](https://labuladong.online/algo/dynamic-programming/memo-fundamental/)
- - [【强化练习】二分搜索算法经典习题](https://labuladong.online/algo/problem-set/binary-search/)
- - [一文秒杀所有丑数系列问题](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
- - [动态规划设计：最长递增子序列](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)
- - [双指针技巧秒杀七道数组题目](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
- - [学习数据结构和算法的框架思维](https://labuladong.online/algo/essential-technique/algorithm-summary/)
- - [实际运用二分搜索时的思维框架](https://labuladong.online/algo/frequency-interview/binary-search-in-action/)
- - [带权重的随机选择算法](https://labuladong.online/algo/frequency-interview/random-pick-with-weight/)
- - [拓展：快速排序详解及应用](https://labuladong.online/algo/practice-in-action/quick-sort/)
- - [浅谈存储系统：LSM 树设计原理](https://labuladong.online/algo/fname.html?fname=LSM树)
- - [用算法打败算法](https://labuladong.online/algo/fname.html?fname=PDF中的算法)
- - [算法刷题的重点和坑](https://labuladong.online/algo/intro/how-to-learn-algorithms/)
- - [讲两道常考的阶乘算法题](https://labuladong.online/algo/frequency-interview/factorial-problems/)
+ - [Choosing Base Cases and Memo Initial Values](https://labuladong.online/algo/dynamic-programming/memo-fundamental/)
+ - [[Practice] Classic Binary Search Problems](https://labuladong.online/algo/problem-set/binary-search/)
+ - [Sweeping All Ugly-Number Problems](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
+ - [DP Design: Longest Increasing Subsequence](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)
+ - [Two-Pointer Tricks Sweep 7 Array Problems](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
+ - [Framework Thinking for Learning Data Structures and Algorithms](https://labuladong.online/algo/essential-technique/algorithm-summary/)
+ - [Practical Framework for Applying Binary Search](https://labuladong.online/algo/frequency-interview/binary-search-in-action/)
+ - [Weighted Random Selection](https://labuladong.online/algo/frequency-interview/random-pick-with-weight/)
+ - [Extension: Quicksort Details and Applications](https://labuladong.online/algo/practice-in-action/quick-sort/)
+ - [Storage Systems: LSM Tree Design Principles](https://labuladong.online/algo/fname.html?fname=lsm-tree)
+ - [Beat Algorithms with Algorithms](https://labuladong.online/algo/fname.html?fname=algorithm-in-pdf)
+ - [Key Points and Pitfalls in Practice](https://labuladong.online/algo/intro/how-to-learn-algorithms/)
+ - [Two Common Factorial Problems](https://labuladong.online/algo/frequency-interview/factorial-problems/)
 
 </details><hr>
 
@@ -718,29 +641,29 @@ int right_bound(int[] nums, int target) {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1201. Ugly Number III](https://leetcode.com/problems/ugly-number-iii/?show=1) | [1201. 丑数 III](https://leetcode.cn/problems/ugly-number-iii/?show=1) | 🟠 |
-| [1235. Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/?show=1) | [1235. 规划兼职工作](https://leetcode.cn/problems/maximum-profit-in-job-scheduling/?show=1) | 🔴 |
-| [162. Find Peak Element](https://leetcode.com/problems/find-peak-element/?show=1) | [162. 寻找峰值](https://leetcode.cn/problems/find-peak-element/?show=1) | 🟠 |
-| [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/?show=1) | [240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/?show=1) | 🟠 |
-| [33. Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/?show=1) | [33. 搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/?show=1) | 🟠 |
-| [35. Search Insert Position](https://leetcode.com/problems/search-insert-position/?show=1) | [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/?show=1) | 🟢 |
-| [658. Find K Closest Elements](https://leetcode.com/problems/find-k-closest-elements/?show=1) | [658. 找到 K 个最接近的元素](https://leetcode.cn/problems/find-k-closest-elements/?show=1) | 🟠 |
-| [74. Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/?show=1) | [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/?show=1) | 🟠 |
-| [792. Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences/?show=1) | [792. 匹配子序列的单词数](https://leetcode.cn/problems/number-of-matching-subsequences/?show=1) | 🟠 |
-| [793. Preimage Size of Factorial Zeroes Function](https://leetcode.com/problems/preimage-size-of-factorial-zeroes-function/?show=1) | [793. 阶乘函数后 K 个零](https://leetcode.cn/problems/preimage-size-of-factorial-zeroes-function/?show=1) | 🔴 |
-| [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/?show=1) | [81. 搜索旋转排序数组 II](https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/?show=1) | 🟠 |
-| [852. Peak Index in a Mountain Array](https://leetcode.com/problems/peak-index-in-a-mountain-array/?show=1) | [852. 山脉数组的峰顶索引](https://leetcode.cn/problems/peak-index-in-a-mountain-array/?show=1) | 🟠 |
-| - | [剑指 Offer 04. 二维数组中的查找](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/?show=1) | 🟠 |
-| - | [剑指 Offer 53 - I. 在排序数组中查找数字 I](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/?show=1) | 🟢 |
-| - | [剑指 Offer 53 - II. 0～n-1中缺失的数字](https://leetcode.cn/problems/que-shi-de-shu-zi-lcof/?show=1) | 🟢 |
-| - | [剑指 Offer II 068. 查找插入位置](https://leetcode.cn/problems/N6YdxV/?show=1) | 🟢 |
-| - | [剑指 Offer II 069. 山峰数组的顶部](https://leetcode.cn/problems/B1IidL/?show=1) | 🟢 |
+| [1201. Ugly Number III](https://leetcode.com/problems/ugly-number-iii/?show=1) | [1201. Ugly Number III](https://leetcode.cn/problems/ugly-number-iii/?show=1) | 🟠 |
+| [1235. Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/?show=1) | [1235. Maximum Profit in Job Scheduling](https://leetcode.cn/problems/maximum-profit-in-job-scheduling/?show=1) | 🔴 |
+| [162. Find Peak Element](https://leetcode.com/problems/find-peak-element/?show=1) | [162. Find Peak Element](https://leetcode.cn/problems/find-peak-element/?show=1) | 🟠 |
+| [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/?show=1) | [240. Search a 2D Matrix II](https://leetcode.cn/problems/search-a-2d-matrix-ii/?show=1) | 🟠 |
+| [33. Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/?show=1) | [33. Search in Rotated Sorted Array](https://leetcode.cn/problems/search-in-rotated-sorted-array/?show=1) | 🟠 |
+| [35. Search Insert Position](https://leetcode.com/problems/search-insert-position/?show=1) | [35. Search Insert Position](https://leetcode.cn/problems/search-insert-position/?show=1) | 🟢 |
+| [658. Find K Closest Elements](https://leetcode.com/problems/find-k-closest-elements/?show=1) | [658. Find K Closest Elements](https://leetcode.cn/problems/find-k-closest-elements/?show=1) | 🟠 |
+| [74. Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/?show=1) | [74. Search a 2D Matrix](https://leetcode.cn/problems/search-a-2d-matrix/?show=1) | 🟠 |
+| [792. Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences/?show=1) | [792. Number of Matching Subsequences](https://leetcode.cn/problems/number-of-matching-subsequences/?show=1) | 🟠 |
+| [793. Preimage Size of Factorial Zeroes Function](https://leetcode.com/problems/preimage-size-of-factorial-zeroes-function/?show=1) | [793. Preimage Size of Factorial Zeroes Function](https://leetcode.cn/problems/preimage-size-of-factorial-zeroes-function/?show=1) | 🔴 |
+| [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/?show=1) | [81. Search in Rotated Sorted Array II](https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/?show=1) | 🟠 |
+| [852. Peak Index in a Mountain Array](https://leetcode.com/problems/peak-index-in-a-mountain-array/?show=1) | [852. Peak Index in a Mountain Array](https://leetcode.cn/problems/peak-index-in-a-mountain-array/?show=1) | 🟠 |
+| - | [Sword to Offer 04. Search a 2D Array](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer 53 - I. Find a Number in a Sorted Array](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/?show=1) | 🟢 |
+| - | [Sword to Offer 53 - II. Missing Number in 0..n-1](https://leetcode.cn/problems/que-shi-de-shu-zi-lcof/?show=1) | 🟢 |
+| - | [Sword to Offer II 068. Search Insert Position](https://leetcode.cn/problems/N6YdxV/?show=1) | 🟢 |
+| - | [Sword to Offer II 069. Peak of a Mountain Array](https://leetcode.cn/problems/B1IidL/?show=1) | 🟢 |
 
 </details>
 <hr>

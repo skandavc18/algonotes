@@ -1,6 +1,6 @@
-# 二叉堆详解实现优先级队列
+# Binary Heap In-Depth: Implementing a Priority Queue
 
-本文已重写，请阅读 [二叉堆基础原理](https://labuladong.online/algo/data-structure-basic/binary-heap-basic/) 和 [二叉堆实现优先级队列](https://labuladong.online/algo/data-structure-basic/binary-heap-implement/)。
+This article has been rewritten. Please read [Binary Heap Basics](https://labuladong.online/algo/data-structure-basic/binary-heap-basic/) and [Implementing a Priority Queue with a Binary Heap](https://labuladong.online/algo/data-structure-basic/binary-heap-implement/).
 
 
 
@@ -8,17 +8,17 @@
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-**《labuladong 的算法笔记》已经出版，关注公众号查看详情；后台回复「**全家桶**」可下载配套 PDF 和刷题全家桶**：
+**"labuladong's Algorithm Notes" has been published. Follow the official account for details; reply with "all-in-one bundle" to download the companion PDF and the full problem-solving bundle**:
 
 ![](https://labuladong.online/algo/images/souyisou2.png)
 
-======其他语言代码======
+====== Code in Other Languages ======
 
 ### javascript
 
 ```js
 /**
- * 最大堆
+ * Max-heap
  */
 function left(i) {
   return i * 2 + 1;
@@ -41,7 +41,7 @@ class Heap {
   }
 
   /**
-   * 重构堆
+   * Rebuild the heap
    */
   rebuildHeap() {
     const L = Math.floor(this.size / 2);
@@ -94,8 +94,8 @@ class Heap {
   }
 
   /**
-   * 堆的其他地方都满足性质
-   * 唯独跟节点，重构堆性质
+   * Every other part of the heap satisfies the property;
+   * only the root node violates it, so restore the heap property.
    * @param {*} i
    */
   maxHeapify(i) {
@@ -105,7 +105,7 @@ class Heap {
       return;
     }
 
-    // 求左右节点中较大的序号
+    // Find the index of the larger child
     const l = left(i);
     const r = right(i);
     if (l < this.size && this.data[l] > this.data[max]) {
@@ -116,14 +116,14 @@ class Heap {
       max = r;
     }
 
-    // 如果当前节点最大，已经是最大堆
+    // If the current node is the largest, the max-heap property already holds
     if (max === i) {
       return;
     }
 
     swap(this.data, i, max);
 
-    // 递归向下继续执行
+    // Recurse downward
     return this.maxHeapify(max);
   }
 }

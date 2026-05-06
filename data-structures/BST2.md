@@ -1,44 +1,44 @@
-# 二叉搜索树心法（基操篇）
+# Binary Search Tree Tactics (Basic Operations)
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [450. Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/) | [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/) | 🟠 |
-| [700. Search in a Binary Search Tree](https://leetcode.com/problems/search-in-a-binary-search-tree/) | [700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/) | 🟢 |
-| [701. Insert into a Binary Search Tree](https://leetcode.com/problems/insert-into-a-binary-search-tree/) | [701. 二叉搜索树中的插入操作](https://leetcode.cn/problems/insert-into-a-binary-search-tree/) | 🟠 |
-| [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) | [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/) | 🟠 |
+| [450. Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/) | [450. Delete Node in a BST](https://leetcode.cn/problems/delete-node-in-a-bst/) | 🟠 |
+| [700. Search in a Binary Search Tree](https://leetcode.com/problems/search-in-a-binary-search-tree/) | [700. Search in a Binary Search Tree](https://leetcode.cn/problems/search-in-a-binary-search-tree/) | 🟢 |
+| [701. Insert into a Binary Search Tree](https://leetcode.com/problems/insert-into-a-binary-search-tree/) | [701. Insert into a Binary Search Tree](https://leetcode.cn/problems/insert-into-a-binary-search-tree/) | 🟠 |
+| [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) | [98. Validate Binary Search Tree](https://leetcode.cn/problems/validate-binary-search-tree/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [二叉树结构基础](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
-> - [二叉树的 DFS/BFS 遍历](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
+> - [Binary Tree Structure Basics](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
+> - [DFS/BFS Traversal of Binary Trees](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
 
-我们前文 [二叉搜索树心法（特性篇）](https://labuladong.online/algo/data-structure/bst-part1/) 介绍了 BST 的基本特性，还利用二叉搜索树「中序遍历有序」的特性来解决了几道题目，本文来实现 BST 的基础操作：判断 BST 的合法性、增、删、查。其中「删」和「判断合法性」略微复杂。
+In the earlier article [BST Tactics (Properties)](https://labuladong.online/algo/data-structure/bst-part1/), we covered BST's basic properties and used the "in-order traversal is sorted" property to solve a few problems. This article implements BST's basic operations: validity check, insert, delete, search. Delete and validity check are slightly tricky.
 
-BST 的基础操作主要依赖「左小右大」的特性，可以在二叉树中做类似二分搜索的操作，寻找一个元素的效率很高。比如下面这就是一棵合法的二叉树：
+BST basic operations rely on the "left small, right large" property — searching is similar to binary search and very efficient. For example, the following is a valid BST:
 
 ![](https://labuladong.online/algo/images/bst/0.png)
 
-对于 BST 相关的问题，你可能会经常看到类似下面这样的代码逻辑：
+For BST problems, you'll often see code patterns like:
 
 ```java
 void BST(TreeNode root, int target) {
     if (root.val == target)
-        // 找到目标，做点什么
+        // Found the target; do something
     if (root.val < target) 
         BST(root.right, target);
     if (root.val > target)
@@ -46,23 +46,23 @@ void BST(TreeNode root, int target) {
 }
 ```
 
-这个代码框架其实和二叉树的遍历框架差不多，无非就是利用了 BST 左小右大的特性而已。接下来看下 BST 这种结构的基础操作是如何实现的。
+This is essentially the binary-tree traversal framework, just leveraging the "left small, right large" property. Let's see how the basic BST operations are implemented.
 
-## 一、判断 BST 的合法性
+## 1. Validate a BST
 
-力扣第 98 题「验证二叉搜索树」就是让你判断输入的 BST 是否合法：
+LeetCode 98 "Validate Binary Search Tree":
 
 <Problem slug="validate-binary-search-tree" />
 
-注意，这里是有坑的哦。按照 BST 左小右大的特性，每个节点想要判断自己是否是合法的 BST 节点，要做的事不就是比较自己和左右孩子吗？感觉应该这样写代码：
+There's a pitfall here. By the BST property, doesn't each node only need to compare itself with its left and right children? Like:
 
 ```java
 boolean isValidBST(TreeNode root) {
     if (root == null) return true;
-    // root 的左边应该更小
+    // root's left should be smaller
     if (root.left != null && root.left.val >= root.val)
         return false;
-    // root 的右边应该更大
+    // root's right should be larger
     if (root.right != null && root.right.val <= root.val)
         return false;
 
@@ -71,13 +71,13 @@ boolean isValidBST(TreeNode root) {
 }
 ```
 
-但是这个算法出现了错误，BST 的每个节点应该要小于右边子树的**所有**节点，下面这个二叉树显然不是 BST，因为节点 10 的右子树中有一个节点 6，但是我们的算法会把它判定为合法 BST：
+This is wrong. Each BST node must be smaller than **all** nodes in its right subtree. The following tree is not a BST because node 6 sits inside the right subtree of node 10, but our algorithm reports it as valid:
 
 ![](https://labuladong.online/algo/images/bst/假BST.png)
 
-**错误的原因在于，对于每一个节点 `root`，代码值检查了它的左右孩子节点是否符合左小右大的原则；但是根据 BST 的定义，`root` 的整个左子树都要小于 `root.val`，整个右子树都要大于 `root.val`**。
+**The bug: for each `root`, the code only checks the immediate children, but BST requires the entire left subtree to be `< root.val` and the entire right subtree to be `> root.val`.**
 
-问题是，对于某一个节点 `root`，他只能管得了自己的左右子节点，怎么把 `root` 的约束传递给左右子树呢？请看正确的代码：
+So how do we propagate `root`'s constraint down to its left and right subtrees, when `root` only has direct access to its children? Correct code:
 
 ```java
 class Solution {
@@ -85,14 +85,14 @@ class Solution {
         return _isValidBST(root, null, null);
     }
 
-    // 定义：该函数返回 root 为根的子树的所有节点是否满足 max.val > root.val > min.val
+    // Returns true iff every node in the subtree rooted at root satisfies max.val > root.val > min.val
     public boolean _isValidBST(TreeNode root, TreeNode min, TreeNode max) {
-        // base case
+        // Base case
         if (root == null) return true;
-        // 若 root.val 不符合 max 和 min 的限制，说明不是合法 BST
+        // If root.val violates min/max bounds, not a valid BST
         if (min != null && root.val <= min.val) return false;
         if (max != null && root.val >= max.val) return false;
-        // 根据定义，限定左子树的最大值是 root.val，右子树的最小值是 root.val
+        // By definition, the left subtree's max is root.val and the right subtree's min is root.val
         return _isValidBST(root.left, min, root) 
             && _isValidBST(root.right, root, max);
     }
@@ -104,7 +104,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/validate-binary-search-tree/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🎃 代码可视化动画🎃</strong>
+<strong>🎃 Animated Code Visualization 🎃</strong>
 </summary>
 </details>
 </a>
@@ -112,23 +112,23 @@ class Solution {
 
 
 
-我们通过使用辅助函数，增加函数参数列表，在参数中携带额外信息，将这种约束传递给子树的所有节点，这也是二叉树算法的一个小技巧吧。
+We use a helper with extra parameters carrying additional information, propagating constraints to descendants. This is a small but useful binary-tree trick.
 
-## 在 BST 中搜索元素
+## Search for an Element in a BST
 
-力扣第 700 题「二叉搜索树中的搜索」就是让你在 BST 中搜索值为 `target` 的节点，函数签名如下：
+LeetCode 700 "Search in a Binary Search Tree" asks you to find the node with value `target` in a BST. Signature:
 
 ```java
 TreeNode searchBST(TreeNode root, int target);
 ```
 
-如果是在一棵普通的二叉树中寻找，可以这样写代码：
+In a generic binary tree, we'd write:
 
 ```java
 TreeNode searchBST(TreeNode root, int target) {
     if (root == null) return null;
     if (root.val == target) return root;
-    // 当前节点没找到就递归地去左右子树寻找
+    // Otherwise recurse on both subtrees
     TreeNode left = searchBST(root.left, target);
     TreeNode right = searchBST(root.right, target);
 
@@ -136,24 +136,24 @@ TreeNode searchBST(TreeNode root, int target) {
 }
 ```
 
-这样写完全正确，但这段代码相当于穷举了所有节点，适用于所有二叉树。那么应该如何充分利用 BST 的特殊性，把「左小右大」的特性用上？
+This is correct but exhaustive — fine for any binary tree. How do we exploit BST's left-small/right-large property?
 
-很简单，其实不需要递归地搜索两边，类似二分查找思想，根据 `target` 和 `root.val` 的大小比较，就能排除一边。我们把上面的思路稍稍改动：
+We don't need to recurse on both sides — like binary search, comparing `target` with `root.val` rules one side out. Slight tweak:
 
 ```java
 TreeNode searchBST(TreeNode root, int target) {
     if (root == null) {
         return null;
     }
-    // 去左子树搜索
+    // Search the left subtree
     if (root.val > target) {
         return searchBST(root.left, target);
     }
-    // 去右子树搜索
+    // Search the right subtree
     if (root.val < target) {
         return searchBST(root.right, target);
     }
-    // 当前节点就是目标值
+    // Current node is the target
     return root;
 }
 ```
@@ -163,7 +163,7 @@ TreeNode searchBST(TreeNode root, int target) {
 <a href="https://labuladong.online/algo-visualize/leetcode/search-in-a-binary-search-tree/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>👾 代码可视化动画👾</strong>
+<strong>👾 Animated Code Visualization 👾</strong>
 </summary>
 </details>
 </a>
@@ -171,39 +171,39 @@ TreeNode searchBST(TreeNode root, int target) {
 
 
 
-## 在 BST 中插入一个数
+## Insert a Number into a BST
 
-对数据结构的操作无非遍历 + 访问，遍历就是「找」，访问就是「改」。具体到这个问题，插入一个数，就是先找到插入位置，然后进行插入操作。
+Operating on a data structure boils down to traverse + access — traverse "finds", access "modifies". Concretely, inserting a number means finding the insertion position, then inserting.
 
-因为 BST 一般不会存在值重复的节点，所以我们一般不会在 BST 中插入已存在的值。**下面的代码都默认不会向 BST 中插入已存在的值**。
+BSTs typically don't have duplicate values, so we don't insert values that already exist. **The code below assumes no duplicates are inserted.**
 
-上一个问题，我们总结了 BST 中的遍历框架，就是「找」的问题。直接套框架，加上「改」的操作即可。
+The previous problem gave us the BST traversal framework — the "find" part. Apply the framework and add the "modify" step.
 
-**一旦涉及「改」，就类似二叉树的构造问题，函数要返回 `TreeNode` 类型，并且要对递归调用的返回值进行接收**。
+**Whenever modification is involved (similar to binary-tree construction), the function should return `TreeNode` and we should capture the return value of recursive calls.**
 
-力扣第 701 题「二叉搜索树中的插入操作」就是这个问题：
+LeetCode 701 "Insert into a Binary Search Tree":
 
 <Problem slug="insert-into-a-binary-search-tree" />
 
-直接看解法代码吧，可以结合注释和可视化面板的来理解：
+Solution code (read with the comments):
 
 ```java
 class Solution {
     public TreeNode insertIntoBST(TreeNode root, int val) {
         if (root == null) {
-            // 找到空位置插入新节点
+            // Found the empty slot; create a new node
             return new TreeNode(val);
         }
 
-        // 去右子树找插入位置
+        // Search the right subtree for insertion
         if (root.val < val) {
             root.right = insertIntoBST(root.right, val);
         }
-        // 去左子树找插入位置
+        // Search the left subtree for insertion
         if (root.val > val) {
             root.left = insertIntoBST(root.left, val);
         }
-        // 返回 root，上层递归会接收返回值作为子节点
+        // Return root; the caller assigns it as a child
         return root;
     }
 }
@@ -214,7 +214,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/insert-into-a-binary-search-tree/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌈 代码可视化动画🌈</strong>
+<strong>🌈 Animated Code Visualization 🌈</strong>
 </summary>
 </details>
 </a>
@@ -222,36 +222,32 @@ class Solution {
 
 
 
-## 三、在 BST 中删除一个数
+## 3. Delete a Number from a BST
 
-力扣第 450 题「删除二叉搜索树中的节点」就是让你在 BST 中删除一个值为 `key` 的节点：
+LeetCode 450 "Delete Node in a BST" asks you to delete the node with value `key`:
 
 <Problem slug="delete-node-in-a-bst" />
 
-这个问题稍微复杂，跟插入操作类似，先「找」再「改」，先把框架写出来再说：
+Slightly more complex; like insert, "find then modify". Framework first:
 
 ```java
 TreeNode deleteNode(TreeNode root, int key) {
     if (root.val == key) {
-        // 找到啦，进行删除
+        // Found it; perform delete
     } else if (root.val > key) {
-        // 去左子树找
+        // Search the left subtree
         root.left = deleteNode(root.left, key);
     } else if (root.val < key) {
-        // 去右子树找
+        // Search the right subtree
         root.right = deleteNode(root.right, key);
     }
     return root;
 }
 ```
 
-找到目标节点了，比方说是节点 `A`，如何删除这个节点，这是难点。因为删除节点的同时不能破坏 BST 的性质。有三种情况，用图片来说明。
+Once the target node `A` is found, deleting it without breaking the BST property is the tricky part. Three cases (with figures):
 
-**情况 1**：`A` 恰好是末端节点，两个子节点都为空，那么它可以当场去世了。
-
-
-
-
+**Case 1**: `A` is a leaf — both children null. It can simply be removed.
 
 ![](https://labuladong.online/algo/images/bst/bst_deletion_case_1.png)
 
@@ -262,59 +258,51 @@ if (root.left == null && root.right == null)
 
 
 
-**情况 2**：`A` 只有一个非空子节点，那么它要让这个孩子接替自己的位置。
-
-
-
-
+**Case 2**: `A` has exactly one non-null child. The child takes `A`'s place.
 
 ![](https://labuladong.online/algo/images/bst/bst_deletion_case_2.png)
 
 ```java
-// 排除了情况 1 之后
+// After case 1 is excluded
 if (root.left == null) return root.right;
 if (root.right == null) return root.left;
 ```
 
 
 
-**情况 3**：`A` 有两个子节点，麻烦了，为了不破坏 BST 的性质，`A` 必须找到左子树中最大的那个节点，或者右子树中最小的那个节点来接替自己。我们以第二种方式讲解。
-
-
-
-
+**Case 3**: `A` has two children. To preserve BST, `A` must be replaced by either the largest node in its left subtree or the smallest in its right subtree. We use the latter.
 
 ![](https://labuladong.online/algo/images/bst/bst_deletion_case_3.png)
 
 ```java
 if (root.left != null && root.right != null) {
-    // 找到右子树的最小节点
+    // Find the smallest node in the right subtree
     TreeNode minNode = getMin(root.right);
-    // 把 root 改成 minNode
+    // Replace root with minNode
     root.val = minNode.val;
-    // 转而去删除 minNode
+    // Then delete minNode
     root.right = deleteNode(root.right, minNode.val);
 }
 ```
 
 
 
-三种情况分析完毕，填入框架，简化一下代码：
+All three cases handled, fill them into the framework and simplify:
 
 ```java
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
         if (root == null) return null;
         if (root.val == key) {
-            // 这两个 if 把情况 1 和 2 都正确处理了
+            // These two ifs handle cases 1 and 2 correctly
             if (root.left == null) return root.right;
             if (root.right == null) return root.left;
-            // 处理情况 3
-            // 获得右子树最小的节点
+            // Handle case 3
+            // Get the min node of the right subtree
             TreeNode minNode = getMin(root.right);
-            // 删除右子树最小的节点
+            // Delete the min node from the right subtree
             root.right = deleteNode(root.right, minNode.val);
-            // 用右子树最小的节点替换 root 节点
+            // Replace root with minNode
             minNode.left = root.left;
             minNode.right = root.right;
             root = minNode;
@@ -327,7 +315,7 @@ class Solution {
     }
 
     TreeNode getMin(TreeNode node) {
-        // BST 最左边的就是最小的
+        // The leftmost in the BST is the smallest
         while (node.left != null) node = node.left;
         return node;
     }
@@ -339,7 +327,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/delete-node-in-a-bst/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🥳 代码可视化动画🥳</strong>
+<strong>🥳 Animated Code Visualization 🥳</strong>
 </summary>
 </details>
 </a>
@@ -347,19 +335,15 @@ class Solution {
 
 
 
-这样，删除操作就完成了。注意一下，上述代码在处理情况 3 时通过一系列略微复杂的链表操作交换 `root` 和 `minNode` 两个节点：
-
-
-
-
+Done. In case 3, we swap `root` and `minNode` via a few pointer operations:
 
 ```java
-// 处理情况 3
-// 获得右子树最小的节点
+// Handle case 3
+// Get the min node of the right subtree
 TreeNode minNode = getMin(root.right);
-// 删除右子树最小的节点
+// Delete the min node from the right subtree
 root.right = deleteNode(root.right, minNode.val);
-// 用右子树最小的节点替换 root 节点
+// Replace root with minNode
 minNode.left = root.left;
 minNode.right = root.right;
 root = minNode;
@@ -367,35 +351,31 @@ root = minNode;
 
 
 
-有的读者可能会疑惑，替换 `root` 节点为什么这么麻烦，直接改 `val` 字段不就行了？看起来还更简洁易懂：
-
-
-
-
+You may wonder why this is necessary — why not just modify `val`? Like:
 
 ```java
-// 处理情况 3
-// 获得右子树最小的节点
+// Handle case 3
+// Get the min node of the right subtree
 TreeNode minNode = getMin(root.right);
-// 删除右子树最小的节点
+// Delete the min node from the right subtree
 root.right = deleteNode(root.right, minNode.val);
-// 用右子树最小的节点替换 root 节点
+// Replace root with minNode
 root.val = minNode.val;
 ```
 
 
 
-仅对于这道算法题来说是可以的，但这样操作并不完美，我们一般不会通过修改节点内部的值来交换节点。因为在实际应用中，BST 节点内部的数据域是用户自定义的，可以非常复杂，而 BST 作为数据结构（一个工具人），其操作应该和内部存储的数据域解耦，所以我们更倾向于使用指针操作来交换节点，根本没必要关心内部数据。
+That works for this problem, but it's not ideal — generally we don't swap nodes by mutating internal values. In real applications, the BST's data field can be a complex user-defined payload, and the BST as a data structure should be decoupled from that payload. Pointer manipulation is preferred and doesn't require knowledge of the payload.
 
-最后简单总结一下吧，通过这篇文章，我们总结出了如下几个技巧：
+Quick recap of the techniques:
 
-1、如果当前节点会对下面的子节点有整体影响，可以通过辅助函数增长参数列表，借助参数传递信息。
+1. If a current node imposes a constraint on its descendants, use a helper with extra parameters to carry the constraint down.
 
-2、掌握 BST 的增删查改方法。
+2. Master BST insert/delete/search/update.
 
-3、递归修改数据结构时，需要对递归调用的返回值进行接收，并返回修改后的节点。
+3. When recursive calls modify the structure, capture the return value and return the modified node.
 
-本文就到这里，更多经典的二叉树习题以及递归思维的训练，请参见二叉树章节中的 [递归专项练习](https://labuladong.online/algo/problem-set/bst1/)
+That's it. For more classic binary-tree problems and recursion practice, see [Recursion Practice](https://labuladong.online/algo/problem-set/bst1/) in the binary-tree chapter.
 
 
 
@@ -405,12 +385,12 @@ root.val = minNode.val;
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [Trie/字典树/前缀树代码实现](https://labuladong.online/algo/data-structure/trie-implement/)
- - [【强化练习】二叉搜索树经典例题 II](https://labuladong.online/algo/problem-set/bst2/)
- - [二叉搜索树心法（后序篇）](https://labuladong.online/algo/data-structure/bst-part4/)
- - [二叉搜索树心法（构造篇）](https://labuladong.online/algo/data-structure/bst-part3/)
+ - [Trie / Prefix Tree Implementation](https://labuladong.online/algo/data-structure/trie-implement/)
+ - [[Practice] Classic BST Problems II](https://labuladong.online/algo/problem-set/bst2/)
+ - [BST Tactics (Postorder)](https://labuladong.online/algo/data-structure/bst-part4/)
+ - [BST Tactics (Construction)](https://labuladong.online/algo/data-structure/bst-part3/)
 
 </details><hr>
 
@@ -419,13 +399,13 @@ root.val = minNode.val;
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer 33. Postorder Traversal of a BST](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/?show=1) | 🟠 |
 
 </details>
 <hr>

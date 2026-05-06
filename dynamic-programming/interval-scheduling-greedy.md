@@ -1,16 +1,16 @@
-# 贪心算法之区间调度问题
+# Greedy: interval scheduling
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you'll not only learn the algorithmic pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [435. Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/) | [435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/) | 🟠 |
 | [452. Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/) | [452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) | 🟠 |
@@ -19,76 +19,76 @@
 
 
 
-什么是贪心算法呢？贪心算法可以认为是动态规划算法的一个特例，相比动态规划，使用贪心算法需要满足更多的条件（贪心选择性质），但是效率比动态规划要高。
+What is the greedy algorithm? You can think of it as a special case of dynamic programming. Compared with DP, greedy requires more conditions (the greedy-choice property), but it's more efficient.
 
-比如说一个算法问题使用暴力解法需要指数级时间，如果能使用动态规划消除重叠子问题，就可以降到多项式级别的时间，如果满足贪心选择性质，那么可以进一步降低时间复杂度，达到线性级别的。
+For example, an algorithmic problem that takes exponential time by brute force can be reduced to polynomial time by DP eliminating overlapping subproblems. If it also satisfies the greedy-choice property, the time complexity can be reduced further to linear.
 
-什么是贪心选择性质呢，简单说就是：每一步都做出一个局部最优的选择，最终的结果就是全局最优。注意哦，这是一种特殊性质，其实只有一部分问题拥有这个性质。
+What is the greedy-choice property? Simply put: at every step, make a locally optimal choice, and the final result is globally optimal. Note this is a special property — only some problems have it.
 
-比如你面前放着 100 张人民币，你只能拿十张，怎么才能拿最多的面额？显然每次选择剩下钞票中面值最大的一张，最后你的选择一定是最优的。
+For example, suppose 100 banknotes are placed in front of you and you can take ten — how do you maximize the total value? Obviously, picking the largest-denomination bill at each step gives the optimal result.
 
-然而，大部分问题明显不具有贪心选择性质。比如打斗地主，对手出对儿三，按照贪心策略，你应该出尽可能小的牌刚好压制住对方，但现实情况我们甚至可能会出王炸。这种情况就不能用贪心算法，而得使用动态规划解决，参见前文 [动态规划解决博弈问题](https://labuladong.online/algo/dynamic-programming/game-theory/)。
+However, most problems clearly don't have the greedy-choice property. Take Doudizhu (Fight the Landlord): the opponent plays a pair of 3s. By a greedy strategy, you should play the smallest pair that beats them — but in real games you might even drop a "bomb". This case can't be solved greedily, only by DP. See the earlier post [Game theory via DP](https://labuladong.online/algo/dynamic-programming/game-theory/).
 
-## 一、问题概述
+## 1. Problem overview
 
-言归正传，本文解决一个很经典的贪心算法问题 Interval Scheduling（区间调度问题），也就是力扣第 435 题「无重叠区间」：
+Back to the topic: this article solves a classic greedy problem — Interval Scheduling — which is LeetCode 435 "Non-overlapping Intervals":
 
-给你很多形如 `[start, end]` 的闭区间，请你设计一个算法，**算出这些区间中最多有几个互不相交的区间**。
+You're given many closed intervals of the form `[start, end]`. Design an algorithm that **counts the maximum number of mutually non-overlapping intervals**.
 
 ```java
 int intervalSchedule(int[][] intvs);
 ```
 
-举个例子，`intvs = [[1,3], [2,4], [3,6]]`，这些区间最多有 2 个区间互不相交，即 `[[1,3], [3,6]]`，你的算法应该返回 2。注意边界相同并不算相交。
+For example, with `intvs = [[1,3], [2,4], [3,6]]`, the maximum number of mutually non-overlapping intervals is 2, namely `[[1,3], [3,6]]`. Your algorithm should return 2. Note that touching at a boundary is not considered overlapping.
 
-这个问题在生活中的应用广泛，比如你今天有好几个活动，每个活动都可以用区间 `[start, end]` 表示开始和结束的时间，请问你今天**最多能参加几个活动呢**？显然你一个人不能同时参加两个活动，所以说这个问题就是求这些时间区间的最大不相交子集。
-
-
+This problem has many real-world applications. For example, you have several activities today, each represented by an interval `[start, end]`. **What's the maximum number of activities you can attend today?** Obviously you can't attend two at once, so the problem is to find the largest non-overlapping subset of these time intervals.
 
 
 
 
 
-## 二、贪心解法
 
-这个问题有许多看起来不错的贪心思路，却都不能得到正确答案。比如说：
 
-也许我们可以每次选择可选区间中开始最早的那个？但是可能存在某些区间开始很早，但是很长，使得我们错误地错过了一些短的区间。或者我们每次选择可选区间中最短的那个？或者选择出现冲突最少的那个区间？这些方案都能很容易举出反例，不是正确的方案。
+## 2. Greedy solution
 
-正确的思路其实很简单，可以分为以下三步：
+This problem has many seemingly-good greedy ideas that don't yield the right answer. For example:
 
-1、从区间集合 `intvs` 中选择一个区间 `x`，这个 `x` 是在当前所有区间中**结束最早的**（`end` 最小）。
+Maybe pick the interval that starts earliest among the remaining? But some intervals start very early but are very long, causing us to incorrectly miss several short ones. Or pick the shortest? Or pick the one with the fewest conflicts? Each of these has easy counterexamples and is wrong.
 
-2、把所有与 `x` 区间相交的区间从区间集合 `intvs` 中删除。
+The correct idea is actually simple, in three steps:
 
-3、重复步骤 1 和 2，直到 `intvs` 为空为止。之前选出的那些 `x` 就是最大不相交子集。
+1. From the interval set `intvs`, pick an interval `x` that **ends earliest** (smallest `end`) among all current intervals.
 
-把这个思路实现成算法的话，可以按每个区间的 `end` 数值升序排序，因为这样处理之后实现步骤 1 和步骤 2 都方便很多，如下 GIF 所示：
+2. Remove from `intvs` every interval that overlaps with `x`.
+
+3. Repeat steps 1 and 2 until `intvs` is empty. The chosen `x`'s form the largest non-overlapping subset.
+
+To turn this into an algorithm, sort the intervals by `end` ascending — both step 1 and step 2 become much easier. See the GIF below:
 
 ![](https://labuladong.online/algo/images/interval/1.gif)
 
-现在来实现算法，对于步骤 1，由于我们预先按照 `end` 排了序，所以选择 `x` 是很容易的。关键在于，如何去除与 `x` 相交的区间，选择下一轮循环的 `x` 呢？
+Now, the implementation: step 1 is easy after sorting by `end`. The key is how to remove the intervals overlapping with `x` and pick the next `x`.
 
-**由于我们事先排了序**，不难发现所有与 `x` 相交的区间必然会与 `x` 的 `end` 相交；如果一个区间不想与 `x` 的 `end` 相交，它的 `start` 必须要大于（或等于）`x` 的 `end`：
+**Since we sorted in advance**, every interval overlapping with `x` must overlap with `x`'s `end`. If an interval doesn't want to overlap with `x`'s `end`, its `start` must be greater than (or equal to) `x`'s `end`:
 
 ![](https://labuladong.online/algo/images/interval/2.jpg)
 
-看下代码：
+Here's the code:
 
 ```java
 class Solution {
     public int intervalSchedule(int[][] intvs) {
         if (intvs.length == 0) return 0;
-        // 按 end 升序排序
+        // sort by end ascending
         Arrays.sort(intvs, (a, b) -> Integer.compare(a[1], b[1]));
-        // 至少有一个区间不相交
+        // at least one interval is non-overlapping
         int count = 1;
-        // 排序后，第一个区间就是 x
+        // after sorting, the first interval is x
         int x_end = intvs[0][1];
         for (int[] interval : intvs) {
             int start = interval[0];
             if (start >= x_end) {
-                // 找到下一个选择的区间了
+                // found the next interval to choose
                 count++;
                 x_end = interval[1];
             }
@@ -98,23 +98,23 @@ class Solution {
 }
 ```
 
-## 三、应用举例
+## 3. Application examples
 
-下面再举例几道具体的题目应用一下区间调度算法。
+Let's apply the interval-scheduling algorithm to a few specific problems.
 
-首先是力扣第 435 题「无重叠区间」问题：
+First is LeetCode 435 "Non-overlapping Intervals":
 
-输入一个区间的集合，请你计算，要想使其中的区间都互不重叠，至少需要移除几个区间？函数签名如下：
+Given a set of intervals, compute the minimum number of intervals you need to remove to make the rest non-overlapping. Function signature:
 
 ```java
 int eraseOverlapIntervals(int[][] intvs);
 ```
 
-其中，可以假设输入的区间的终点总是大于起点，另外边界相等的区间只算接触，但并不算相互重叠。
+You may assume that an interval's end is always greater than its start. Touching boundaries count as touching, not as overlapping.
 
-比如说输入是 `intvs = [[1,2],[2,3],[3,4],[1,3]]`，算法返回 1，因为只要移除 `[1,3]` 后，剩下的区间就没有重叠了。
+For example, with `intvs = [[1,2],[2,3],[3,4],[1,3]]`, the algorithm returns 1 — once we remove `[1,3]`, the rest don't overlap.
 
-我们已经会求最多有几个区间不会重叠了，那么剩下的不就是至少需要去除的区间吗？
+We already know how to find the maximum number of non-overlapping intervals — the rest is exactly the minimum we must remove:
 
 ```java
 class Solution {
@@ -124,7 +124,7 @@ class Solution {
     }
 
     private int intervalSchedule(int[][] intvs) {
-        // 见上文
+        // see above
     }
 }
 ```
@@ -134,7 +134,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/non-overlapping-intervals/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🍭 代码可视化动画🍭</strong>
+<strong>🍭 Code visualization 🍭</strong>
 </summary>
 </details>
 </a>
@@ -142,27 +142,27 @@ class Solution {
 
 
 
-再说说力扣第 452 题「用最少的箭头射爆气球」，我来描述一下题目：
+Next, LeetCode 452 "Minimum Number of Arrows to Burst Balloons". Description:
 
-假设在二维平面上有很多圆形的气球，这些圆形投影到 x 轴上会形成一个个区间对吧。那么给你输入这些区间，你沿着 x 轴前进，可以垂直向上射箭，请问你至少要射几箭才能把这些气球全部射爆呢？
+Suppose there are many circular balloons in a 2D plane. Their projections onto the x-axis form intervals. Given these intervals, you walk along the x-axis and can shoot arrows vertically upward. What's the minimum number of arrows needed to burst all balloons?
 
-函数签名如下：
+Function signature:
 
 ```java
 int findMinArrowShots(int[][] intvs);
 ```
 
-比如说输入为 `[[10,16],[2,8],[1,6],[7,12]]`，算法应该返回 2，因为我们可以在 `x` 为 6 的地方射一箭，射爆 `[2,8]` 和 `[1,6]` 两个气球，然后在 `x` 为 10，11 或 12 的地方射一箭，射爆 `[10,16]` 和 `[7,12]` 两个气球。
+For example, with input `[[10,16],[2,8],[1,6],[7,12]]`, the algorithm returns 2: shoot one arrow at `x = 6` to burst `[2,8]` and `[1,6]`, then shoot one at `x = 10`, 11, or 12 to burst `[10,16]` and `[7,12]`.
 
-其实稍微思考一下，这个问题和区间调度算法一模一样！如果最多有 `n` 个不重叠的区间，那么就至少需要 `n` 个箭头穿透所有区间：
+Think a moment — this problem is the same as interval scheduling! If at most `n` intervals are non-overlapping, we need at least `n` arrows to pierce all of them:
 
 ![](https://labuladong.online/algo/images/interval/3.jpg)
 
-只是有一点不一样，在 `intervalSchedule` 算法中，如果两个区间的边界触碰，不算重叠；而按照这道题目的描述，箭头如果碰到气球的边界气球也会爆炸，所以说相当于区间的边界触碰也算重叠：
+The only difference: in `intervalSchedule`, two intervals touching at a boundary don't count as overlapping. But here, an arrow that hits the boundary still bursts the balloon, so touching boundaries do count as overlapping:
 
 ![](https://labuladong.online/algo/images/interval/4.jpg)
 
-所以只要将之前的算法稍作修改，就是这道题目的答案：
+So we slightly modify the previous algorithm to get the answer:
 
 ```java
 class Solution {
@@ -174,7 +174,7 @@ class Solution {
         
         for (int[] interval : intvs) {
             int start = interval[0];
-            // 把 >= 改成 > 就行了
+            // change >= to >
             if (start > x_end) {
                 count++;
                 x_end = interval[1];
@@ -190,7 +190,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/minimum-number-of-arrows-to-burst-balloons/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌈 代码可视化动画🌈</strong>
+<strong>🌈 Code visualization 🌈</strong>
 </summary>
 </details>
 </a>
@@ -200,11 +200,11 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [一个方法解决三道区间问题](https://labuladong.online/algo/practice-in-action/interval-problem-summary/)
- - [剪视频剪出一个贪心算法](https://labuladong.online/algo/frequency-interview/cut-video/)
- - [扫描线技巧：安排会议室](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
+ - [One method solves three interval problems](https://labuladong.online/algo/practice-in-action/interval-problem-summary/)
+ - [Editing video clips inspired a greedy algorithm](https://labuladong.online/algo/frequency-interview/cut-video/)
+ - [Sweep-line technique: scheduling meeting rooms](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
 
 </details><hr>
 
@@ -214,6 +214,3 @@ class Solution {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,50 +1,50 @@
-# 动态规划之子序列问题解题模板
+# DP template for subsequence problems
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
-| [1312. Minimum Insertion Steps to Make a String Palindrome](https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | [1312. 让字符串成为回文串的最少插入次数](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | 🔴 |
-| [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/) | [516. 最长回文子序列](https://leetcode.cn/problems/longest-palindromic-subsequence/) | 🟠 |
+| [1312. Minimum Insertion Steps to Make a String Palindrome](https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | [1312. 让字符串成为palindrome串的最少插入次数](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | 🔴 |
+| [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/) | [516. 最长palindromesubsequence](https://leetcode.cn/problems/longest-palindromic-subsequence/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
-子序列问题是常见的算法问题，而且并不好解决。
+Subsequence problems are common but not easy to solve.
 
-首先，子序列问题本身就相对子串、子数组更困难一些，因为前者是不连续的序列，而后两者是连续的，就算穷举你都不一定会，更别说求解相关的算法问题了。
+First, subsequence problems are inherently harder than substring or subarray problems, because subsequences are non-contiguous while substrings/subarrays are contiguous — even brute-forcing isn't trivial, let alone solving algorithmic questions.
 
-而且，子序列问题很可能涉及到两个字符串，比如前文 [最长公共子序列](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)，如果没有一定的处理经验，真的不容易想出来。所以本文就来扒一扒子序列问题的套路，其实就有两种模板，相关问题只要往这两种思路上想，十拿九稳。
+Plus, subsequence problems often involve two strings (e.g. the earlier [Longest common subsequence](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)). Without experience, they're really tough. So this article digs into the patterns of subsequence problems — there are essentially two templates, and as long as you think along these lines, you've nearly always got it.
 
-一般来说，这类问题都是让你求一个**最长子序列**，因为最短子序列就是一个字符嘛，没啥可问的。一旦涉及到子序列和最值，那几乎可以肯定，**考察的是动态规划技巧，时间复杂度一般都是 O(n^2)**。
+Generally these problems ask you to find a **longest subsequence** — the shortest is just one character, nothing to ask. Once subsequences and optimization are involved, it's almost certainly **DP, with O(n^2) time complexity**.
 
-原因很简单，你想想一个字符串，它的子序列有多少种可能？起码是指数级的吧，这种情况下，不用动态规划技巧，还想怎么着？
+Reason is simple: how many possible subsequences does a string have? At least exponential. Without DP, what else would you do?
 
-既然要用动态规划，那就要定义 `dp` 数组，找状态转移关系。我们说的两种思路模板，就是 `dp` 数组的定义思路。不同的问题可能需要不同的 `dp` 数组定义来解决。
+Since we're using DP, we need to define the `dp` array and find the state transition. The two "thought templates" are essentially `dp` array definitions. Different problems may need different definitions.
 
-## 一、两种思路
-
-
+## 1. Two thought templates
 
 
 
 
 
-**1、第一种思路模板是一个一维的 `dp` 数组**：
+
+
+**1. The first template uses a 1D `dp` array**:
 
 ```java
 int n = array.length;
@@ -52,20 +52,20 @@ int[] dp = new int[n];
 
 for (int i = 1; i < n; i++) {
     for (int j = 0; j < i; j++) {
-        dp[i] = 最值(dp[i], dp[j] + ...)
+        dp[i] = best(dp[i], dp[j] + ...)
     }
 }
 ```
 
-比如我们写过的 [最长递增子序列](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/) 和 [最大子数组和](https://labuladong.online/algo/dynamic-programming/maximum-subarray/) 都是这个思路。
+For example, the [longest increasing subsequence](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/) and [maximum subarray sum](https://labuladong.online/algo/dynamic-programming/maximum-subarray/) we've covered both use this template.
 
-在这个思路中 `dp` 数组的定义是：
+In this template, `dp` is defined as:
 
-**在子数组 `arr[0..i]` 中，以 `arr[i]` 结尾的子序列的长度是 `dp[i]`**。
+**Within subarray `arr[0..i]`, the length of the subsequence ending at `arr[i]` is `dp[i]`**.
 
-为啥最长递增子序列需要这种思路呢？前文说得很清楚了，因为这样符合归纳法，可以找到状态转移的关系，这里就不具体展开了。
+Why does longest-increasing-subsequence need this approach? As that article explains, this fits induction and yields the state transition. We won't repeat it here.
 
-**2、第二种思路模板是一个二维的 `dp` 数组**：
+**2. The second template uses a 2D `dp` array**:
 
 ```java
 int n = arr.length;
@@ -76,54 +76,54 @@ for (int i = 0; i < n; i++) {
         if (arr[i] == arr[j]) 
             dp[i][j] = dp[i][j] + ...
         else
-            dp[i][j] = 最值(...)
+            dp[i][j] = best(...)
     }
 }
 ```
 
-这种思路运用相对更多一些，尤其是涉及两个字符串/数组的子序列时，比如前文讲的 [最长公共子序列](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/) 和 [编辑距离](https://labuladong.online/algo/dynamic-programming/edit-distance/)；这种思路也可以用于只涉及一个字符串/数组的情景，比如本文讲的回文子序列问题。
+This is more common, especially when subsequences of two strings/arrays are involved — like the earlier [Longest common subsequence](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/) and [Edit distance](https://labuladong.online/algo/dynamic-programming/edit-distance/). It also applies when there's only one string/array, like the palindromic-subsequence problem here.
 
-**2.1 涉及两个字符串/数组的场景**，`dp` 数组的定义如下：
+**2.1 Two strings/arrays scenario**, `dp` is defined as:
 
-**在子数组 `arr1[0..i]` 和子数组 `arr2[0..j]` 中，我们要求的子序列长度为 `dp[i][j]`**。
+**Within subarray `arr1[0..i]` and subarray `arr2[0..j]`, the desired subsequence length is `dp[i][j]`**.
 
-**2.2 只涉及一个字符串/数组的场景**，`dp` 数组的定义如下：
+**2.2 Single string/array scenario**, `dp` is defined as:
 
-**在子数组 `array[i..j]` 中，我们要求的子序列的长度为 `dp[i][j]`**。
+**Within subarray `array[i..j]`, the desired subsequence length is `dp[i][j]`**.
 
-下面就看看最长回文子序列问题，详解一下第二种情况下如何使用动态规划。
+Now let's look at the longest-palindromic-subsequence problem to walk through the second template in detail.
 
-## 二、最长回文子序列
+## 2. Longest palindromic subsequence
 
-之前解决了 [最长回文子串](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/) 的问题，这次提升难度，看看力扣第 516 题「最长回文子序列」，求最长回文子序列的长度：
+We solved [longest palindromic substring](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/) earlier. This time, harder: LeetCode 516 "Longest Palindromic Subsequence" — find the length of the longest palindromic subsequence:
 
-输入一个字符串 `s`，请你找出 `s` 中的最长回文子序列长度，函数签名如下：
+Given a string `s`, find the length of the longest palindromic subsequence. Function signature:
 
 ```java
 int longestPalindromeSubseq(String s);
 ```
 
-比如说输入 `s = "aecda"`，算法返回 3，因为最长回文子序列是 `"aca"`，长度为 3。
+For example, with `s = "aecda"`, the algorithm returns 3, since the longest palindromic subsequence is `"aca"` of length 3.
 
-我们对 `dp` 数组的定义是：**在子串 `s[i..j]` 中，最长回文子序列的长度为 `dp[i][j]`**。一定要记住这个定义才能理解算法。
+Our `dp` definition is: **within substring `s[i..j]`, the length of the longest palindromic subsequence is `dp[i][j]`**. Remember this definition to follow the algorithm.
 
-为啥这个问题要这样定义二维的 `dp` 数组呢？我在 [最长递增子序列](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/) 提到，找状态转移需要归纳思维，说白了就是如何从已知的结果推出未知的部分。而这样定义能够进行归纳，容易发现状态转移关系。
+Why this 2D `dp` definition for this problem? In [longest increasing subsequence](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/) I noted that finding state transitions needs inductive thinking — i.e. how to derive the unknown from the known. This definition supports induction and reveals the state-transition relation.
 
-具体来说，如果我们想求 `dp[i][j]`，假设你知道了子问题 `dp[i+1][j-1]` 的结果（`s[i+1..j-1]` 中最长回文子序列的长度），你是否能想办法算出 `dp[i][j]` 的值（`s[i..j]` 中，最长回文子序列的长度）呢？
+Concretely, to compute `dp[i][j]`, suppose you know the subproblem `dp[i+1][j-1]` (the longest palindromic subseq length of `s[i+1..j-1]`). Can you compute `dp[i][j]` (the longest palindromic subseq length of `s[i..j]`)?
 
 ![](https://labuladong.online/algo/images/lps/1.jpg)
 
-可以！这取决于 `s[i]` 和 `s[j]` 的字符：
+Yes! It depends on `s[i]` and `s[j]`:
 
-**如果它俩相等**，那么它俩加上 `s[i+1..j-1]` 中的最长回文子序列就是 `s[i..j]` 的最长回文子序列：
+**If they're equal**, then they plus the longest palindromic subseq of `s[i+1..j-1]` form the longest palindromic subseq of `s[i..j]`:
 
 ![](https://labuladong.online/algo/images/lps/2.jpg)
 
-**如果它俩不相等**，说明它俩**不可能同时**出现在 `s[i..j]` 的最长回文子序列中，那么把它俩**分别**加入 `s[i+1..j-1]` 中，看看哪个子串产生的回文子序列更长即可：
+**If they're not equal**, they **can't both** be in the longest palindromic subseq of `s[i..j]`. So add each one separately to `s[i+1..j-1]` and see which yields a longer palindromic subseq:
 
 ![](https://labuladong.online/algo/images/lps/3.jpg)
 
-以上两种情况写成代码就是这样：
+In code:
 
 
 
@@ -131,50 +131,50 @@ int longestPalindromeSubseq(String s);
 
 ```java
 if (s[i] == s[j])
-    // 它俩一定在最长回文子序列中
+    // they must be in the longest palindromic subseq
     dp[i][j] = dp[i + 1][j - 1] + 2;
 else
-    // s[i+1..j] 和 s[i..j-1] 谁的回文子序列更长？
+    // which yields a longer palindromic subseq, s[i+1..j] or s[i..j-1]?
     dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
 ```
 
 
 
-至此，状态转移方程就写出来了，根据 dp 数组的定义，我们要求的就是 `dp[0][n - 1]`，也就是整个 `s` 的最长回文子序列的长度。
+That's the state-transition equation. By the dp definition, we want `dp[0][n - 1]` — the length of the longest palindromic subseq of the entire `s`.
 
-## 三、代码实现
+## 3. Implementation
 
-首先明确一下 base case，如果只有一个字符，显然最长回文子序列长度是 1，也就是 `dp[i][j] = 1 (i == j)`。
+First clarify the base case: with one character, the longest palindromic subseq length is 1, i.e. `dp[i][j] = 1 (i == j)`.
 
-因为 `i` 肯定小于等于 `j`，所以对于那些 `i > j` 的位置，根本不存在什么子序列，应该初始化为 0。
+Since `i` is at most `j`, positions with `i > j` don't represent any valid subsequence — initialize them to 0.
 
-另外，看看刚才写的状态转移方程，想求 `dp[i][j]` 需要知道 `dp[i+1][j-1]`，`dp[i+1][j]`，`dp[i][j-1]` 这三个位置；再看看我们确定的 base case，填入 `dp` 数组之后是这样：
+Also, looking at the state-transition equation, computing `dp[i][j]` needs `dp[i+1][j-1]`, `dp[i+1][j]`, `dp[i][j-1]`. After filling in the base case, the `dp` array looks like:
 
 ![](https://labuladong.online/algo/images/lps/4.jpg)
 
-**为了保证每次计算 `dp[i][j]`，左下右方向的位置已经被计算出来，只能斜着遍历或者反着遍历**：
+**To ensure the lower-left and right neighbors are already computed when calculating `dp[i][j]`, we can only iterate diagonally or in reverse**:
 
 ![](https://labuladong.online/algo/images/lps/5.jpg)
 
 > [!TIP]
-> 关于 `dp` 数组的遍历方向，详情见 [动态规划答疑篇](https://labuladong.online/algo/dynamic-programming/faq-summary/)。
+> For details on `dp` array traversal direction, see [DP FAQ](https://labuladong.online/algo/dynamic-programming/faq-summary/).
 
-我选择反着遍历，代码如下：
+I choose reverse iteration:
 
 ```java
 class Solution {
     public int longestPalindromeSubseq(String s) {
         int n = s.length();
-        // dp 数组全部初始化为 0
+        // initialize the entire dp array to 0
         int[][] dp = new int[n][n];
         // base case
         for (int i = 0; i < n; i++) {
             dp[i][i] = 1;
         }
-        // 反着遍历保证正确的状态转移
+        // iterate in reverse to ensure correct state transitions
         for (int i = n - 1; i >= 0; i--) {
             for (int j = i + 1; j < n; j++) {
-                // 状态转移方程
+                // state-transition equation
                 if (s.charAt(i) == s.charAt(j)) {
                     dp[i][j] = dp[i + 1][j - 1] + 2;
                 } else {
@@ -182,7 +182,7 @@ class Solution {
                 }
             }
         }
-        // 整个 s 的最长回文子串长度
+        // length of the longest palindromic substring of the whole s
         return dp[0][n - 1];
     }
 }
@@ -193,7 +193,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/longest-palindromic-subsequence/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🥳 代码可视化动画🥳</strong>
+<strong>🥳 Code visualization 🥳</strong>
 </summary>
 </details>
 </a>
@@ -201,35 +201,35 @@ class Solution {
 
 
 
-至此，最长回文子序列的问题就解决了。
+That's the longest palindromic subseq problem solved.
 
-## 四、拓展延伸
+## 4. Extension
 
-虽然回文相关的问题没有什么特别广泛的使用场景，但是你会算最长回文子序列之后，一些类似的题目也可以顺手做掉。
+Palindrome problems don't have especially broad applications, but once you can compute longest palindromic subseq, similar problems become easy.
 
-比如力扣第 1312 题「计算让字符串成为回文串的最少插入次数」：
+For example, LeetCode 1312 "Minimum Insertion Steps to Make a String Palindrome":
 
-输入一个字符串 `s`，你可以在字符串的任意位置插入任意字符。如果要把 `s` 变成回文串，请你计算最少要进行多少次插入？
+Given a string `s`, you can insert any character anywhere. To turn `s` into a palindrome, what's the minimum number of insertions?
 
-函数签名如下：
+Function signature:
 
 ```java
 int minInsertions(String s);
 ```
 
-比如说输入 `s = "abcea"`，算法返回 2，因为可以给 `s` 插入 2 个字符变成回文串 `"abeceba"` 或者 `"aebcbea"`。如果输入 `s = "aba"`，则算法返回 0，因为 `s` 已经是回文串，不用插入任何字符。
+For `s = "abcea"`, the algorithm returns 2 — insert 2 characters to form `"abeceba"` or `"aebcbea"`. For `s = "aba"`, returns 0 — already a palindrome, no insertions needed.
 
-这也是一道单字符串的子序列问题，所以我们也可以使用一个二维 `dp` 数组，其中 `dp[i][j]` 的定义如下：
+This is also a single-string subseq problem, so we use a 2D `dp` array, where `dp[i][j]` is defined as:
 
-**对字符串 `s[i..j]`，最少需要进行 `dp[i][j]` 次插入才能变成回文串**。
+**For string `s[i..j]`, `dp[i][j]` insertions are needed (minimum) to make it a palindrome**.
 
-根据 `dp` 数组的定义，base case 就是 `dp[i][i] = 0`，因为单个字符本身就是回文串，不需要插入。
+Per the `dp` definition, base case is `dp[i][i] = 0` — single characters are already palindromes, no insertions needed.
 
-然后使用数学归纳法，假设已经计算出了子问题 `dp[i+1][j-1]` 的值了，思考如何推出 `dp[i][j]` 的值：
+Then, by induction, suppose we've computed `dp[i+1][j-1]` — how do we derive `dp[i][j]`?
 
 ![](https://labuladong.online/algo/images/palindrome-insert/1.jpeg)
 
-实际上和最长回文子序列问题的状态转移方程非常类似，这里也分两种情况：
+Very similar to longest palindromic subseq. Two cases:
 
 
 
@@ -237,30 +237,30 @@ int minInsertions(String s);
 
 ```java
 if (s[i] == s[j]) {
-    // 不需要插入任何字符
+    // no insertion needed
     dp[i][j] = dp[i + 1][j - 1];
 } else {
-    // 把 s[i+1..j] 和 s[i..j-1] 变成回文串，选插入次数较少的
-    // 然后还要再插入一个 s[i] 或 s[j]，使 s[i..j] 配成回文串
+    // make either s[i+1..j] or s[i..j-1] a palindrome (whichever needs fewer insertions),
+    // then insert one s[i] or s[j] to make s[i..j] a palindrome
     dp[i][j] = min(dp[i + 1][j], dp[i][j - 1]) + 1;
 }
 ```
 
 
 
-最后，我们依然采取倒着遍历 `dp` 数组的方式，写出代码：
+Finally, again iterate the `dp` array in reverse:
 
 ```java
 class Solution {
     public int minInsertions(String s) {
         int n = s.length();
-        // dp[i][j] 表示把字符串 s[i..j] 变成回文串的最少插入次数
-        // dp 数组全部初始化为 0
+        // dp[i][j] = minimum insertions to make s[i..j] a palindrome
+        // initialize the entire dp array to 0
         int[][] dp = new int[n][n];
-        // 反着遍历保证正确的状态转移
+        // iterate in reverse to ensure correct state transitions
         for (int i = n - 1; i >= 0; i--) {
             for (int j = i + 1; j < n; j++) {
-                // 状态转移方程
+                // state-transition equation
                 if (s.charAt(i) == s.charAt(j)) {
                     dp[i][j] = dp[i + 1][j - 1];
                 } else {
@@ -268,35 +268,35 @@ class Solution {
                 }
             }
         }
-        // 整个 s 的最少插入次数
+        // minimum insertions for the entire s
         return dp[0][n - 1];
     }
 }
 ```
 
-至此，这道题也使用子序列解题模板解决了，整体逻辑和最长回文子序列非常相似，那么这个问题是否可以直接复用回文子序列的解法呢？
+That's it — the subseq template solves this too. The logic is very similar to longest palindromic subseq. So can we directly reuse the palindromic subseq solution?
 
-其实是可以的，我们甚至都不用写状态转移方程，你仔细想想：
+Actually yes, and we don't even need to write the state-transition equation. Think about it:
 
-**我先算出字符串 `s` 中的最长回文子序列，那些不在最长回文子序列中的字符，不就是需要插入的字符吗**？
+**Compute the longest palindromic subseq of `s` first; the characters not in the longest palindromic subseq are exactly the characters we need to insert**.
 
-所以这道题可以直接复用之前实现的 `longestPalindromeSubseq` 函数：
+So this problem can directly reuse the `longestPalindromeSubseq` function:
 
 ```java
 class Solution {
-    // 计算把 s 变成回文串的最少插入次数
+    // compute the minimum insertions to make s a palindrome
     public int minInsertions(String s) {
         return s.length() - longestPalindromeSubseq(s);
     }
 
-    // 计算 s 中的最长回文子序列长度
+    // compute the longest palindromic subseq length of s
     int longestPalindromeSubseq(String s) {
-        // 见上文
+        // see above
     }
 }
 ```
 
-好了，子序列相关的算法就讲到这里，希望对你有启发。
+That's it for subseq-related algorithms. Hope it inspires you.
 
 
 
@@ -306,12 +306,12 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [动态规划设计：最长递增子序列](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)
- - [对动态规划进行降维打击](https://labuladong.online/algo/dynamic-programming/space-optimization/)
- - [最优子结构原理和 dp 数组遍历方向](https://labuladong.online/algo/dynamic-programming/faq-summary/)
- - [经典动态规划：最长公共子序列](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
+ - [DP design: longest increasing subsequence](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)
+ - [Dimensional reduction on dynamic programming](https://labuladong.online/algo/dynamic-programming/space-optimization/)
+ - [Optimal substructure and dp-array traversal direction](https://labuladong.online/algo/dynamic-programming/faq-summary/)
+ - [Classic DP: longest common subsequence](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
 
 </details><hr>
 
@@ -321,6 +321,3 @@ class Solution {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

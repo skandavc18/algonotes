@@ -1,85 +1,85 @@
-# 烧饼排序算法
+# Pancake Sorting
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [969. Pancake Sorting](https://leetcode.com/problems/pancake-sorting/) | [969. 煎饼排序](https://leetcode.cn/problems/pancake-sorting/) | 🟠 |
+| [969. Pancake Sorting](https://leetcode.com/problems/pancake-sorting/) | [969. Pancake Sorting](https://leetcode.cn/problems/pancake-sorting/) | 🟠 |
 
 **-----------**
 
 
 
-力扣第 969 题「煎饼排序」是个很有意思的实际问题：假设盘子上有 `n` 块**面积大小不一**的烧饼，你如何用一把锅铲进行若干次翻转，让这些烧饼的大小有序（小的在上，大的在下）？
+LeetCode 969 "Pancake Sorting" is an interesting practical problem: suppose a plate has `n` pancakes of **different sizes**. How can you, using a spatula, perform a series of flips so the pancakes end up sorted (smallest on top, largest at the bottom)?
 
 ![](https://labuladong.online/algo/images/pancakeSort/1.jpg)
 
-设想一下用锅铲翻转一堆烧饼的情景，其实是有一点限制的，我们每次只能将最上面的若干块饼子翻转：
+Flipping a stack of pancakes with a spatula has a constraint: each flip can only flip the topmost few pancakes:
 
 ![](https://labuladong.online/algo/images/pancakeSort/2.png)
 
-我们的问题是，**如何使用算法得到一个翻转序列，使得烧饼堆变得有序**？
+The question: **how do we devise an algorithm that produces a flip sequence to sort the stack**?
 
-首先，需要把这个问题抽象，用数组来表示烧饼堆：
+First, abstract the problem with an array representing the stack:
 
 <Problem slug="pancake-sorting" />
 
-如何解决这个问题呢？其实类似上篇文章 [递归反转链表的一部分](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/)，这也是需要**递归思想**的。
+Similar to the earlier article [Recursive Linked-List Reversal in Parts](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/), this also relies on **recursive thinking**.
 
-### 一、思路分析
+### 1. Idea
 
-为什么说这个问题有递归性质呢？比如说我们需要实现这样一个函数：
+Why is this problem recursive? Suppose we want to implement:
 
 ```java
-// cakes 是一堆烧饼，函数会将前 n 个烧饼排序
+// cakes is a stack of pancakes; the function sorts the first n
 void sort(int[] cakes, int n);
 ```
 
-如果我们找到了前 `n` 个烧饼中最大的那个，然后设法将这个饼子翻转到最底下：
+If we find the largest among the first `n` pancakes and flip it to the bottom:
 
 ![](https://labuladong.online/algo/images/pancakeSort/3.jpg)
 
-那么，原问题的规模就可以减小，递归调用 `pancakeSort(A, n-1)` 即可：
+Then the problem shrinks; recursively call `pancakeSort(A, n-1)`:
 
 ![](https://labuladong.online/algo/images/pancakeSort/4.jpg)
 
-接下来，对于上面的这 `n - 1` 块饼，如何排序呢？还是先从中找到最大的一块饼，然后把这块饼放到底下，再递归调用 `pancakeSort(A, n-1-1)`……
+Now how to sort the remaining `n - 1` pancakes? Find the largest, send it to the bottom, recursively call `pancakeSort(A, n-1-1)`...
 
-你看，这就是递归性质，总结一下思路就是：
+That's the recursion. Summary:
 
-1、找到 `n` 个饼中最大的那个。
+1. Find the largest among the top `n` pancakes.
 
-2、把这个最大的饼移到最底下。
+2. Move it to the bottom.
 
-3、递归调用 `pancakeSort(A, n - 1)`。
+3. Recurse on `pancakeSort(A, n - 1)`.
 
-base case：`n == 1` 时，排序 1 个饼时不需要翻转。
+Base case: when `n == 1`, no flips needed.
 
-那么，最后剩下个问题，**如何设法将某块烧饼翻到最后呢**？
+Finally, **how do we send a particular pancake to the bottom?**
 
-其实很简单，比如第 3 块饼是最大的，我们想把它换到最后，也就是换到第 `n` 块。可以这样操作：
+Easy. Suppose pancake at position 3 is the largest and we want it at position `n`:
 
-1、用锅铲将前 3 块饼翻转一下，这样最大的饼就翻到了最上面。
+1. Flip the top 3 — the largest is now on top.
 
-2、用锅铲将前 `n` 块饼全部翻转，这样最大的饼就翻到了第 `n` 块，也就是最后一块。
+2. Flip the top `n` — the largest is now at position `n`.
 
-以上两个流程理解之后，基本就可以写出解法了，不过题目要求我们写出具体的反转操作序列，这也很简单，只要在每次翻转烧饼时记录下来就行了。    
+With that we can write the solution. The problem also asks for the actual flip sequence — just record each flip.
 
-### 二、代码实现
+### 2. Implementation
 
-只要把上述的思路用代码实现即可，唯一需要注意的是，数组索引从 0 开始，而我们要返回的结果是从 1 开始算的。
+Just translate the idea. Note: array indices start at 0, but the answer uses 1-based positions.
 
 ```java
 class Solution {
-    // 记录反转操作序列
+    // Records the flip operations
     LinkedList<Integer> res = new LinkedList<>();
 
     public List<Integer> pancakeSort(int[] cakes) {
@@ -91,7 +91,7 @@ class Solution {
         // base case
         if (n == 1) return;
         
-        // 寻找最大饼的索引
+        // Find the index of the largest pancake
         int maxCake = 0;
         int maxCakeIndex = 0;
         for (int i = 0; i < n; i++)
@@ -100,14 +100,14 @@ class Solution {
                 maxCake = cakes[i];
             }
         
-        // 第一次翻转，将最大饼翻到最上面
+        // First flip: bring the largest to the top
         reverse(cakes, 0, maxCakeIndex);
         res.add(maxCakeIndex + 1);
-        // 第二次翻转，将最大饼翻到最下面
+        // Second flip: bring the largest to the bottom
         reverse(cakes, 0, n - 1);
         res.add(n);
 
-        // 递归调用
+        // Recurse
         sort(cakes, n - 1);
     }
 
@@ -127,7 +127,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/pancake-sorting/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌟 代码可视化动画🌟</strong>
+<strong>🌟 Animated Code Visualization 🌟</strong>
 </summary>
 </details>
 </a>
@@ -135,24 +135,24 @@ class Solution {
 
 
 
-通过刚才的详细解释，这段代码应该是很清晰了。
+With the explanation above, the code should be clear.
 
-算法的时间复杂度很容易计算，因为递归调用的次数是 `n`，每次递归调用都需要一次 for 循环，时间复杂度是 O(n)，所以总的复杂度是 O(n^2)。
+Time complexity: there are `n` recursive calls, each scanning O(n), so the total is O(n^2).
 
-**最后，我们可以思考一个问题**：按照我们这个思路，得出的操作序列长度应该为 `2(n - 1)`，因为每次递归都要进行 2 次翻转并记录操作，总共有 `n` 层递归，但由于 base case 直接返回结果，不进行翻转，所以最终的操作序列长度应该是固定的 `2(n - 1)`。
+**One last question to ponder**: by our approach, the operation sequence has length `2(n - 1)` — each recursion does 2 flips, and there are `n` levels (the base case does no flips), so the length is fixed at `2(n - 1)`.
 
-显然，这个结果不是最优的（最短的），比如说一堆煎饼 `[3,2,4,1]`，我们的算法得到的翻转序列是 `[3,4,2,3,1,2]`，但是最快捷的翻转方法应该是 `[2,3,4]`：
+Clearly this isn't optimal (shortest). E.g. `[3,2,4,1]` — our algorithm yields `[3,4,2,3,1,2]`, but the fastest is `[2,3,4]`:
 
 ```
-初始状态 ：[3,2,4,1]
-翻前 2 个：[2,3,4,1]
-翻前 3 个：[4,3,2,1]
-翻前 4 个：[1,2,3,4]
+Initial    : [3,2,4,1]
+Flip top 2 : [2,3,4,1]
+Flip top 3 : [4,3,2,1]
+Flip top 4 : [1,2,3,4]
 ```
 
-如果要求你的算法计算排序烧饼的**最短**操作序列，你该如何计算呢？或者说，解决这种求最优解法的问题，核心思路什么，一定需要使用什么算法技巧呢？
+If the algorithm has to compute the **shortest** flip sequence, how would you do it? More generally, what is the core idea / algorithmic technique for finding the optimal solution to this kind of problem?
 
-不妨分享一下你的思考。
+Feel free to share your thoughts.
 
 
 

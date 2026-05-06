@@ -1,16 +1,16 @@
-# 动态规划帮我通关了《魔塔》
+# DP helped me clear "Magic Tower"
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [174. Dungeon Game](https://leetcode.com/problems/dungeon-game/) | [174. 地下城游戏](https://leetcode.cn/problems/dungeon-game/) | 🔴 |
 
@@ -19,72 +19,72 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
-「魔塔」是一款经典的地牢类游戏，碰怪物要掉血，吃血瓶能加血，你要收集钥匙，一层一层上楼，最后救出美丽的公主。
+"Magic Tower" is a classic dungeon game: bumping into monsters loses HP, drinking potions adds HP. You collect keys, climb floor by floor, and finally rescue the beautiful princess.
 
-现在手机上仍然可以玩这个游戏：
+You can still play it on phones today:
 
 ![](https://labuladong.online/algo/images/dungeons/0.png)
 
-嗯，相信这款游戏承包了不少人的童年回忆，记得小时候，一个人拿着游戏机玩，两三个人围在左右指手画脚，这导致玩游戏的人体验极差，而左右的人异常快乐 😂
+I bet this game shaped many people's childhoods. I remember as a kid, one person held the gaming device, with two or three others crowding around shouting advice — terrible experience for the player, great fun for the spectators 😂
 
-力扣第 174 题「地下城游戏」是一道类似的题目：
+LeetCode 174 "Dungeon Game" is a similar problem:
 
 <Problem slug="dungeon-game" />
 
-**简单说，就是问你至少需要多少初始生命值，能够让骑士从最左上角移动到最右下角，且任何时候生命值都要大于 0**。
+**In short: what's the minimum initial HP needed for a knight to move from the top-left to the bottom-right cell while keeping HP > 0 at all times?**
 
-函数签名如下：
+Function signature:
 
 ```java
 int calculateMinimumHP(int[][] grid);
 ```
 
-上篇文章 [最小路径和](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/) 写过类似的问题，问你从左上角到右下角的最小路径和是多少。
+The earlier post [Minimum path sum](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/) covered a similar problem — the minimum path sum from top-left to bottom-right.
 
-我们做算法题一定要尝试举一反三，感觉今天这道题和最小路径和有点关系对吧？
+Always try to draw inferences when grinding algorithms. Today's problem feels related to minimum path sum, right?
 
-想要最小化骑士的初始生命值，是不是意味着要最大化骑士行进路线上的血瓶？是不是相当于求「最大路径和」？是不是可以直接套用计算「最小路径和」的思路？
+Minimizing the knight's initial HP — does that mean maximizing the potions consumed along the path? That'd be a "maximum path sum", solvable with the minimum-path-sum approach, right?
 
-但是稍加思考，发现这个推论并不成立，吃到最多的血瓶，并不一定就能获得最小的初始生命值。
+But on second thought, that inference fails. Eating the most potions doesn't necessarily yield the smallest initial HP.
 
-比如如下这种情况，如果想要吃到最多的血瓶获得「最大路径和」，应该按照下图箭头所示的路径，初始生命值需要 11：
+For example, in the situation below, to eat the most potions and get the "maximum path sum", you'd take the arrow path shown — initial HP needed is 11:
 
 ![](https://labuladong.online/algo/images/dungeons/2.png)
 
-但也很容易看到，正确的答案应该是下图箭头所示的路径，初始生命值只需要 1：
+But it's easy to see the correct answer is the arrow path below, requiring only 1 initial HP:
 
 ![](https://labuladong.online/algo/images/dungeons/3.png)
 
-**所以，关键不在于吃最多的血瓶，而是在于如何损失最少的生命值**。
+**So the key isn't to eat the most potions — it's to lose the least HP**.
 
-这类求最值的问题，肯定要借助动态规划技巧，要合理设计 `dp` 数组/函数的定义。类比前文 [最小路径和问题](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/)，`dp` 函数签名肯定长这样：
+Such optimization problems must use DP. We need to define `dp` array/function carefully. Analogous to the [minimum path sum problem](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/), the `dp` function signature should look like:
 
 ```java
 int dp(int[][] grid, int i, int j);
 ```
 
-但是这道题对 `dp` 函数的定义比较有意思，按照常理，这个 `dp` 函数的定义应该是：
+But the definition is interesting. By common sense, the `dp` function should be:
 
-**从左上角（`grid[0][0]`）走到 `grid[i][j]` 至少需要 `dp(grid, i, j)` 的生命值**。
+**The minimum HP needed to walk from the top-left (`grid[0][0]`) to `grid[i][j]` is `dp(grid, i, j)`**.
 
-这样定义的话，base case 就是 `i, j` 都等于 0 的时候，我们可以这样写代码：
+With this definition, the base case is when `i, j` are both 0:
 
 ```java
 int calculateMinimumHP(int[][] grid) {
     int m = grid.length;
     int n = grid[0].length;
-    // 我们想计算左上角到右下角所需的最小生命值
+    // we want to compute the minimum HP required to go from top-left to bottom-right
     return dp(grid, m - 1, n - 1);
 }
 
 int dp(int[][] grid, int i, int j) {
     // base case
     if (i == 0 && j == 0) {
-        // 保证骑士落地不死就行了
+        // make sure the knight survives upon landing
         return grid[i][j] > 0 ? 1 : -grid[i][j] + 1;
     }
     ...
@@ -92,53 +92,53 @@ int dp(int[][] grid, int i, int j) {
 ```
 
 > [!NOTE]
-> 为了简洁，之后 `dp(grid, i, j)` 就简写为 `dp(i, j)`，大家理解就好。
+> For brevity, I'll write `dp(i, j)` instead of `dp(grid, i, j)` going forward.
 
-接下来我们需要找状态转移了，还记得如何找状态转移方程吗？我们这样定义 `dp` 函数能否正确进行状态转移呢？
+Now we need a state transition. Remember how to find one? Can our `dp` function definition support correct state transitions?
 
-我们希望 `dp(i, j)` 能够通过 `dp(i-1, j)` 和 `dp(i, j-1)` 推导出来，这样就能不断逼近 base case，也就能够正确进行状态转移。
+We want `dp(i, j)` to be derivable from `dp(i-1, j)` and `dp(i, j-1)` so we keep approaching the base case and the transition is valid.
 
-具体来说，「到达 `A` 的最小生命值」应该能够由「到达 `B` 的最小生命值」和「到达 `C` 的最小生命值」推导出来：
+Specifically, "minimum HP to reach `A`" should be derivable from "minimum HP to reach `B`" and "minimum HP to reach `C`":
 
 ![](https://labuladong.online/algo/images/dungeons/4.png)
 
-**但问题是，能推出来么？实际上是不能的**。
+**But can it actually be derived? Actually, no**.
 
-因为按照 `dp` 函数的定义，你只知道「能够从左上角到达 `B` 的最小生命值」，但并不知道「到达 `B` 时的生命值」。
+By our `dp` function definition, you only know "the minimum HP needed to reach `B` from the top-left", but not "the HP at the time of reaching `B`".
 
-「到达 `B` 时的生命值」是进行状态转移的必要参考，我给你举个例子你就明白了，假设下图这种情况：
+The HP at the moment of reaching `B` is essential reference info for the state transition. Here's an example:
 
 ![](https://labuladong.online/algo/images/dungeons/5.png)
 
-你说这种情况下，骑士救公主的最优路线是什么？
+What's the optimal route for the knight to save the princess?
 
-显然是按照图中蓝色的线走到 `B`，最后走到 `A` 对吧，这样初始血量只需要 1 就可以；如果走黄色箭头这条路，先走到 `C` 然后走到 `A`，初始血量至少需要 6。
+Clearly the blue path: through `B`, then to `A`. Initial HP needed is just 1. The yellow path through `C` then `A` requires at least 6 initial HP.
 
-为什么会这样呢？骑士走到 `B` 和 `C` 的最少初始血量都是 1，为什么最后是从 `B` 走到 `A`，而不是从 `C` 走到 `A` 呢？
+Why? Both `B` and `C` need only 1 minimum initial HP — why end up via `B` and not via `C`?
 
-因为骑士走到 `B` 的时候生命值为 11，而走到 `C` 的时候生命值依然是 1。
+Because when reaching `B`, the knight has 11 HP, but when reaching `C`, the knight still has 1 HP.
 
-如果骑士执意要通过 `C` 走到 `A`，那么初始血量必须加到 6 点才行；而如果通过 `B` 走到 `A`，初始血量为 1 就够了，因为路上吃到血瓶了，生命值足够抗 `A` 上面怪物的伤害。
+If the knight insists on `C` → `A`, the initial HP must be raised to 6. Going `B` → `A` works with initial HP 1, since the knight ate potions along the way and has enough HP to survive the monster on `A`.
 
-这下应该说的很清楚了，再回顾我们对 `dp` 函数的定义，上图的情况，算法只知道 `dp(1, 2) = dp(2, 1) = 1`，都是一样的，怎么做出正确的决策，计算出 `dp(2, 2)` 呢？
+Hopefully that's clear. Now look back at our `dp` definition. In the figure above, the algorithm only knows `dp(1, 2) = dp(2, 1) = 1` — both are equal. How would it correctly decide and compute `dp(2, 2)`?
 
-**所以说，我们之前对 `dp` 数组的定义是错误的，信息量不足，算法无法做出正确的状态转移**。
+**So our previous `dp` array definition was wrong — insufficient information for the algorithm to make the right state transition**.
 
-正确的做法需要反向思考，依然是如下的 `dp` 函数：
+The correct approach is reverse thinking. Same `dp` signature:
 
 ```java
 int dp(int[][] grid, int i, int j);
 ```
 
-但是我们要修改 `dp` 函数的定义：
+But we modify the definition:
 
-**从 `grid[i][j]` 到达终点（右下角）所需的最少生命值是 `dp(grid, i, j)`**。
+**The minimum HP needed to reach the destination (bottom-right) starting from `grid[i][j]` is `dp(grid, i, j)`**.
 
-那么可以这样写代码：
+Then the code becomes:
 
 ```java
 int calculateMinimumHP(int[][] grid) {
-    // 我们想计算左上角到右下角所需的最小生命值
+    // we want to compute the minimum HP required to go from top-left to bottom-right
     return dp(grid, 0, 0);
 }
 
@@ -153,21 +153,21 @@ int dp(int[][] grid, int i, int j) {
 }
 ```
 
-根据新的 `dp` 函数定义和 base case，我们想求 `dp(0, 0)`，那就应该试图通过 `dp(i, j+1)` 和 `dp(i+1, j)` 推导出 `dp(i, j)`，这样才能不断逼近 base case，正确进行状态转移。
+With this new definition and base case, we want `dp(0, 0)`. So we should derive `dp(i, j)` from `dp(i, j+1)` and `dp(i+1, j)` to keep approaching the base case correctly.
 
-具体来说，「从 `A` 到达右下角的最少生命值」应该由「从 `B` 到达右下角的最少生命值」和「从 `C` 到达右下角的最少生命值」推导出来：
+Specifically, "minimum HP from `A` to bottom-right" should be derivable from "minimum HP from `B` to bottom-right" and "minimum HP from `C` to bottom-right":
 
 ![](https://labuladong.online/algo/images/dungeons/6.png)
 
-能不能推导出来呢？这次是可以的，假设 `dp(0, 1) = 5, dp(1, 0) = 4`，那么可以肯定要从 `A` 走向 `C`，因为 4 小于 5 嘛。
+Can it be derived this time? Yes. Suppose `dp(0, 1) = 5, dp(1, 0) = 4`. Then we'd definitely go `A → C` since 4 < 5.
 
-那么怎么推出 `dp(0, 0)` 是多少呢？
+How do we infer `dp(0, 0)`?
 
-假设 `A` 的值为 1，既然知道下一步要往 `C` 走，且 `dp(1, 0) = 4` 意味着走到 `grid[1][0]` 的时候至少要有 4 点生命值，那么就可以确定骑士出现在 `A` 点时需要 4 - 1 = 3 点初始生命值，对吧。
+Suppose `A`'s value is 1. Knowing the next step is `C` and `dp(1, 0) = 4` means we need at least 4 HP when reaching `grid[1][0]`. So at `A`, the knight needs `4 - 1 = 3` initial HP.
 
-那如果 `A` 的值为 10，落地就能捡到一个大血瓶，超出了后续需求，4 - 10 = -6 意味着骑士的初始生命值为负数，这显然不可以，骑士的生命值小于 1 就挂了，所以这种情况下骑士的初始生命值应该是 1。
+If `A`'s value is 10 — a big potion on landing, exceeding what's needed — then `4 - 10 = -6`, i.e. the knight's initial HP is negative, which can't happen (HP < 1 = death). In this case the initial HP should be 1.
 
-综上，状态转移方程已经推出来了：
+So the state-transition equation is:
 
 
 
@@ -182,15 +182,15 @@ int res = min(
 dp(i, j) = res <= 0 ? 1 : res;
 ```
 
-根据这个核心逻辑，加一个备忘录消除重叠子问题，就可以直接写出最终的代码了：
+With this core logic, plus a memo to eliminate overlapping subproblems, we get the final code:
 
 ```java
 class Solution {
-    // 主函数
+    // main function
     public int calculateMinimumHP(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        // 备忘录中都初始化为 -1
+        // initialize the memo with all -1
         memo = new int[m][n];
         for (int[] row : memo) {
             Arrays.fill(row, -1);
@@ -199,10 +199,10 @@ class Solution {
         return dp(grid, 0, 0);
     }
 
-    // 备忘录，消除重叠子问题
+    // memo to eliminate overlapping subproblems
     int[][] memo;
 
-    // 定义：从 (i, j) 到达右下角，需要的初始血量至少是多少
+    // definition: minimum initial HP needed to reach the bottom-right starting from (i, j)
     int dp(int[][] grid, int i, int j) {
         int m = grid.length;
         int n = grid[0].length;
@@ -213,16 +213,16 @@ class Solution {
         if (i == m || j == n) {
             return Integer.MAX_VALUE;
         }
-        // 避免重复计算
+        // avoid redundant computation
         if (memo[i][j] != -1) {
             return memo[i][j];
         }
-        // 状态转移逻辑
+        // state transition logic
         int res = Math.min(
                 dp(grid, i, j + 1),
                 dp(grid, i + 1, j)
             ) - grid[i][j];
-        // 骑士的生命值至少为 1
+        // the knight's HP must be at least 1
         memo[i][j] = res <= 0 ? 1 : res;
 
         return memo[i][j];
@@ -235,7 +235,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/dungeon-game/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>👾 代码可视化动画👾</strong>
+<strong>👾 Code visualization 👾</strong>
 </summary>
 </details>
 </a>
@@ -243,9 +243,9 @@ class Solution {
 
 
 
-这就是自顶向下带备忘录的动态规划解法，参考前文 [动态规划套路详解](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 很容易就可以改写成 `dp` 数组的迭代解法，这里就不写了，读者可以尝试自己写一写。
+This is the top-down memoized DP solution. With reference to the earlier [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), it's easy to convert into an iterative `dp` array solution. I'll skip that — try writing it yourself.
 
-这道题的核心是定义 `dp` 函数，找到正确的状态转移方程，从而计算出正确的答案。
+The core of this problem is defining the `dp` function and finding the correct state-transition equation, which then yields the right answer.
 
 
 
@@ -257,6 +257,3 @@ class Solution {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

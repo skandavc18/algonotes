@@ -1,10 +1,10 @@
-# 最优子结构原理和 dp 数组遍历方向
+# Optimal substructure and dp-array traversal direction
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
@@ -13,47 +13,47 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
-> tip：本文有视频版：[动态规划详解进阶](https://www.bilibili.com/video/BV1uv411W73P/)。建议关注我的 B 站账号，我会用视频领读的方式带大家学习那些稍有难度的算法技巧。
-
-
-
-本文是旧文 [动态规划答疑篇](https://mp.weixin.qq.com/s/qvlfyKBiXVX7CCwWFR-XKg) 的修订版，根据我的不断学习总结以及读者的评论反馈，我给扩展了更多内容，力求使本文成为继 [动态规划核心套路框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 之后的一篇全面答疑文章。以下是正文。
-
-这篇文章就给你讲明白以下几个问题：
-
-1、到底什么才叫「最优子结构」，和动态规划什么关系。
-
-2、如何判断一个问题是动态规划问题，即如何看出是否存在重叠子问题。
-
-3、为什么经常看到将 `dp` 数组的大小设置为 `n + 1` 而不是 `n`。
-
-4、为什么动态规划遍历 `dp` 数组的方式五花八门，有的正着遍历，有的倒着遍历，有的斜着遍历。
+> Tip: this article has a video version: [DP detailed (advanced)](https://www.bilibili.com/video/BV1uv411W73P/). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
 
 
+
+This article is a revised version of the older [DP FAQ post](https://mp.weixin.qq.com/s/qvlfyKBiXVX7CCwWFR-XKg). Based on continued learning, summarization, and reader feedback, I expanded more content, aiming to make this a comprehensive Q&A follow-up to [DP core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/). Here's the body.
+
+This article will clarify these questions:
+
+1. What does "optimal substructure" actually mean and how is it related to DP?
+
+2. How do you tell whether a problem is a DP problem — i.e. how do you spot overlapping subproblems?
+
+3. Why is the `dp` array often sized `n + 1` instead of `n`?
+
+4. Why do DP solutions traverse the `dp` array in so many ways — sometimes forward, sometimes backward, sometimes diagonally?
 
 
 
 
 
-## 一、最优子结构详解
 
-「最优子结构」是某些问题的一种特定性质，并不是动态规划问题专有的。也就是说，很多问题其实都具有最优子结构，只是其中大部分不具有重叠子问题，所以我们不把它们归为动态规划系列问题而已。
 
-我先举个很容易理解的例子：假设你们学校有 10 个班，你已经计算出了每个班的最高考试成绩。那么现在我要求你计算全校最高的成绩，你会不会算？当然会，而且你不用重新遍历全校学生的分数进行比较，而是只要在这 10 个最高成绩中取最大的就是全校的最高成绩。
+## 1. Optimal substructure in detail
 
-我给你提出的这个问题就**符合最优子结构**：可以从子问题的最优结果推出更大规模问题的最优结果。让你算**每个班**的最优成绩就是子问题，你知道所有子问题的答案后，就可以借此推出**全校**学生的最优成绩这个规模更大的问题的答案。
+"Optimal substructure" is a property of certain problems — not exclusive to DP. Many problems have it, but most don't have overlapping subproblems, so we don't classify them as DP problems.
 
-你看，这么简单的问题都有最优子结构性质，只是因为显然没有重叠子问题，所以我们简单地求最值肯定用不出动态规划。
+A simple example first: suppose your school has 10 classes, and you've already computed the highest exam score in each class. Now I ask you for the school's highest score — can you compute it? Yes, and you don't need to re-traverse all student scores; just take the max of those 10 highest scores.
 
-再举个例子：假设你们学校有 10 个班，你已知每个班的最大分数差（最高分和最低分的差值）。那么现在我让你计算全校学生中的最大分数差，你会不会算？可以想办法算，但是肯定不能通过已知的这 10 个班的最大分数差推到出来。因为这 10 个班的最大分数差不一定就包含全校学生的最大分数差，比如全校的最大分数差可能是 3 班的最高分和 6 班的最低分之差。
+This problem **satisfies optimal substructure**: the optimal of the larger problem can be derived from the optimums of subproblems. Asking for each class's best is the subproblem; once you know all subproblem answers, you can derive the school's best.
 
-这次我给你提出的问题就**不符合最优子结构**，因为你没办通过每个班的最优值推出全校的最优值，没办法通过子问题的最优值推出规模更大的问题的最优值。前文 [动态规划详解](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 说过，想满足最优子结，子问题之间必须互相独立。全校的最大分数差可能出现在两个班之间，显然子问题不独立，所以这个问题本身不符合最优子结构。
+So even a simple problem has optimal substructure — it just lacks overlapping subproblems, so we don't need DP for a simple max.
 
-**那么遇到这种最优子结构失效情况，怎么办？策略是：改造问题**。对于最大分数差这个问题，我们不是没办法利用已知的每个班的分数差吗，那我只能这样写一段暴力代码：
+Another example: suppose your school has 10 classes and you know each class's largest score gap (max - min). Now I ask for the school's largest score gap — can you compute it? You can try, but you can't derive it from the 10 classes' gaps. Because those 10 gaps don't necessarily contain the school's gap; e.g. the school's largest gap might be between class 3's max and class 6's min.
+
+This problem **does not satisfy optimal substructure** — you can't derive the school's optimum from each class's optimum, you can't derive the larger problem's optimum from the subproblems'. As [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) said: for optimal substructure to hold, subproblems must be mutually independent. The school's largest gap can occur between two classes, so subproblems aren't independent — the problem itself doesn't satisfy optimal substructure.
+
+**So when optimal substructure fails, what do we do? Strategy: reformulate the problem**. For the largest-score-gap problem, we couldn't use each class's known gap, so we'd have to write brute-force code:
 
 
 
@@ -72,13 +72,13 @@ return result;
 
 
 
-改造问题，也就是把问题等价转化：最大分数差，不就等价于最高分数和最低分数的差么，那不就是要求最高和最低分数么，不就是我们讨论的第一个问题么，不就具有最优子结构了么？那现在改变思路，借助最优子结构解决最值问题，再回过头解决最大分数差问题，是不是就高效多了？
+Reformulate, i.e. equivalently transform the problem: largest score gap is just the difference between the highest and lowest scores. So we want highest and lowest scores — that's exactly the first problem we discussed, which has optimal substructure! Now use optimal substructure to solve the max problem first, then come back and solve the gap problem — much more efficient.
 
-当然，上面这个例子太简单了，不过请读者回顾一下，我们做动态规划问题，是不是一直在求各种最值，本质跟我们举的例子没啥区别，无非需要处理一下重叠子问题。
+Sure, this example is too simple, but think about it: when we do DP, we always seek some optimum. Essentially no different from our example, except we have to deal with overlapping subproblems.
 
-前文 [高楼扔鸡蛋问题](https://labuladong.online/algo/dynamic-programming/egg-drop/) 就展示了如何改造问题，不同的最优子结构，可能导致不同的解法和效率。
+The earlier [Super egg drop problem](https://labuladong.online/algo/dynamic-programming/egg-drop/) showed how to reformulate a problem; different optimal substructures lead to different solutions and efficiencies.
 
-再举个常见但也十分简单的例子，求一棵二叉树的最大值，不难吧（简单起见，假设节点中的值都是非负数）：
+Another simple example: find the maximum value in a binary tree (assume all node values are non-negative for simplicity):
 
 ```java
 int maxVal(TreeNode root) {
@@ -90,45 +90,45 @@ int maxVal(TreeNode root) {
 }
 ```
 
-你看这个问题也符合最优子结构，以 `root` 为根的树的最大值，可以通过两边子树（子问题）的最大值推导出来，结合刚才学校和班级的例子，很容易理解吧。
+This problem also satisfies optimal substructure — the max of the tree rooted at `root` is derivable from the max of its two subtrees (subproblems). Easy to understand combined with the school/class example.
 
-当然这也不是动态规划问题，旨在说明，最优子结构并不是动态规划独有的一种性质，能求最值的问题大部分都具有这个性质；**但反过来，最优子结构性质作为动态规划问题的必要条件，一定是让你求最值的**，以后碰到那种恶心人的最值题，思路往动态规划想就对了，这就是套路。
+This isn't a DP problem either, but it shows: optimal substructure isn't unique to DP. Most max/min problems satisfy it. **But conversely, optimal substructure as a necessary condition for DP problems must involve seeking an optimum**. So when you encounter nasty optimum problems, reach for DP — that's the routine.
 
-动态规划不就是从最简单的 base case 往后推导吗，可以想象成一个链式反应，以小博大。但只有符合最优子结构的问题，才有发生这种链式反应的性质。
+DP works by deriving from a simple base case forward — picture a chain reaction, leveraging small to win big. But only problems with optimal substructure exhibit this chain-reaction property.
 
-找最优子结构的过程，其实就是证明状态转移方程正确性的过程，方程符合最优子结构就可以写暴力解了，写出暴力解就可以看出有没有重叠子问题了，有则优化，无则 OK。这也是套路，经常刷题的读者应该能体会。
+Finding optimal substructure is essentially proving the state-transition equation correct; if the equation has it, you can write the brute force; once you have brute force, you can spot overlapping subproblems and optimize. Routine — frequent grinders feel this.
 
-这里就不举那些正宗动态规划的例子了，读者可以翻翻历史文章，看看状态转移是如何遵循最优子结构的，这个话题就聊到这，下面再来看其他的动态规划迷惑行为。
-
-
+We won't list canonical DP examples here — readers can browse historical articles to see how state transitions follow optimal substructure. Topic over; let's look at other DP confusions.
 
 
 
 
 
-## 二、如何一眼看出重叠子问题
 
-经常有读者说：
 
-看了前文 [动态规划核心套路](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)，我知道了如何一步步优化动态规划问题；
+## 2. How to spot overlapping subproblems at a glance
 
-看了前文 [动态规划设计：数学归纳法](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/)，我知道了利用数学归纳法写出暴力解（状态转移方程）。
+Readers often say:
 
-**但就算我写出了暴力解，我很难判断这个解法是否存在重叠子问题**，从而无法确定是否可以运用备忘录等方法去优化算法效率。
+After reading the [DP core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), I know how to step-by-step optimize a DP problem.
 
-对于这个问题，其实我在动态规划系列的文章中写过几次，在这里再统一总结一下吧。
+After reading the earlier [DP design: mathematical induction](https://labuladong.online/algo/dynamic-programming/longest-increasing-subsequence/), I know how to use induction to write the brute force (state-transition equation).
 
-**首先，最简单粗暴的方式就是画图，把递归树画出来，看看有没有重复的节点**。
+**But even with the brute force, I find it hard to tell whether overlapping subproblems exist** — so I can't decide whether memoization etc. can optimize it.
 
-比如最简单的例子，[动态规划核心套路](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 中斐波那契数列的递归树：
+I've covered this question several times across DP articles; let me collect a unified summary here.
+
+**First, the simplest brute method is to draw the recursion tree and look for repeated nodes**.
+
+For the simplest example, the Fibonacci recursion tree from [DP core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/):
 
 ![](https://labuladong.online/algo/images/dynamic-programming/1.jpg)
 
-这棵递归树很明显存在重复的节点，所以我们可以通过备忘录避免冗余计算。
+Clearly there are repeated nodes, so we use a memo to avoid redundant computation.
 
-但毕竟斐波那契数列问题太简单了，实际的动态规划问题比较复杂，比如二维甚至三维的动态规划，当然也可以画递归树，但不免有些复杂。
+Fibonacci is too simple. Real DP problems are more complex — 2D or even 3D DP. You can still draw the tree, but it's painful.
 
-比如在 [最小路径和问题](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/) 中，我们写出了这样一个暴力解法：
+For example, in the [Minimum path sum problem](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/), we wrote this brute force:
 
 ```java
 int dp(int[][] grid, int i, int j) {
@@ -146,15 +146,15 @@ int dp(int[][] grid, int i, int j) {
 }
 ```
 
-你不需要读过前文，光看这个函数代码就能看出来，该函数递归过程中参数 `i, j` 在不断变化，即「状态」是 `(i, j)` 的值，你是否可以判断这个解法是否存在重叠子问题呢？
+You don't need to read the earlier post — just from this function, you see the parameters `i, j` change during recursion, i.e. the "state" is `(i, j)`. Can you tell whether overlapping subproblems exist?
 
-假设输入的 `i = 8, j = 7`，二维状态的递归树如下图，显然出现了重叠子问题：
+For input `i = 8, j = 7`, the 2D-state recursion tree is below; clearly overlapping subproblems exist:
 
 ![](https://labuladong.online/algo/images/optimal/2.jpeg)
 
-**但稍加思考就可以知道，其实根本没必要画图，可以通过递归框架直接判断是否存在重叠子问题**。
+**With a moment's thought, you don't need to draw — you can decide directly from the recursion framework**.
 
-具体操作就是直接删掉代码细节，抽象出该解法的递归框架：
+Just delete the code details and abstract the recursive framework:
 
 
 
@@ -169,11 +169,11 @@ int dp(int[][] grid, int i, int j) {
 
 
 
-可以看到 `i, j` 的值在不断减小，那么我问你一个问题：如果我想从状态 `(i, j)` 转移到 `(i-1, j-1)`，有几种路径？
+We see `i, j` both decrease. Question: how many paths transition state `(i, j)` to `(i-1, j-1)`?
 
-显然有两种路径，可以是 `(i, j) -> #1 -> #2` 或者 `(i, j) -> #2 -> #1`，不止一种，说明 `(i-1, j-1)` 会被多次计算，所以一定存在重叠子问题。
+Two paths: `(i, j) -> #1 -> #2` or `(i, j) -> #2 -> #1`. More than one means `(i-1, j-1)` is computed multiple times — overlapping subproblems exist.
 
-再举个稍微复杂的例子，前文 [正则表达式问题](https://labuladong.online/algo/dynamic-programming/regular-expression-matching/) 的暴力解代码：
+Slightly more complex example: brute force from the earlier [Regex matching problem](https://labuladong.online/algo/dynamic-programming/regular-expression-matching/):
 
 ```java
 boolean dp(String s, int i, String p, int j) {
@@ -214,7 +214,7 @@ boolean dp(String s, int i, String p, int j) {
 }
 ```
 
-代码有些复杂对吧，如果画图的话有些麻烦，但我们不画图，直接忽略所有细节代码和条件分支，只抽象出递归框架：
+Code is somewhat complex; drawing the tree is annoying. But we don't need to — ignore all detail code and conditionals, abstract the recursive framework:
 
 ```java
 boolean dp(String s, int i, String p, int j) {
@@ -224,27 +224,27 @@ boolean dp(String s, int i, String p, int j) {
 }
 ```
 
-和上一题一样，这个解法的「状态」也是 `(i, j)` 的值，那么我继续问你问题：如果我想从状态 `(i, j)` 转移到 `(i+2, j+2)`，有几种路径？
+Same as before, the "state" is `(i, j)`. Now: how many paths transition state `(i, j)` to `(i+2, j+2)`?
 
-显然，至少有两条路径：`(i, j) -> #1 -> #2 -> #2` 和 `(i, j) -> #3 -> #3`，这就说明这个解法存在巨量重叠子问题。
+At least two: `(i, j) -> #1 -> #2 -> #2` and `(i, j) -> #3 -> #3`. So this solution has many overlapping subproblems.
 
-所以，不用画图就知道这个解法也存在重叠子问题，需要用备忘录技巧去优化。
+So without drawing, we know this also has overlapping subproblems and needs the memo technique to optimize.
 
-## 三、dp 数组的大小设置
+## 3. dp array sizing
 
-比如说前文 [编辑距离问题](https://labuladong.online/algo/dynamic-programming/edit-distance/)，我首先讲的是自顶向下的递归解法，实现了这样一个 `dp` 函数：
+For example, in the earlier [Edit distance problem](https://labuladong.online/algo/dynamic-programming/edit-distance/), I first showed the top-down recursive solution with this `dp` function:
 
 ```java
 class Solution {
     public int minDistance(String s1, String s2) {
         int m = s1.length(), n = s2.length();
-        // 按照 dp 函数的定义，计算 s1 和 s2 的最小编辑距离
+        // by the dp function definition, compute the minimum edit distance of s1 and s2
         return dp(s1, m - 1, s2, n - 1);
     }
 
-    // 定义：s1[0..i] 和 s2[0..j] 的最小编辑距离是 dp(s1, i, s2, j)
+    // definition: minimum edit distance of s1[0..i] and s2[0..j] is dp(s1, i, s2, j)
     int dp(String s1, int i, String s2, int j) {
-        // 处理 base case
+        // handle base cases
         if (i == -1) {
             return j + 1;
         }
@@ -252,7 +252,7 @@ class Solution {
             return i + 1;
         }
 
-        // 进行状态转移
+        // perform the state transition
         if (s1.charAt(i) == s2.charAt(j)) {
             return dp(s1, i - 1, s2, j - 1);
         } else {
@@ -270,24 +270,24 @@ class Solution {
 }
 ```
 
-然后改造成了自底向上的迭代解法：
+Then converted to the bottom-up iterative solution:
 
 ```java
 class Solution {
     public int minDistance(String s1, String s2) {
         int m = s1.length(), n = s2.length();
-        // 定义：s1[0..i] 和 s2[0..j] 的最小编辑距离是 dp[i+1][j+1]
+        // definition: minimum edit distance of s1[0..i] and s2[0..j] is dp[i+1][j+1]
         int[][] dp = new int[m + 1][n + 1];
-        // 初始化 base case 
+        // initialize base cases
         for (int i = 1; i <= m; i++)
             dp[i][0] = i;
         for (int j = 1; j <= n; j++)
             dp[0][j] = j;
         
-        // 自底向上求解
+        // solve bottom-up
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
-                // 进行状态转移
+                // perform the state transition
                 if (s1.charAt(i-1) == s2.charAt(j-1)) {
                     dp[i][j] = dp[i - 1][j - 1];
                 } else {
@@ -299,27 +299,27 @@ class Solution {
                 }
             }
         }
-        // 按照 dp 数组的定义，存储 s1 和 s2 的最小编辑距离
+        // by the dp definition, this stores the minimum edit distance of s1 and s2
         return dp[m][n];
     }
 }
 ```
 
-这两种解法思路是完全相同的，但就有读者提问，为什么迭代解法中的 `dp` 数组初始化大小要设置为 `int[m+1][n+1]`？为什么 `s1[0..i]` 和 `s2[0..j]` 的最小编辑距离要存储在 `dp[i+1][j+1]` 中，有一位索引偏移？
+These are the same idea, but readers ask: why is the `dp` array sized `int[m+1][n+1]`? Why is the minimum edit distance of `s1[0..i]` and `s2[0..j]` stored at `dp[i+1][j+1]` with a one-position index offset?
 
-能不能模仿 `dp` 函数的定义，把 `dp` 数组初始化为 `int[m][n]`，然后让 `s1[0..i]` 和 `s2[0..j]` 的最小编辑距离要存储在 `dp[i][j]` 中？
+Can we mimic the `dp` function and size the array `int[m][n]`, storing `s1[0..i]` and `s2[0..j]` at `dp[i][j]`?
 
-**理论上，你怎么定义都可以，只要根据定义处理好 base case 就可以**。
+**In theory, you can define it however you like, as long as base cases are handled accordingly**.
 
-你看 `dp` 函数的定义，`dp(s1, i, s2, j)` 计算 `s1[0..i]` 和 `s2[0..j]` 的编辑距离，那么 `i, j` 等于 -1 时代表空串的 base case，所以函数开头处理了这两种特殊情况。
+By the `dp` function definition, `dp(s1, i, s2, j)` computes edit distance of `s1[0..i]` and `s2[0..j]`. So `i, j` equal to -1 represents the empty-string base case; the function handles those two cases at the start.
 
-再看 `dp` 数组，你当然也可以定义 `dp[i][j]` 存储 `s1[0..i]` 和 `s2[0..j]` 的编辑距离，但问题是 base case 怎么搞？索引怎么能是 -1 呢？
+For the `dp` array, of course you can also define `dp[i][j]` as edit distance of `s1[0..i]` and `s2[0..j]`. But how to handle base cases? Can the index be -1?
 
-所以我们把 `dp` 数组初始化为 `int[m+1][n+1]`，让索引整体偏移一位，把索引 0 留出来作为 base case 表示空串，然后定义 `dp[i+1][j+1]` 存储 `s1[0..i]` 和 `s2[0..j]` 的编辑距离。
+So we size the `dp` array as `int[m+1][n+1]`, shifting indices by one and reserving index 0 as the base case representing the empty string. Then define `dp[i+1][j+1]` to store the edit distance of `s1[0..i]` and `s2[0..j]`.
 
-## 四、dp 数组的遍历方向
+## 4. dp array traversal direction
 
-我相信读者做动态规问题时，肯定会对 `dp` 数组的遍历顺序有些头疼。我们拿二维 `dp` 数组来举例，有时候我们是正向遍历：
+I'm sure readers worry about traversal order when doing DP. Take 2D `dp` arrays. Sometimes we go forward:
 
 
 
@@ -329,12 +329,12 @@ class Solution {
 int[][] dp = new int[m][n];
 for (int i = 0; i < m; i++)
     for (int j = 0; j < n; j++)
-        // 计算 dp[i][j]
+        // compute dp[i][j]
 ```
 
 
 
-有时候我们反向遍历：
+Sometimes backward:
 
 
 
@@ -343,44 +343,44 @@ for (int i = 0; i < m; i++)
 ```java
 for (int i = m - 1; i >= 0; i--)
     for (int j = n - 1; j >= 0; j--)
-        // 计算 dp[i][j]
+        // compute dp[i][j]
 ```
 
 
 
-有时候可能会斜向遍历：
+Sometimes diagonally:
 
 
 
 
 
 ```java
-// 斜着遍历数组
+// traverse the array diagonally
 for (int l = 2; l <= n; l++) {
     for (int i = 0; i <= n - l; i++) {
         int j = l + i - 1;
-        // 计算 dp[i][j]
+        // compute dp[i][j]
     }
 }
 ```
 
 
 
-甚至更让人迷惑的是，有时候发现正向反向遍历都可以得到正确答案，比如我们在 [团灭股票问题](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/) 中有的地方就正反皆可。
+More confusingly, sometimes both forward and backward yield correct answers — e.g. in the [Stock-buy-sell summary](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/), some places are bidirectional.
 
-如果仔细观察的话可以发现其中的原因，你只要把住两点就行了：
+If you observe carefully, the reason: just hold to two principles:
 
-**1、遍历的过程中，所需的状态必须是已经计算出来的**。
+**1. During traversal, the states we need must already be computed**.
 
-**2、遍历结束后，存储结果的那个位置必须已经被计算出来**。
+**2. After traversal ends, the position storing the result must be computed**.
 
-下面来具体解释上面两个原则是什么意思。
+Let me explain these in concrete terms.
 
-比如 [编辑距离](https://labuladong.online/algo/dynamic-programming/edit-distance/) 这个经典的问题，我们通过对 `dp` 数组的定义，确定了 base case 是 `dp[..][0]` 和 `dp[0][..]`，最终答案是 `dp[m][n]`；而且我们通过状态转移方程知道 `dp[i][j]` 需要从 `dp[i-1][j]`, `dp[i][j-1]`, `dp[i-1][j-1]` 转移而来，如下图：
+Take the classic [Edit distance](https://labuladong.online/algo/dynamic-programming/edit-distance/). By the `dp` definition, the base cases are `dp[..][0]` and `dp[0][..]`, the final answer is `dp[m][n]`. By the state transition, `dp[i][j]` comes from `dp[i-1][j]`, `dp[i][j-1]`, `dp[i-1][j-1]`, as below:
 
 ![](https://labuladong.online/algo/images/optimal/1.jpg)
 
-那么，参考刚才说的两条原则，你该怎么遍历 `dp` 数组？肯定是正向遍历：
+Per the two principles, how should you traverse `dp`? Forward:
 
 
 
@@ -389,25 +389,25 @@ for (int l = 2; l <= n; l++) {
 ```java
 for (int i = 1; i < m; i++)
     for (int j = 1; j < n; j++)
-        // 通过 dp[i-1][j], dp[i][j - 1], dp[i-1][j-1]
-        // 计算 dp[i][j]
+        // via dp[i-1][j], dp[i][j - 1], dp[i-1][j-1]
+        // compute dp[i][j]
 ```
 
 
 
-因为，这样每一步迭代的左边、上边、左上边的位置都是 base case 或者之前计算过的，而且最终结束在我们想要的答案 `dp[m][n]`。
+Because each iteration's left, top, and top-left positions are either base cases or already computed, and we end at our desired `dp[m][n]`.
 
-再举一例，回文子序列问题，详见前文 [子序列问题模板](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)，我们通过过对 `dp` 数组的定义，确定了 base case 处在中间的对角线，`dp[i][j]` 需要从 `dp[i+1][j]`, `dp[i][j-1]`, `dp[i+1][j-1]` 转移而来，想要求的最终答案是 `dp[0][n-1]`，如下图：
+Another example: palindromic subsequence — see the earlier [Subsequence template](https://labuladong.online/algo/dynamic-programming/subsequence-problem/). By the `dp` definition, base cases are on the middle diagonal, `dp[i][j]` comes from `dp[i+1][j]`, `dp[i][j-1]`, `dp[i+1][j-1]`, and we want `dp[0][n-1]`:
 
 ![](https://labuladong.online/algo/images/lps/4.jpg)
 
-这种情况根据刚才的两个原则，就可以有两种正确的遍历方式：
+By the two principles, two correct traversals work:
 
 ![](https://labuladong.online/algo/images/lps/5.jpg)
 
-要么从左上至右下斜着遍历，要么从下向上从左到右遍历，这样才能保证每次 `dp[i][j]` 的左边、下边、左下边已经计算完毕，得到正确结果。
+Either traverse diagonally from upper-left to lower-right, or bottom-up left-to-right — only then can we ensure `dp[i][j]`'s left, bottom, lower-left neighbors are already computed.
 
-现在，你应该理解了这两个原则，主要就是看 base case 和最终结果的存储位置，保证遍历过程中使用的数据都是计算完毕的就行，有时候确实存在多种方法可以得到正确答案，可根据个人口味自行选择。
+Now you should understand the two principles. Just look at the base case and the result-storage position — ensure the data used during traversal are computed. Sometimes multiple methods yield the right answer; pick what suits your taste.
 
 
 
@@ -417,15 +417,15 @@ for (int i = 1; i < m; i++)
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [一个方法团灭 LeetCode 股票买卖问题](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/)
- - [动态规划之子序列问题解题模板](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)
- - [动态规划解题套路框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
- - [经典动态规划：博弈问题](https://labuladong.online/algo/dynamic-programming/game-theory/)
- - [经典动态规划：戳气球](https://labuladong.online/algo/dynamic-programming/burst-balloons/)
- - [经典动态规划：正则表达式](https://labuladong.online/algo/dynamic-programming/regular-expression-matching/)
- - [经典动态规划：编辑距离](https://labuladong.online/algo/dynamic-programming/edit-distance/)
+ - [One method demolishes the LeetCode stock buy/sell series](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/)
+ - [DP template for subsequence problems](https://labuladong.online/algo/dynamic-programming/subsequence-problem/)
+ - [Dynamic programming problem-solving framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+ - [Classic DP: game theory](https://labuladong.online/algo/dynamic-programming/game-theory/)
+ - [Classic DP: burst balloons](https://labuladong.online/algo/dynamic-programming/burst-balloons/)
+ - [Classic DP: regular expression matching](https://labuladong.online/algo/dynamic-programming/regular-expression-matching/)
+ - [Classic DP: edit distance](https://labuladong.online/algo/dynamic-programming/edit-distance/)
 
 </details><hr>
 
@@ -434,13 +434,13 @@ for (int i = 1; i < m; i++)
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems citing this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
-| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
+| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. 不同的subsequence](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
 | [139. Word Break](https://leetcode.com/problems/word-break/?show=1) | [139. 单词拆分](https://leetcode.cn/problems/word-break/?show=1) | 🟠 |
 | [221. Maximal Square](https://leetcode.com/problems/maximal-square/?show=1) | [221. 最大正方形](https://leetcode.cn/problems/maximal-square/?show=1) | 🟠 |
 | [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. 粉刷房子](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
@@ -449,7 +449,7 @@ for (int i = 1; i < m; i++)
 | [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
 | [91. Decode Ways](https://leetcode.com/problems/decode-ways/?show=1) | [91. 解码方法](https://leetcode.cn/problems/decode-ways/?show=1) | 🟠 |
 | - | [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
-| - | [剑指 Offer II 097. 子序列的数目](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
+| - | [剑指 Offer II 097. subsequence的数目](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
 
 </details>
 <hr>
@@ -458,6 +458,3 @@ for (int i = 1; i < m; i++)
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

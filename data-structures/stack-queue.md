@@ -1,76 +1,76 @@
-# 队列实现栈以及栈实现队列
+# Implementing a Stack with a Queue and a Queue with Stacks
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [225. Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/) | [225. 用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/) | 🟢 |
-| [232. Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/) | [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/) | 🟢 |
-| - | [剑指 Offer 09. 用两个栈实现队列](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/) | 🟢 |
+| [225. Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/) | [225. Implement Stack using Queues](https://leetcode.cn/problems/implement-stack-using-queues/) | 🟢 |
+| [232. Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/) | [232. Implement Queue using Stacks](https://leetcode.cn/problems/implement-queue-using-stacks/) | 🟢 |
+| - | [Sword to Offer 09. Implement Queue with Two Stacks](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/) | 🟢 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [数组基础](https://labuladong.online/algo/data-structure-basic/array-basic/)
-> - [链表基础](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/)
-> - [队列基础](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/)
+> - [Array Basics](https://labuladong.online/algo/data-structure-basic/array-basic/)
+> - [Linked List Basics](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/)
+> - [Queue Basics](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/)
 
-队列是一种先进先出的数据结构，栈是一种先进后出的数据结构，形象一点就是这样：
+A queue is a first-in-first-out (FIFO) data structure, while a stack is a last-in-first-out (LIFO) data structure. Visually:
 
 ![](https://labuladong.online/algo/images/stack-queue/1.jpg)
 
-这两种数据结构底层其实都是数组或者链表实现的，只是 API 限定了它们的特性，具体实现可以参见基础知识章节的 [队列/栈的原理及实现](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/)。
+Both are ultimately implemented on top of arrays or linked lists; their APIs simply restrict their behavior. For details see [Principles and Implementations of Queues/Stacks](https://labuladong.online/algo/data-structure-basic/queue-stack-basic/) in the basics chapter.
 
-今天来看看如何使用「栈」的特性来实现一个「队列」，如何用「队列」实现一个「栈」。
+Today we look at how to use a stack to implement a queue, and how to use a queue to implement a stack.
 
-### 一、用栈实现队列
+### 1. Implementing a Queue with Stacks
 
-力扣第 232 题「用栈实现队列」让我们实现的 API 如下：
+LeetCode 232 "Implement Queue using Stacks" asks us to implement the following API:
 
 ```java
 class MyQueue {
     
-    // 添加元素到队尾
+    // Add an element to the tail of the queue
     public void push(int x);
     
-    // 删除队头的元素并返回
+    // Remove and return the front element of the queue
     public int pop();
     
-    // 返回队头元素
+    // Return the front element of the queue
     public int peek();
     
-    // 判断队列是否为空
+    // Determine whether the queue is empty
     public boolean empty();
 }
 ```
 
-我们使用两个栈 `s1, s2` 就能实现一个队列的功能（这样放置栈可能更容易理解）：
+We can implement a queue using two stacks `s1, s2` (arranging the stacks like this may make it easier to understand):
 
 ![](https://labuladong.online/algo/images/stack-queue/2.jpg)
 
-当调用 `push` 让元素入队时，只要把元素压入 `s1` 即可，比如说 `push` 进 3 个元素分别是 1,2,3，那么底层结构就是这样：
+When `push` is called to enqueue an element, simply push the element onto `s1`. For example, if we push 3 elements 1, 2, 3, the underlying structure looks like:
 
 ![](https://labuladong.online/algo/images/stack-queue/3.jpg)
 
-那么如果这时候使用 `peek` 查看队头的元素怎么办呢？按道理队头元素应该是 1，但是在 `s1` 中 1 被压在栈底，现在就要轮到 `s2` 起到一个中转的作用了：当 `s2` 为空时，可以把 `s1` 的所有元素取出再添加进 `s2`，**这时候 `s2` 中元素就是先进先出顺序了**：
+Now what if we call `peek` to look at the front element? Logically the front should be 1, but in `s1` the 1 is at the bottom. This is where `s2` plays the role of a relay: when `s2` is empty, we pop everything from `s1` and push it into `s2`, **at which point the elements in `s2` are in FIFO order**:
 
 ![](https://labuladong.online/algo/images/stack-queue/4.jpg)
 
-当 `s2` 中存在元素时，直接调用操作 `s2` 的 `pop` 方法，弹出的就是最先插入的元素，即实现了队列的 `pop` 操作。
+When `s2` is non-empty, we directly call `pop` on `s2`, which yields the earliest-inserted element — implementing the queue's `pop`.
 
-完整代码如下：
+Full code:
 
 ```java
 class MyQueue {
@@ -81,86 +81,86 @@ class MyQueue {
         s2 = new Stack<>();
     }
 
-    // 添加元素到队尾
+    // Add an element to the tail of the queue
     public void push(int x) {
         s1.push(x);
     }
     
-    // 返回队头元素
+    // Return the front element of the queue
     public int peek() {
         if (s2.isEmpty())
-            // 把 s1 元素压入 s2
+            // Move s1's elements onto s2
             while (!s1.isEmpty()) {
                 s2.push(s1.pop());
             }
         return s2.peek();
     }
 
-    // 删除队头元素并返回
+    // Remove and return the front element of the queue
     public int pop() {
-        // 先调用 peek 保证 s2 非空
+        // Call peek first to ensure s2 is non-empty
         peek();
         return s2.pop();
     }
 
-     // 判断队列是否为空
-     // 两个栈都为空才说明队列为空
+     // Determine whether the queue is empty
+     // The queue is empty only when both stacks are empty
     public boolean empty() {
         return s1.isEmpty() && s2.isEmpty();
     }
 }
 ```
 
-至此，就用栈结构实现了一个队列，核心思想是利用两个栈互相配合。
+We have now implemented a queue using stacks; the core idea is letting two stacks cooperate.
 
-值得一提的是，这几个操作的时间复杂度是多少呢？
+It's worth asking what the time complexity of these operations is.
 
-有点意思的是 `peek` 操作，调用它时可能触发 `while` 循环，这样的话时间复杂度是 O(N)，但是大部分情况下 `while` 循环不会被触发，时间复杂度是 O(1)。由于 `pop` 操作调用了 `peek`，它的时间复杂度和 `peek` 相同。
+The interesting one is `peek`: calling it may trigger the `while` loop, giving O(N) complexity, but most of the time the `while` loop does not run and the complexity is O(1). Since `pop` calls `peek`, its complexity is the same.
 
-像这种情况，可以说它们的**最坏时间复杂度**是 O(N)，因为包含 `while` 循环，**可能**需要从 `s1` 往 `s2` 搬移元素。
+In such cases we say their **worst-case time complexity** is O(N), because the `while` loop may need to move elements from `s1` to `s2`.
 
-但是它们的**均摊时间复杂度**是 O(1)，这个要这么理解：对于一个元素，最多只可能被搬运一次，也就是说 `peek` 操作平均到每个元素的时间复杂度是 O(1)。
+But their **amortized time complexity** is O(1). The intuition: each element can be moved at most once, so the average per-element cost of `peek` is O(1).
 
-关于时间复杂度的分析方法，详见 [时空复杂度实用分析方法](https://labuladong.online/algo/essential-technique/complexity-analysis/)。
+For an analysis of time complexity, see [Practical Time/Space Complexity Analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/).
 
-### 二、用队列实现栈
+### 2. Implementing a Stack with a Queue
 
-如果说双栈实现队列比较巧妙，那么用队列实现栈就比较简单粗暴了，只需要一个队列作为底层数据结构就能实现了。
+If implementing a queue with two stacks was clever, implementing a stack with a queue is more brute-force — we only need a single queue.
 
-力扣第 225 题「用队列实现栈」让我们实现如下 API：
+LeetCode 225 "Implement Stack using Queues" asks us to implement:
 
 ```java
 class MyStack {
     
-    // 添加元素到栈顶
+    // Push an element onto the top of the stack
     public void push(int x);
     
-    // 删除栈顶的元素并返回
+    // Remove and return the top element
     public int pop();
     
-    // 返回栈顶元素
+    // Return the top element
     public int top();
     
-    // 判断栈是否为空
+    // Determine whether the stack is empty
     public boolean empty();
 }
 ```
 
-先说 `push` API，直接将元素加入队列，同时记录队尾元素，因为队尾元素相当于栈顶元素，如果要 `top` 查看栈顶元素的话可以直接返回：
+For `push`, just enqueue the element and remember the tail element, since the queue's tail is the stack's top — so `top` can return it directly:
 
 ```java
 class MyStack {
     Queue<Integer> q = new LinkedList<>();
     int top_elem = 0;
 
-    // 添加元素到栈顶
+    // Push an element onto the top of the stack
     public void push(int x) {
-        // x 是队列的队尾，是栈的栈顶
+        // x is at the tail of the queue, i.e., the top of the stack
         q.offer(x);
         top_elem = x;
     }
     
-    // 返回栈顶元素
+    // Return the top element
     public int top() {
         return top_elem;
     }
@@ -171,68 +171,68 @@ class MyStack {
 }
 ```
 
-我们的底层数据结构是先进先出的队列，每次 `pop` 只能从队头取元素；但是栈是后进先出，也就是说 `pop` API 要从队尾取元素：
+Our underlying structure is a FIFO queue, so each `pop` only pops from the front; but a stack is LIFO, meaning `pop` should remove the queue's tail:
 
 ![](https://labuladong.online/algo/images/stack-queue/5.jpg)
 
-解决方法简单粗暴，把队列前面的都取出来再加入队尾，让之前的队尾元素排到队头，这样就可以取出了：
+The brute-force solution: take everything from the front and re-enqueue it at the back, so the previous tail moves to the front and can then be removed:
 
 ![](https://labuladong.online/algo/images/stack-queue/6.jpg)
 
 ```java
 class MyStack {
-    // 为了节约篇幅，省略上文给出的代码部分...
+    // Earlier code omitted for brevity...
 
-    // 删除栈顶的元素并返回
+    // Remove and return the top element
     public int pop() {
         int size = q.size();
         while (size > 1) {
             q.offer(q.poll());
             size--;
         }
-        // 之前的队尾元素已经到了队头
+        // The previous tail is now at the front
         return q.poll();
     }
 }
 ```
 
-这样实现还有一点小问题就是，原来的队尾元素被推到队头并删除了，但是 `top_elem` 变量没有更新，我们还需要一点小修改：
+There's a small issue: after the previous tail is moved to the front and removed, `top_elem` is not updated. A small fix:
 
 ```java
 class MyStack {
-    // 为了节约篇幅，省略上文给出的代码部分...
+    // Earlier code omitted for brevity...
 
-    // 删除栈顶的元素并返回
+    // Remove and return the top element
     public int pop() {
         int size = q.size();
-        // 留下队尾 2 个元素
+        // Leave the last 2 elements at the back
         while (size > 2) {
             q.offer(q.poll());
             size--;
         }
-        // 记录新的队尾元素
+        // Record the new tail element
         top_elem = q.peek();
         q.offer(q.poll());
-        // 删除之前的队尾元素
+        // Remove the previous tail
         return q.poll();
     }
 }
 ```
 
-这样就实现完了，完整的代码如下：
+The complete code:
 
 ```java
 class MyStack {
     Queue<Integer> q = new LinkedList<>();
     int top_elem = 0;
 
-    // 添加元素到栈顶
+    // Push an element onto the top of the stack
     public void push(int x) {
         q.offer(x);
         top_elem = x;
     }
     
-    // 删除栈顶的元素并返回
+    // Remove and return the top element
     public int pop() {
         int size = q.size();
         while (size > 2) {
@@ -244,25 +244,25 @@ class MyStack {
         return q.poll();
     }
     
-    // 返回栈顶元素
+    // Return the top element
     public int top() {
         return top_elem;
     }
     
-    // 判断栈是否为空
+    // Determine whether the stack is empty
     public boolean empty() {
         return q.isEmpty();
     }
 }
 ```
 
-很明显，用队列实现栈的话，`pop` 操作时间复杂度是 O(N)，其他操作都是 O(1)。
+Clearly, when implementing a stack with a queue, `pop` is O(N) and the others are O(1).
 
-个人认为，用队列实现栈是没啥亮点的问题，但是用双栈实现队列是值得学习的。
+In my opinion, implementing a stack with a queue isn't very interesting; the two-stack queue is the one worth learning.
 
 ![](https://labuladong.online/algo/images/stack-queue/4.jpg)
 
-从栈 `s1` 搬运元素到 `s2` 之后，元素在 `s2` 中就变成了队列的先进先出顺序，这个特性有点类似「负负得正」，确实不太容易想到。
+After moving elements from `s1` to `s2`, they end up in FIFO order in `s2` — somewhat like "two negatives make a positive". It's not an obvious idea.
 
 
 
@@ -272,9 +272,9 @@ class MyStack {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】栈的经典习题](https://labuladong.online/algo/problem-set/stack/)
+ - [[Practice] Classic Stack Problems](https://labuladong.online/algo/problem-set/stack/)
 
 </details><hr>
 
@@ -283,13 +283,13 @@ class MyStack {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer 09. 用两个栈实现队列](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/?show=1) | 🟢 |
+| - | [Sword to Offer 09. Implement Queue with Two Stacks](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/?show=1) | 🟢 |
 
 </details>
 <hr>

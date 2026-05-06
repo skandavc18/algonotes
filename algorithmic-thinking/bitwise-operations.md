@@ -1,79 +1,75 @@
-# 常用的位操作
+# Common Bit Operations
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [136. Single Number](https://leetcode.com/problems/single-number/) | [136. 只出现一次的数字](https://leetcode.cn/problems/single-number/) | 🟢 |
-| [191. Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/) | [191. 位1的个数](https://leetcode.cn/problems/number-of-1-bits/) | 🟢 |
-| [231. Power of Two](https://leetcode.com/problems/power-of-two/) | [231. 2 的幂](https://leetcode.cn/problems/power-of-two/) | 🟢 |
-| [268. Missing Number](https://leetcode.com/problems/missing-number/) | [268. 丢失的数字](https://leetcode.cn/problems/missing-number/) | 🟢 |
+| [136. Single Number](https://leetcode.com/problems/single-number/) | [136. Single Number](https://leetcode.cn/problems/single-number/) | 🟢 |
+| [191. Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/) | [191. Number of 1 Bits](https://leetcode.cn/problems/number-of-1-bits/) | 🟢 |
+| [231. Power of Two](https://leetcode.com/problems/power-of-two/) | [231. Power of Two](https://leetcode.cn/problems/power-of-two/) | 🟢 |
+| [268. Missing Number](https://leetcode.com/problems/missing-number/) | [268. Missing Number](https://leetcode.cn/problems/missing-number/) | 🟢 |
 
 **-----------**
 
 
 
-位操作（Bit Manipulation）可以有很多技巧，有一个叫做 Bit Twiddling Hacks 的网站收集了几乎所有位操作的黑科技玩法，网址如下：
+Bit manipulation has many tricks. The site "Bit Twiddling Hacks" collects nearly every dark-magic trick:
 
 http://graphics.stanford.edu/~seander/bithacks.html
 
-但是这些技巧大部分都过于晦涩，我觉得可以作为字典查阅，没必要逐条深究。但我认为那些有趣的、有用的位运算技巧，是我们每个人需要掌握的。
+Most are too obscure to study one by one — treat them as a reference. But the interesting and useful ones are worth knowing.
 
-所以本文由浅入深，先展示几个有趣（但没卵用）的位运算技巧，然后再汇总一些在算法题以及工程开发中常用的位运算技巧。
+This article goes from light to heavy: a few fun (but useless) tricks first, then practical ones for problems and engineering.
 
-## 一、几个有趣的位操作
-
-
-
-
+## 1. A Few Fun Bit Tricks
 
 ```java
-// 1. 利用或操作 `|` 和空格将英文字符转换为小写
+// 1. Use OR `|` with a space to lowercase an ASCII letter
 ('a' | ' ') = 'a'
 ('A' | ' ') = 'a'
 
-// 2. 利用与操作 `&` 和下划线将英文字符转换为大写
+// 2. Use AND `&` with an underscore to uppercase an ASCII letter
 ('b' & '_') = 'B'
 ('B' & '_') = 'B'
 
-// 3. 利用异或操作 `^` 和空格进行英文字符大小写互换
+// 3. Use XOR `^` with a space to swap case
 ('d' ^ ' ') = 'D'
 ('D' ^ ' ') = 'd'
 
-// 以上操作能够产生奇特效果的原因在于 ASCII 编码
-// ASCII 字符其实就是数字，恰巧空格和下划线对应的数字通过位运算就能改变大小写
-// 有兴趣的读者可以查 ASCII 码表自己算算，我就不展开讲了
+// These work because of ASCII encoding.
+// ASCII characters are just numbers; space and underscore happen to flip case via bit ops.
+// Curious readers can check the ASCII table.
 
 
-// 4. 不用临时变量交换两个数
+// 4. Swap two numbers without a temporary
 int a = 1, b = 2;
 a ^= b;
 b ^= a;
 a ^= b;
-// 现在 a = 2, b = 1
+// Now a = 2, b = 1
 
 
-// 5. 加一
+// 5. Increment
 int n = 1;
 n = -~n;
-// 现在 n = 2
+// Now n = 2
 
 
-// 6. 减一
+// 6. Decrement
 int n = 2;
 n = ~-n;
-// 现在 n = 1
+// Now n = 1
 
 
-// 7. 判断两个数是否异号
+// 7. Whether two numbers have opposite signs
 int x = -1, y = 2;
 boolean f = ((x ^ y) < 0); // true
 
@@ -83,89 +79,81 @@ boolean f = ((x ^ y) < 0); // false
 
 
 
-如果说前 6 个技巧的用处不大，这第 7 个技巧还是比较实用的，利用的是**补码编码**的符号位。整数编码最高位是符号位，负数的符号位是 1，非负数的符号位是 0，再借助异或的特性，可以判断出两个数字是否异号。
+The first 6 are mostly toys; trick 7 is genuinely useful — it leverages the **two's complement** sign bit. The high bit is the sign (1 for negative, 0 otherwise); XOR yields the sign of the product's parity.
 
-当然，如果不用位运算来判断是否异号，需要使用 if else 分支，还挺麻烦的。你可能想利用乘积来判断两个数是否异号，但是这种处理方式容易造成整型溢出，从而出现错误。
-
-
+Without bit tricks you'd need an `if/else`, which is clunkier. Multiplying signs invites overflow.
 
 
 
 
 
-## `index & (arr.length - 1)` 的运用
 
-我在 [单调栈解题套路](https://labuladong.online/algo/data-structure/monotonic-stack/) 中介绍过环形数组，其实就是利用求模（余数）的方式让数组看起来头尾相接形成一个环形，永远都走不完：
+
+## Using `index & (arr.length - 1)`
+
+In [Monotonic Stack Patterns](https://labuladong.online/algo/data-structure/monotonic-stack/) I introduced circular arrays — modulo makes the array seem to wrap:
 
 ```java
 int[] arr = {1,2,3,4};
 int index = 0;
 while (true) {
-    // 在环形数组中转圈
+    // Loop in the circular array
     print(arr[index % arr.length]);
     index++;
 }
-// 输出：1,2,3,4,1,2,3,4,1,2,3,4...
+// Output: 1,2,3,4,1,2,3,4,1,2,3,4...
 ```
 
-但模运算 `%` 对计算机来说其实是一个比较昂贵的操作，所以我们可以用 `&` 运算来求余数：
+But `%` is somewhat expensive. We can use `&`:
 
 ```java
 int[] arr = {1,2,3,4};
 int index = 0;
 while (true) {
-    // 在环形数组中转圈
     print(arr[index & (arr.length - 1)]);
     index++;
 }
-// 输出：1,2,3,4,1,2,3,4,1,2,3,4...
+// Output: 1,2,3,4,1,2,3,4,1,2,3,4...
 ```
 
 > [!IMPORTANT]
-> 注意这个技巧只适用于数组长度是 2 的幂次方的情况，比如 2、4、8、16、32 以此类推。至于如何将数组长度扩展为 2 的幂次方，这也是有比较巧妙的位运算算法的，可以参考 https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+> This trick only works when the array length is a power of 2 (2, 4, 8, 16, 32, ...). To round up to the next power of 2 see https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 
-简单说，`& (arr.length - 1)` 这个位运算能够替代 `% arr.length` 的模运算，性能会更好一些。
+In short, `& (arr.length - 1)` substitutes for `% arr.length`, with better performance.
 
-那问题来了，现在是不断地 `index++`，你做到了循环遍历。但如果不断地 `index--`，还能做到环形数组的效果吗？
-
-答案是，如果你使用 `%` 求模的方式，那么当 `index` 小于 0 之后求模的结果也会出现负数，你需要特殊处理。但通过 `&` 与运算的方式，`index` 不会出现负数，依然可以正常工作：
+What if you decrement instead? With `%`, going negative requires special handling. With `&`, it just works:
 
 ```java
 int[] arr = {1,2,3,4};
 int index = 0;
 while (true) {
-    // 在环形数组中转圈
     print(arr[index & (arr.length - 1)]);
     index--;
 }
-// 输出：1,4,3,2,1,4,3,2,1,4,3,2,1...
+// Output: 1,4,3,2,1,4,3,2,1,4,3,2,1...
 ```
 
-我们自己写代码一般用不到这个技巧，但在学习一些其他代码库时可能会经常看到，这里留个印象，到时候就不会懵逼了。
+You may not write this yourself, but you'll see it in libraries — at least now you'll recognize it.
 
-## `n & (n-1)` 的运用
+## Using `n & (n-1)`
 
-**`n & (n-1)` 这个操作在算法中比较常见，作用是消除数字 `n` 的二进制表示中的最后一个 1**。
+**`n & (n-1)` clears the lowest set bit of `n`.**
 
-看个图就很容易理解了：
+A picture makes it clear:
 
 ![](https://labuladong.online/algo/images/bit-op/1.png)
 
-其核心逻辑就是，`n - 1` 一定可以消除最后一个 1，同时把其后的 0 都变成 1，这样再和 `n` 做一次 `&` 运算，就可以仅仅把最后一个 1 变成 0 了。
+The intuition: `n - 1` clears the lowest 1 and sets all bits below it to 1; ANDing with `n` keeps the higher bits and clears the lowest 1.
 
-### 计算汉明权重（Hamming Weight）
+### Hamming Weight
 
-这是力扣第 191 题「位 1 的个数」：
-
-
-
-
+LeetCode 191 "Number of 1 Bits":
 
 <Problem slug="number-of-1-bits" />
 
 
 
-就是让你返回 `n` 的二进制表示中有几个 1。因为 `n & (n - 1)` 可以消除最后一个 1，所以可以用一个循环不停地消除 1 同时计数，直到 `n` 变成 0 为止。
+Return the number of 1s in `n`'s binary representation. Loop, clearing one 1 at a time:
 
 ```java
 int hammingWeight(int n) {
@@ -178,11 +166,11 @@ int hammingWeight(int n) {
 }
 ```
 
-### 判断 2 的指数
+### Power of Two
 
-力扣第 231 题「2 的幂」就是这个问题。
+LeetCode 231 "Power of Two".
 
-一个数如果是 2 的指数，那么它的二进制表示一定只含有一个 1：
+A power of 2 has exactly one 1 in binary:
 
 ```java
 2^0 = 1 = 0b0001
@@ -192,7 +180,7 @@ int hammingWeight(int n) {
 
 
 
-如果使用  `n & (n-1)` 的技巧就很简单了（注意运算符优先级，括号不可以省略）：
+With `n & (n-1)` (note operator precedence — keep the parentheses):
 
 ```java
 boolean isPowerOfTwo(int n) {
@@ -201,19 +189,19 @@ boolean isPowerOfTwo(int n) {
 }
 ```
 
-## `a ^ a = 0` 的运用
+## Using `a ^ a = 0`
 
-异或运算的性质是需要我们牢记的：
+Remember XOR's properties:
 
-一个数和它本身做异或运算结果为 0，即 `a ^ a = 0`；一个数和 0 做异或运算的结果为它本身，即 `a ^ 0 = a`。
+`a ^ a = 0`, and `a ^ 0 = a`.
 
-### 查找只出现一次的元素
+### Single Element
 
-这是力扣第 136 题「只出现一次的数字」：
+LeetCode 136 "Single Number":
 
 <Problem slug="single-number" />
 
-对于这道题目，我们只要把所有数字进行异或，成对儿的数字就会变成 0，落单的数字和 0 做异或还是它本身，所以最后异或的结果就是只出现一次的元素：
+XOR all numbers; pairs cancel to 0; the lone element remains:
 
 ```java
 int singleNumber(int[] nums) {
@@ -225,29 +213,27 @@ int singleNumber(int[] nums) {
 }
 ```
 
-### 寻找缺失的元素
+### Missing Number
 
-这是力扣第 268 题「丢失的数字」：
+LeetCode 268 "Missing Number":
 
 <Problem slug="missing-number" />
 
-给一个长度为 `n` 的数组，其索引应该在 `[0,n)`，但是现在你要装进去 `n + 1` 个元素 `[0,n]`，那么肯定有一个元素装不下嘛，请你找出这个缺失的元素。
+A length-`n` array should hold indices in `[0, n)`, but it actually contains `n + 1` elements `[0, n]` minus one. Find the missing element.
 
-这道题不难的，我们应该很容易想到，把这个数组排个序，然后遍历一遍，不就很容易找到缺失的那个元素了吗？
+Easy ideas: sort and scan; or use a HashSet.
 
-或者说，借助数据结构的特性，用一个 HashSet 把数组里出现的数字都储存下来，再遍历 `[0,n]` 之间的数字，去 HashSet 中查询，也可以很容易查出那个缺失的元素。
+Sorting: O(N log N). HashSet: O(N) time and space.
 
-排序解法的时间复杂度是 O(NlogN)，HashSet 的解法时间复杂度是 O(N)，但是还需要 O(N) 的空间复杂度存储 HashSet。
+A simpler approach: arithmetic sum.
 
-这个问题其实还有一个特别简单的解法：等差数列求和公式。
-
-题目的意思可以这样理解：现在有个等差数列 `0, 1, 2,..., n`，其中少了某一个数字，请你把它找出来。那这个数字不就是 `sum(0,1,..n) - sum(nums)` 嘛？
+The numbers `0, 1, 2, ..., n` form an arithmetic series with one missing. Compute `sum(0, ..., n) - sum(nums)`:
 
 ```java
 int missingNumber(int[] nums) {
     int n = nums.length;
-    // 虽然题目给的数据范围不大，但严谨起见，用 long 类型防止整型溢出
-    // 求和公式：(首项 + 末项) * 项数 / 2
+    // Use long to avoid overflow, even though the constraints are small
+    // (first + last) * count / 2
     long expect = (0 + n) * (n + 1) / 2;
     long sum = 0;
     for (int x : nums) {
@@ -257,36 +243,34 @@ int missingNumber(int[] nums) {
 }
 ```
 
-不过，本文的主题是位运算，我们来讲讲如何利用位运算技巧来解决这道题。
+But this article is about bit tricks. XOR works too.
 
-再回顾一下异或运算的性质：一个数和它本身做异或运算结果为 0，一个数和 0 做异或运算还是它本身。
-
-而且异或运算满足交换律和结合律，也就是说：
+Recall: `a ^ a = 0`, `a ^ 0 = a`. And XOR is commutative/associative:
 
 ```java
 2 ^ 3 ^ 2 = 3 ^ (2 ^ 2) = 3 ^ 0 = 3
 ```
 
-而这道题索就可以通过这些性质巧妙算出缺失的那个元素，比如说 `nums = [0,3,1,4]`：
+For `nums = [0,3,1,4]`:
 
 ![](https://labuladong.online/algo/images/missing-elem/1.jpg)
 
-为了容易理解，我们假设先把索引补一位，然后让每个元素和自己相等的索引相对应：
+Pad indices and pair each element with its equal index:
 
 ![](https://labuladong.online/algo/images/missing-elem/2.jpg)
 
-这样做了之后，就可以发现除了缺失元素之外，所有的索引和元素都组成一对儿了，现在如果把这个落单的索引 2 找出来，也就找到了缺失的那个元素。
+Every pair cancels except the missing index — index 2 here, the answer.
 
-如何找这个落单的数字呢，**只要把所有的元素和索引做异或运算，成对儿的数字都会消为 0，只有这个落单的元素会剩下**，也就达到了我们的目的：
+**XOR all elements with all indices; pairs cancel; only the missing element remains:**
 
 ```java
 class Solution {
     public int missingNumber(int[] nums) {
         int n = nums.length;
         int res = 0;
-        // 先和新补的索引异或一下
+        // XOR with the extra index
         res ^= n;
-        // 和其他的元素、索引做异或
+        // XOR with every element and index
         for (int i = 0; i < n; i++)
             res ^= i ^ nums[i];
         return res;
@@ -298,9 +282,9 @@ class Solution {
 
 
 
-由于异或运算满足交换律和结合律，所以总是能把成对儿的数字消去，留下缺失的那个元素。
+XOR's commutativity/associativity cancels all pairs, leaving the missing element.
 
-到这里，常见的位运算差不多都讲完了。这些技巧就是会者不难难者不会，也不需要死记硬背，只要有个印象就完全够用了。
+That's the common bit ops. Easy when you know them, baffling otherwise — no rote memorization required, just leave an impression.
 
 
 
@@ -310,12 +294,12 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】哈希表更多习题](https://labuladong.online/algo/problem-set/hash-table/)
- - [【强化练习】用「遍历」思维解题 I](https://labuladong.online/algo/problem-set/binary-tree-traverse-i/)
- - [一文秒杀所有丑数系列问题](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
- - [如何同时寻找缺失和重复的元素](https://labuladong.online/algo/frequency-interview/mismatch-set/)
+ - [[Practice] Hash Table Problems](https://labuladong.online/algo/problem-set/hash-table/)
+ - [[Practice] Traversal Mindset I](https://labuladong.online/algo/problem-set/binary-tree-traverse-i/)
+ - [Sweeping All Ugly-Number Problems](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
+ - [Finding Missing and Duplicate Elements Together](https://labuladong.online/algo/frequency-interview/mismatch-set/)
 
 </details><hr>
 
@@ -324,15 +308,15 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1457. Pseudo-Palindromic Paths in a Binary Tree](https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/?show=1) | [1457. 二叉树中的伪回文路径](https://leetcode.cn/problems/pseudo-palindromic-paths-in-a-binary-tree/?show=1) | 🟠 |
-| [389. Find the Difference](https://leetcode.com/problems/find-the-difference/?show=1) | [389. 找不同](https://leetcode.cn/problems/find-the-difference/?show=1) | 🟢 |
-| - | [剑指 Offer 15. 二进制中1的个数](https://leetcode.cn/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/?show=1) | 🟢 |
+| [1457. Pseudo-Palindromic Paths in a Binary Tree](https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/?show=1) | [1457. Pseudo-Palindromic Paths in a Binary Tree](https://leetcode.cn/problems/pseudo-palindromic-paths-in-a-binary-tree/?show=1) | 🟠 |
+| [389. Find the Difference](https://leetcode.com/problems/find-the-difference/?show=1) | [389. Find the Difference](https://leetcode.cn/problems/find-the-difference/?show=1) | 🟢 |
+| - | [Sword to Offer 15. Number of 1 Bits](https://leetcode.cn/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/?show=1) | 🟢 |
 
 </details>
 <hr>

@@ -1,88 +1,84 @@
-# 二叉树心法（构造篇）
+# Binary Tree Tactics (Construction)
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) | [105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) | 🟠 |
-| [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/) | [106. 从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/) | 🟠 |
-| [654. Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/) | [654. 最大二叉树](https://leetcode.cn/problems/maximum-binary-tree/) | 🟠 |
-| [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/) | [889. 根据前序和后序遍历构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal/) | 🟠 |
+| [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) | [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) | 🟠 |
+| [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/) | [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/) | 🟠 |
+| [654. Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/) | [654. Maximum Binary Tree](https://leetcode.cn/problems/maximum-binary-tree/) | 🟠 |
+| [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/) | [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [二叉树结构基础](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
-> - [二叉树的 DFS/BFS 遍历](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
-> - [二叉树心法（纲领篇）](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
+> - [Binary Tree Structure Basics](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
+> - [DFS/BFS Traversal of Binary Trees](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
+> - [Binary Tree Tactics (Outline)](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
 
-本文是承接 [二叉树心法（纲领篇）](https://labuladong.online/algo/essential-technique/binary-tree-summary/) 的第二篇文章，先复述一下前文总结的二叉树解题总纲：
+This is the second article continuing from [Binary Tree Tactics (Outline)](https://labuladong.online/algo/essential-technique/binary-tree-summary/). First, recall the outline:
 
 > [!NOTE]
-> 二叉树解题的思维模式分两类： 
+> Two thinking modes for binary-tree problems: 
 > 
-> **1、是否可以通过遍历一遍二叉树得到答案**？如果可以，用一个 `traverse` 函数配合外部变量来实现，这叫「遍历」的思维模式。
+> **1. Can the answer be obtained by traversing the tree once?** If so, use a `traverse` function with external variables — the "traversal" mindset.
 > 
-> **2、是否可以定义一个递归函数，通过子问题（子树）的答案推导出原问题的答案**？如果可以，写出这个递归函数的定义，并充分利用这个函数的返回值，这叫「分解问题」的思维模式。
+> **2. Can a recursive function be defined that derives the original answer from sub-problems' (subtrees') answers?** If so, write the recursive definition and exploit its return value — the "decomposition" mindset.
 > 
-> 无论使用哪种思维模式，你都需要思考：
+> Either way, ask:
 > 
-> **如果单独抽出一个二叉树节点，它需要做什么事情？需要在什么时候（前/中/后序位置）做**？其他的节点不用你操心，递归函数会帮你在所有节点上执行相同的操作。
+> **What does an individual node need to do, and at what point (preorder / inorder / postorder) should it do it?** Don't worry about the rest — recursion handles every node.
 
-第一篇文章 [二叉树心法（思维篇）](https://labuladong.online/algo/data-structure/binary-tree-part1/) 讲了「遍历」和「分解问题」两种思维方式，本文讲二叉树的构造类问题。
+The first article, [Binary Tree Tactics (Approach)](https://labuladong.online/algo/data-structure/binary-tree-part1/), discussed both mindsets. This article focuses on tree-construction problems.
 
-**二叉树的构造问题一般都是使用「分解问题」的思路：构造整棵树 = 根节点 + 构造左子树 + 构造右子树**。
+**Construction problems are typically solved with the "decomposition" mindset: build the whole tree = root + build left subtree + build right subtree**.
 
-接下来直接看题。
+Let's dive in.
 
-## 构造最大二叉树
+## Build a Maximum Binary Tree
 
-先来道简单的，这是力扣第 654 题「最大二叉树」，题目如下：
-
-
-
-
+LeetCode 654 "Maximum Binary Tree":
 
 <Problem slug="maximum-binary-tree" />
 
 ```java
-// 函数签名如下
+// Signature
 TreeNode constructMaximumBinaryTree(int[] nums);
 ```
 
-每个二叉树节点都可以认为是一棵子树的根节点，对于根节点，首先要做的当然是把想办法把自己先构造出来，然后想办法构造自己的左右子树。
+Each tree node is the root of a subtree. For the root, we first need to construct itself, then construct its left and right subtrees.
 
-所以，我们要遍历数组把找到最大值 `maxVal`，从而把根节点 `root` 做出来，然后对 `maxVal` 左边的数组和右边的数组进行递归构建，作为 `root` 的左右子树。
+So we scan the array for the maximum `maxVal` to make the root, then recursively build the left subtree from the left portion and the right subtree from the right portion.
 
-按照题目给出的例子，输入的数组为 `[3,2,1,6,0,5]`，对于整棵树的根节点来说，其实在做这件事：
+Example: input `[3,2,1,6,0,5]`. For the overall root:
 
 ```java
 TreeNode constructMaximumBinaryTree([3,2,1,6,0,5]) {
-    // 找到数组中的最大值
+    // Find the maximum
     TreeNode root = new TreeNode(6);
-    // 递归调用构造左右子树
+    // Recurse on the left and right portions
     root.left = constructMaximumBinaryTree([3,2,1]);
     root.right = constructMaximumBinaryTree([0,5]);
     return root;
 }
 
-// 当前 nums 中的最大值就是根节点，然后根据索引递归调用左右数组构造左右子树即可
-// 再详细一点，就是如下伪码
+// The current max in nums is the root; recurse on the left/right portions
+// Pseudo-code:
 TreeNode constructMaximumBinaryTree(int[] nums) {
     if (nums is empty) return null;
-    // 找到数组中的最大值
+    // Find the max in nums
     int maxVal = Integer.MIN_VALUE;
     int index = 0;
     for (int i = 0; i < nums.length; i++) {
@@ -93,16 +89,16 @@ TreeNode constructMaximumBinaryTree(int[] nums) {
     }
 
     TreeNode root = new TreeNode(maxVal);
-    // 递归调用构造左右子树
+    // Recurse on the subarrays
     root.left = constructMaximumBinaryTree(nums[0..index-1]);
     root.right = constructMaximumBinaryTree(nums[index+1..nums.length-1]);
     return root;
 }
 ```
 
-**当前 `nums` 中的最大值就是根节点，然后根据索引递归调用左右数组构造左右子树即可**。
+**The current max in `nums` is the root; recurse on the left/right portions.**
 
-明确了思路，我们可以重新写一个辅助函数 `build`，来控制 `nums` 的索引：
+With the idea clear, write a helper `build` to control indices into `nums`:
 
 ```java
 class Solution {
@@ -111,14 +107,14 @@ class Solution {
         return build(nums, 0, nums.length - 1);
     }
 
-    // 定义：将 nums[lo..hi] 构造成符合条件的树，返回根节点
+    // Definition: build the tree from nums[lo..hi] and return the root
     TreeNode build(int[] nums, int lo, int hi) {
         // base case
         if (lo > hi) {
             return null;
         }
 
-        // 找到数组中的最大值和对应的索引
+        // Find the max and its index
         int index = -1, maxVal = Integer.MIN_VALUE;
         for (int i = lo; i <= hi; i++) {
             if (maxVal < nums[i]) {
@@ -127,9 +123,9 @@ class Solution {
             }
         }
 
-        // 先构造出根节点
+        // Build the root
         TreeNode root = new TreeNode(maxVal);
-        // 递归调用构造左右子树
+        // Recurse on the subtrees
         root.left = build(nums, lo, index - 1);
         root.right = build(nums, index + 1, hi);
         
@@ -143,7 +139,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/maximum-binary-tree/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>👾 代码可视化动画👾</strong>
+<strong>👾 Animated Code Visualization 👾</strong>
 </summary>
 </details>
 </a>
@@ -151,32 +147,28 @@ class Solution {
 
 
 
-至此，这道题就做完了，还是挺简单的对吧，下面看两道更困难一些的。
+That's it — pretty simple. Two harder problems follow.
 
-## 通过前序和中序遍历结果构造二叉树
+## Build a Tree from Preorder and Inorder Traversals
 
-力扣第 105 题「从前序和中序遍历序列构造二叉树」就是这道经典题目，面试笔试中常考：
-
-
-
-
+LeetCode 105 "Construct Binary Tree from Preorder and Inorder Traversal":
 
 <Problem slug="construct-binary-tree-from-preorder-and-inorder-traversal" />
 
 ```java
-// 函数签名如下
+// Signature
 TreeNode buildTree(int[] preorder, int[] inorder);
 ```
 
-废话不多说，直接来想思路，首先思考，根节点应该做什么。
+Think about what the root should do.
 
-**类似上一题，我们肯定要想办法确定根节点的值，把根节点做出来，然后递归构造左右子树即可**。
+**Like the previous problem, we figure out the root's value, build the root, then recursively build the subtrees.**
 
-我们先来回顾一下，前序遍历和中序遍历的结果有什么特点？
+Recall the characteristics of preorder and inorder traversals:
 
 ```java
 void traverse(TreeNode root) {
-    // 前序遍历
+    // Preorder
     preorder.add(root.val);
     traverse(root.left);
     traverse(root.right);
@@ -184,38 +176,37 @@ void traverse(TreeNode root) {
 
 void traverse(TreeNode root) {
     traverse(root.left);
-    // 中序遍历
+    // Inorder
     inorder.add(root.val);
     traverse(root.right);
 }
 ```
 
-前文 [二叉树就那几个框架](https://labuladong.online/algo/data-structure/flatten-nested-list-iterator/) 写过，这样的遍历顺序差异，导致了 `preorder` 和 `inorder` 数组中的元素分布有如下特点：
+As discussed in [There Are Only a Few Binary-Tree Frameworks](https://labuladong.online/algo/data-structure/flatten-nested-list-iterator/), the order difference produces these element distributions in `preorder` and `inorder`:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/1.jpeg)
 
-找到根节点是很简单的，前序遍历的第一个值 `preorder[0]` 就是根节点的值。
+Finding the root is easy — `preorder[0]` is the root's value.
 
-关键在于如何通过根节点的值，将 `preorder` 和 `inorder` 数组划分成两半，构造根节点的左右子树？
+The key is using the root's value to split `preorder` and `inorder` into left and right halves to build the subtrees.
 
-换句话说，对于以下代码中的 `?` 部分应该填入什么：
+What goes in the `?` below:
 
 ```java
 TreeNode buildTree(int[] preorder, int[] inorder) {
-    // 根据函数定义，用 preorder 和 inorder 构造二叉树
+    // Use the function definition to build from preorder and inorder
     return build(preorder, 0, preorder.length - 1,
                 inorder, 0, inorder.length - 1);
 }
 
-// build 函数的定义：
-// 若前序遍历数组为 preorder[preStart..preEnd]，
-// 中序遍历数组为 inorder[inStart..inEnd]，
-// 构造二叉树，返回该二叉树的根节点
+// Definition:
+// Given preorder[preStart..preEnd] and inorder[inStart..inEnd],
+// build the tree and return its root.
 TreeNode build(int[] preorder, int preStart, int preEnd, 
             int[] inorder, int inStart, int inEnd) {
-    // root 节点对应的值就是前序遍历数组的第一个元素
+    // The root's value is the first element of preorder
     int rootVal = preorder[preStart];
-    // rootVal 在中序遍历数组中的索引
+    // Index of rootVal in inorder
     int index = 0;
     for (int i = inStart; i <= inEnd; i++) {
         if (inorder[i] == rootVal) {
@@ -225,7 +216,7 @@ TreeNode build(int[] preorder, int preStart, int preEnd,
     }
 
     TreeNode root = new TreeNode(rootVal);
-    // 递归构造左右子树
+    // Recurse to build the subtrees
     root.left = build(preorder, ?, ?,
                     inorder, ?, ?);
 
@@ -235,16 +226,14 @@ TreeNode build(int[] preorder, int preStart, int preEnd,
 }
 ```
 
-对于代码中的 `rootVal` 和 `index` 变量，就是下图这种情况：
+For `rootVal` and `index`, see the figure:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/2.jpeg)
 
-另外，也有读者注意到，通过 for 循环遍历的方式去确定 `index` 效率不算高，可以进一步优化。
-
-因为题目说二叉树节点的值不存在重复，所以可以使用一个 HashMap 存储元素到索引的映射，这样就可以直接通过 HashMap 查到 `rootVal` 对应的 `index`：
+Note: scanning to find `index` isn't optimal. We can speed it up with a HashMap from value to index — the problem guarantees no duplicate values:
 
 ```java
-// 存储 inorder 中值到索引的映射
+// Maps inorder value -> index
 HashMap<Integer, Integer> valToIndex = new HashMap<>();
 
 public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -258,13 +247,13 @@ public TreeNode buildTree(int[] preorder, int[] inorder) {
 TreeNode build(int[] preorder, int preStart, int preEnd, 
                int[] inorder, int inStart, int inEnd) {
     int rootVal = preorder[preStart];
-    // 避免 for 循环寻找 rootVal
+    // Avoid scanning to find rootVal
     int index = valToIndex.get(rootVal);
     // ...
 }
 ```
 
-现在我们来看图做填空题，下面这几个问号处应该填什么：
+Now, fill in the blanks:
 
 ```java
 root.left = build(preorder, ?, ?,
@@ -274,7 +263,7 @@ root.right = build(preorder, ?, ?,
                    inorder, ?, ?);
 ```
 
-对于左右子树对应的 `inorder` 数组的起始索引和终止索引比较容易确定：
+The inorder range for each subtree is straightforward:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/3.jpeg)
 
@@ -286,13 +275,11 @@ root.right = build(preorder, ?, ?,
                    inorder, index + 1, inEnd);
 ```
 
-对于 `preorder` 数组呢？如何确定左右数组对应的起始索引和终止索引？
-
-这个可以通过左子树的节点数推导出来，假设左子树的节点数为 `leftSize`，那么 `preorder` 数组上的索引情况是这样的：
+For preorder, we deduce the ranges from the size of the left subtree. Let `leftSize` be the number of nodes in the left subtree. Then the preorder index layout is:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/4.jpeg)
 
-看着这个图就可以把 `preorder` 对应的索引写进去了：
+Fill in the preorder ranges:
 
 ```java
 int leftSize = index - inStart;
@@ -304,11 +291,11 @@ root.right = build(preorder, preStart + leftSize + 1, preEnd,
                    inorder, index + 1, inEnd);
 ```
 
-至此，整个算法思路就完成了，我们再补一补 base case 即可写出解法代码：
+Add the base case:
 
 ```java
 class Solution {
-    // 存储 inorder 中值到索引的映射
+    // Maps inorder value -> index
     HashMap<Integer, Integer> valToIndex = new HashMap<>();
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -319,10 +306,9 @@ class Solution {
                     inorder, 0, inorder.length - 1);
     }
 
-    // build 函数的定义：
-    // 若前序遍历数组为 preorder[preStart..preEnd]，
-    // 中序遍历数组为 inorder[inStart..inEnd]，
-    // 构造二叉树，返回该二叉树的根节点
+    // Definition:
+    // Given preorder[preStart..preEnd] and inorder[inStart..inEnd],
+    // build the tree and return its root.
     TreeNode build(int[] preorder, int preStart, int preEnd, 
                int[] inorder, int inStart, int inEnd) {
 
@@ -330,16 +316,16 @@ class Solution {
             return null;
         }
 
-        // root 节点对应的值就是前序遍历数组的第一个元素
+        // The root's value is the first element of preorder
         int rootVal = preorder[preStart];
-        // rootVal 在中序遍历数组中的索引
+        // Index of rootVal in inorder
         int index = valToIndex.get(rootVal);
 
         int leftSize = index - inStart;
 
-        // 先构造出当前根节点
+        // Build the root
         TreeNode root = new TreeNode(rootVal);
-        // 递归构造左右子树
+        // Recurse to build the subtrees
         root.left = build(preorder, preStart + 1, preStart + leftSize,
                         inorder, inStart, index - 1);
 
@@ -350,52 +336,48 @@ class Solution {
 }
 ```
 
-我们的主函数只要调用 `buildTree` 函数即可，你看着函数这么多参数，解法这么多代码，似乎比我们上面讲的那道题难很多，让人望而生畏，实际上呢，这些参数无非就是控制数组起止位置的，画个图就能解决了。
+The main function just calls `buildTree`. The function may look intimidating with all those parameters, but they're just controlling subarray ranges — easy with a picture.
 
-## 通过后序和中序遍历结果构造二叉树
+## Build a Tree from Inorder and Postorder Traversals
 
-类似上一题，这次我们利用**后序**和**中序**遍历的结果数组来还原二叉树，这是力扣第 106 题「从后序和中序遍历序列构造二叉树」：
-
-
-
-
+Like before, but using **postorder** and **inorder**. LeetCode 106:
 
 <Problem slug="construct-binary-tree-from-inorder-and-postorder-traversal" />
 
 ```java
-// 函数签名如下
+// Signature
 TreeNode buildTree(int[] inorder, int[] postorder);
 ```
 
-类似的，看下后序和中序遍历的特点：
+Postorder vs inorder:
 
 ```java
 void traverse(TreeNode root) {
     traverse(root.left);
     traverse(root.right);
-    // 后序遍历
+    // Postorder
     postorder.add(root.val);
 }
 
 void traverse(TreeNode root) {
     traverse(root.left);
-    // 中序遍历
+    // Inorder
     inorder.add(root.val);
     traverse(root.right);
 }
 ```
 
-这样的遍历顺序差异，导致了 `postorder` 和 `inorder` 数组中的元素分布有如下特点：
+The element layouts:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/5.jpeg)
 
-这道题和上一题的关键区别是，后序遍历和前序遍历相反，根节点对应的值为 `postorder` 的最后一个元素。
+Key difference vs. the previous problem: the root's value is the **last** element of `postorder`.
 
-整体的算法框架和上一题非常类似，我们依然写一个辅助函数 `build`：
+The framework is similar; helper `build`:
 
 ```java
 class Solution {
-    // 存储 inorder 中值到索引的映射
+    // Maps inorder value -> index
     HashMap<Integer, Integer> valToIndex = new HashMap<>();
 
     public TreeNode buildTree(int[] inorder, int[] postorder) {
@@ -406,19 +388,18 @@ class Solution {
                     postorder, 0, postorder.length - 1);
     }
 
-    // build 函数的定义：
-    // 后序遍历数组为 postorder[postStart..postEnd]，
-    // 中序遍历数组为 inorder[inStart..inEnd]，
-    // 构造二叉树，返回该二叉树的根节点 
+    // Definition:
+    // Given postorder[postStart..postEnd] and inorder[inStart..inEnd],
+    // build the tree and return its root.
     TreeNode build(int[] inorder, int inStart, int inEnd,
                 int[] postorder, int postStart, int postEnd) {
-        // root 节点对应的值就是后序遍历数组的最后一个元素
+        // The root's value is the last element of postorder
         int rootVal = postorder[postEnd];
-        // rootVal 在中序遍历数组中的索引
+        // Index of rootVal in inorder
         int index = valToIndex.get(rootVal);
 
         TreeNode root = new TreeNode(rootVal);
-        // 递归构造左右子树
+        // Recurse to build the subtrees
         root.left = build(inorder, ?, ?,
                         postorder, ?, ?);
 
@@ -429,11 +410,11 @@ class Solution {
 }
 ```
 
-现在 `postoder` 和 `inorder` 对应的状态如下：
+Postorder/inorder layout:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/6.jpeg)
 
-我们可以按照上图将问号处的索引正确填入：
+Fill in the indices:
 
 ```java
 int leftSize = index - inStart;
@@ -445,11 +426,11 @@ root.right = build(inorder, index + 1, inEnd,
                    postorder, postStart + leftSize, postEnd - 1);
 ```
 
-综上，可以写出完整的解法代码：
+Full solution:
 
 ```java
 class Solution {
-    // 存储 inorder 中值到索引的映射
+    // Maps inorder value -> index
     HashMap<Integer, Integer> valToIndex = new HashMap<>();
 
     public TreeNode buildTree(int[] inorder, int[] postorder) {
@@ -460,24 +441,23 @@ class Solution {
                     postorder, 0, postorder.length - 1);
     }
 
-    // build 函数的定义：
-    // 后序遍历数组为 postorder[postStart..postEnd]，
-    // 中序遍历数组为 inorder[inStart..inEnd]，
-    // 构造二叉树，返回该二叉树的根节点 
+    // Definition:
+    // Given postorder[postStart..postEnd] and inorder[inStart..inEnd],
+    // build the tree and return its root.
     TreeNode build(int[] inorder, int inStart, int inEnd,
                 int[] postorder, int postStart, int postEnd) {
 
         if (inStart > inEnd) {
             return null;
         }
-        // root 节点对应的值就是后序遍历数组的最后一个元素
+        // The root's value is the last element of postorder
         int rootVal = postorder[postEnd];
-        // rootVal 在中序遍历数组中的索引
+        // Index of rootVal in inorder
         int index = valToIndex.get(rootVal);
-        // 左子树的节点个数
+        // Number of nodes in the left subtree
         int leftSize = index - inStart;
         TreeNode root = new TreeNode(rootVal);
-        // 递归构造左右子树
+        // Recurse to build the subtrees
         root.left = build(inorder, inStart, index - 1,
                             postorder, postStart, postStart + leftSize - 1);
         
@@ -493,7 +473,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/construct-binary-tree-from-inorder-and-postorder-traversal/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🍭 代码可视化动画🍭</strong>
+<strong>🍭 Animated Code Visualization 🍭</strong>
 </summary>
 </details>
 </a>
@@ -501,55 +481,49 @@ class Solution {
 
 
 
-有了前一题的铺垫，这道题很快就解决了，无非就是 `rootVal` 变成了最后一个元素，再改改递归函数的参数而已，只要明白二叉树的特性，也不难写出来。
+With the previous setup, this one comes quickly — just `rootVal` becomes the last element and the parameters change a bit.
 
-## 通过后序和前序遍历结果构造二叉树
+## Build a Tree from Preorder and Postorder Traversals
 
-这是力扣第 889 题「根据前序和后序遍历构造二叉树」，给你输入二叉树的前序和后序遍历结果，让你还原二叉树的结构。
-
-函数签名如下：
+LeetCode 889 "Construct Binary Tree from Preorder and Postorder Traversal" gives preorder and postorder, asks you to build the tree.
 
 ```java
 TreeNode constructFromPrePost(int[] preorder, int[] postorder);
 ```
 
-这道题和前两道题有一个本质的区别：
+A key difference from the previous two:
 
-**通过前序中序，或者后序中序遍历结果可以确定唯一一棵原始二叉树，但是通过前序后序遍历结果无法确定唯一的原始二叉树**。
+**Preorder + inorder (or postorder + inorder) uniquely determines a binary tree, but preorder + postorder does NOT.**
 
-题目也说了，如果有多种可能的还原结果，你可以返回任意一种。
+The problem says you may return any valid answer.
 
-为什么呢？我们说过，构建二叉树的套路很简单，先找到根节点，然后找到并递归构造左右子树即可。
+Why? Construction is "find the root, then recursively build the subtrees".
 
-前两道题，可以通过前序或者后序遍历结果找到根节点，然后根据中序遍历结果确定左右子树（题目说了树中没有 `val` 相同的节点）。
+In the previous problems, preorder/postorder gave us the root, and inorder gave us the left/right partitioning (with no duplicate values).
 
-这道题，你可以确定根节点，但是无法确切的知道左右子树有哪些节点。
+Here, you find the root but cannot tell which nodes belong to which subtree.
 
-举个例子，比如给你这个输入：
+Example: `preorder = [1,2,3], postorder = [3,2,1]`.
 
-```
-preorder = [1,2,3], postorder = [3,2,1]
-```
-
-下面这两棵树都是符合条件的，但显然它们的结构不同：
+Both of these trees are valid but structurally different:
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/7.png)
 
-不过话说回来，用后序遍历和前序遍历结果还原二叉树，解法逻辑上和前两道题差别不大，也是通过控制左右子树的索引来构建：
+Still, the logic is similar:
 
-**1、首先把前序遍历结果的第一个元素或者后序遍历结果的最后一个元素确定为根节点的值**。
+**1. The first element of preorder (or last of postorder) is the root.**
 
-**2、然后把前序遍历结果的第二个元素作为左子树的根节点的值**。
+**2. The second element of preorder is the root of the left subtree.**
 
-**3、在后序遍历结果中寻找左子树根节点的值，从而确定了左子树的索引边界，进而确定右子树的索引边界，递归构造左右子树即可**。
+**3. Find the left-subtree-root in postorder; this fixes the left-subtree boundary, and thus the right-subtree boundary too. Recurse.**
 
 ![](https://labuladong.online/algo/images/binary-tree-ii/8.jpeg)
 
-详情见代码。
+Code:
 
 ```java
 class Solution {
-    // 存储 postorder 中值到索引的映射
+    // Maps postorder value -> index
     HashMap<Integer, Integer> valToIndex = new HashMap<>();
 
     public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
@@ -560,8 +534,8 @@ class Solution {
                     postorder, 0, postorder.length - 1);
     }
 
-    // 定义：根据 preorder[preStart..preEnd] 和 postorder[postStart..postEnd]
-    // 构建二叉树，并返回根节点。
+    // Definition: build the tree from preorder[preStart..preEnd]
+    // and postorder[postStart..postEnd], return the root.
     TreeNode build(int[] preorder, int preStart, int preEnd,
                    int[] postorder, int postStart, int postEnd) {
         if (preStart > preEnd) {
@@ -571,21 +545,21 @@ class Solution {
             return new TreeNode(preorder[preStart]);
         }
 
-        // root 节点对应的值就是前序遍历数组的第一个元素
+        // root's value is the first element of preorder
         int rootVal = preorder[preStart];
-        // root.left 的值是前序遍历第二个元素
-        // 通过前序和后序遍历构造二叉树的关键在于通过左子树的根节点
-        // 确定 preorder 和 postorder 中左右子树的元素区间
+        // root.left's value is the second element of preorder
+        // The trick is: find the left subtree's root and use it to
+        // determine the left/right element ranges in preorder/postorder
         int leftRootVal = preorder[preStart + 1];
-        // leftRootVal 在后序遍历数组中的索引
+        // leftRootVal's index in postorder
         int index = valToIndex.get(leftRootVal);
-        // 左子树的元素个数
+        // Number of nodes in the left subtree
         int leftSize = index - postStart + 1;
 
-        // 先构造出当前根节点
+        // Build root
         TreeNode root = new TreeNode(rootVal);
-        // 递归构造左右子树
-        // 根据左子树的根节点索引和元素个数推导左右子树的索引边界
+        // Recurse on the subtrees
+        // Use the left-subtree root index and size to derive the ranges
         root.left = build(preorder, preStart + 1, preStart + leftSize,
                 postorder, postStart, index);
         root.right = build(preorder, preStart + leftSize + 1, preEnd,
@@ -601,7 +575,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/construct-binary-tree-from-preorder-and-postorder-traversal/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>👾 代码可视化动画👾</strong>
+<strong>👾 Animated Code Visualization 👾</strong>
 </summary>
 </details>
 </a>
@@ -609,21 +583,19 @@ class Solution {
 
 
 
-代码和前两道题非常类似，我们可以看着代码思考一下，为什么通过前序遍历和后序遍历结果还原的二叉树可能不唯一呢？
-
-关键在这一句：
+Why is the result not unique? The key line:
 
 ```java
 int leftRootVal = preorder[preStart + 1];
 ```
 
-我们假设前序遍历的第二个元素是左子树的根节点，但实际上左子树有可能是空指针，那么这个元素就应该是右子树的根节点。由于这里无法确切进行判断，所以导致了最终答案的不唯一。
+We assume the second preorder element is the left subtree's root, but the left subtree may be empty — in which case it's the right subtree's root. We can't tell, so the result isn't unique.
 
-至此，通过前序和后序遍历结果还原二叉树的问题也解决了。
+That wraps up all three reconstruction problems.
 
-最后呼应下前文，**二叉树的构造问题一般都是使用「分解问题」的思路：构造整棵树 = 根节点 + 构造左子树 + 构造右子树**。先找出根节点，然后根据根节点的值找到左右子树的元素，进而递归构建出左右子树。
+To echo the introduction: **construction problems use the "decomposition" mindset — build the tree = root + build left subtree + build right subtree**. Find the root, partition the elements, recurse.
 
-现在你是否明白其中的玄妙了呢？
+Hope this clears up the trick.
 
 
 
@@ -633,13 +605,13 @@ int leftRootVal = preorder[preStart + 1];
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】二叉搜索树经典例题 I](https://labuladong.online/algo/problem-set/bst1/)
- - [【强化练习】用「分解问题」思维解题 I](https://labuladong.online/algo/problem-set/binary-tree-divide-i/)
- - [【强化练习】用「分解问题」思维解题 II](https://labuladong.online/algo/problem-set/binary-tree-divide-ii/)
- - [二叉搜索树心法（特性篇）](https://labuladong.online/algo/data-structure/bst-part1/)
- - [二叉树心法（序列化篇）](https://labuladong.online/algo/data-structure/serialize-and-deserialize-binary-tree/)
+ - [[Practice] Classic BST Problems I](https://labuladong.online/algo/problem-set/bst1/)
+ - [[Practice] Decomposition Mindset I](https://labuladong.online/algo/problem-set/binary-tree-divide-i/)
+ - [[Practice] Decomposition Mindset II](https://labuladong.online/algo/problem-set/binary-tree-divide-ii/)
+ - [BST Tactics (Properties)](https://labuladong.online/algo/data-structure/bst-part1/)
+ - [Binary Tree Tactics (Serialization)](https://labuladong.online/algo/data-structure/serialize-and-deserialize-binary-tree/)
 
 </details><hr>
 
@@ -648,15 +620,15 @@ int leftRootVal = preorder[preStart + 1];
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | [1008. 前序遍历构造二叉搜索树](https://leetcode.cn/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | 🟠 |
-| - | [剑指 Offer 07. 重建二叉树](https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/?show=1) | 🟠 |
-| - | [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/?show=1) | 🟠 |
+| [1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | [1008. Construct BST from Preorder Traversal](https://leetcode.cn/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | 🟠 |
+| - | [Sword to Offer 07. Reconstruct Binary Tree](https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer 33. Postorder Traversal Sequence of a BST](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/?show=1) | 🟠 |
 
 </details>
 <hr>

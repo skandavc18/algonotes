@@ -1,10 +1,10 @@
-# 对动态规划进行降维打击
+# Dimensional reduction on dynamic programming
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
@@ -13,16 +13,16 @@
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading, you should first study:
 > 
-> - [动态规划核心框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+> - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
 > [!NOTE]
-> 空间压缩并不难，主要用来优化某些动态规划问题的空间复杂度。但是一般的笔试中对空间的要求并不高，即便不使用这个优化技巧也能通过，所以我个人认为状态压缩并不是必须掌握的技巧，有兴趣的读者可以仔细学习理解一下。
+> Space compression isn't hard — it's mainly used to optimize the space complexity of certain DP problems. Most coding interviews don't have tight space requirements, so you can usually pass without it. Personally, I think state compression isn't a must-learn technique. Interested readers can study it carefully.
 
-我们号之前写过十几篇动态规划文章，可以说动态规划技巧对于算法效率的提升非常可观，一般来说都能把指数级和阶乘级时间复杂度的算法优化成 O(N^2)，堪称算法界的二向箔，把各路魑魅魍魉统统打成二次元。
+We've written over a dozen DP articles. DP techniques produce huge efficiency gains, generally turning exponential or factorial time complexity into O(N^2). It's the algorithm world's "two-dimensional foil" — flattening all manner of monsters into 2D.
 
-但是，动态规划求解的过程中也是可以进行阶段性优化的，如果你认真观察某些动态规划问题的状态转移方程，就能够把它们解法的空间复杂度进一步降低，由 O(N^2) 降低到 O(N)。
+But DP solutions can also be optimized further. If you carefully observe certain DP problems' state-transition equations, you can lower their space complexity from O(N^2) to O(N).
 
 
 
@@ -31,25 +31,25 @@
 
 
 > [!NOTE]
-> 之前我在本文中误用了「状态压缩」这个词，有读者指出「状态压缩」这个词的含义是把多个状态通过二进制运算用一个整数表示出来，从而减少 `dp` 数组的维度。而本文描述的优化方式是通过观察状态转移方程的依赖关系，从而减少 `dp` 数组的维度，确实和「状态压缩」有所区别。所以严谨起见，我把原来文章中的「状态压缩」都改为了「空间压缩」，避免名词的误用。
+> Earlier, I incorrectly used the term "state compression" in this article. A reader pointed out that "state compression" actually means representing multiple states with a single integer via bitwise operations, thereby reducing `dp` array dimensionality. The optimization described here observes the dependencies of the state-transition equation to reduce the `dp` array's dimensions — different from "state compression". For accuracy, I've replaced "state compression" with "space compression" in this article to avoid term misuse.
 
-能够使用空间压缩技巧的动态规划都是二维 `dp` 问题，**你看它的状态转移方程，如果计算状态 `dp[i][j]` 需要的都是 `dp[i][j]` 相邻的状态，那么就可以使用空间压缩技巧**，将二维的 `dp` 数组转化成一维，将空间复杂度从 O(N^2) 降低到 O(N)。
+DP problems that can use space compression are 2D `dp` problems. **Look at the state-transition equation: if computing state `dp[i][j]` only needs neighbors of `dp[i][j]`, then space compression applies** — converting the 2D `dp` array into 1D, reducing space from O(N^2) to O(N).
 
-什么叫「和 `dp[i][j]` 相邻的状态」呢，比如前文 [最长回文子序列](https://labuladong.online/algo/dynamic-programming/subsequence-problem/) 中，最终的代码如下：
+What does "neighbor of `dp[i][j]`" mean? Take the earlier post [Longest palindromic subsequence](https://labuladong.online/algo/dynamic-programming/subsequence-problem/), where the final code is:
 
 ```java
 int longestPalindromeSubseq(String s) {
     int n = s.length();
-    // dp 数组全部初始化为 0
+    // initialize the entire dp array to 0
     int[][] dp = new int[n][n];
     // base case
     for (int i = 0; i < n; i++) {
         dp[i][i] = 1;
     }
-    // 反着遍历保证正确的状态转移
+    // iterate in reverse to ensure correct state transitions
     for (int i = n - 1; i >= 0; i--) {
         for (int j = i + 1; j < n; j++) {
-            // 状态转移方程
+            // state-transition equation
             if (s.charAt(i) == s.charAt(j)) {
                 dp[i][j] = dp[i + 1][j - 1] + 2;
             } else {
@@ -57,27 +57,27 @@ int longestPalindromeSubseq(String s) {
             }
         }
     }
-    // 整个 s 的最长回文子串长度
+    // length of the longest palindromic subsequence of the whole s
     return dp[0][n - 1];
 }
 ```
 
 > [!TIP]
-> 我们本文不探讨如何推状态转移方程，只探讨对二维 DP 问题进行空间压缩的技巧。技巧都是通用的，所以如果你没看过前文，不明白这段代码的逻辑也无妨，完全不会阻碍你学会空间压缩。
+> This article doesn't discuss how to derive state-transition equations — only how to apply space compression to a 2D DP problem. The technique is general, so even if you haven't read the previous article and don't follow the code's logic, you can still learn space compression.
 
-你看我们对 `dp[i][j]` 的更新，其实只依赖于 `dp[i+1][j-1], dp[i][j-1], dp[i+1][j]` 这三个状态：
+The update of `dp[i][j]` only depends on three states: `dp[i+1][j-1]`, `dp[i][j-1]`, `dp[i+1][j]`:
 
 ![](https://labuladong.online/algo/images/space-optimal/1.jpeg)
 
-这就叫和 `dp[i][j]` 相邻，反正你计算 `dp[i][j]` 只需要这三个相邻状态，其实根本不需要那么大一个二维的 dp table 对不对？**空间压缩的核心思路就是，将二维数组「投影」到一维数组**：
+These are the "neighbors" of `dp[i][j]`. Since computing `dp[i][j]` only needs these three neighbors, we don't really need such a large 2D dp table. **The core idea of space compression: "project" the 2D array onto a 1D array**:
 
 ![](https://labuladong.online/algo/images/space-optimal/2.jpeg)
 
-「投影」这个词应该比较形象吧，说白了就是希望让一维数组发挥原来二维数组的作用。
+The word "project" should be intuitive — we want a 1D array to play the role of the original 2D array.
 
-思路很直观，但是也有一个明显的问题，图中 `dp[i][j-1]` 和 `dp[i+1][j-1]` 这两个状态处在同一列，而一维数组中只能容下一个，那么他俩投影到一维必然有一个会被另一个覆盖掉，我还怎么计算 `dp[i][j]` 呢？
+The idea is direct, but there's an obvious problem: in the figure, `dp[i][j-1]` and `dp[i+1][j-1]` are in the same column. A 1D array can only hold one of them; projected to 1D, one will overwrite the other — so how do we still compute `dp[i][j]`?
 
-这就是空间压缩的难点，下面就来分析解决这个问题，还是拿「最长回文子序列」问题举例，它的状态转移方程主要逻辑就是如下这段代码：
+That's the crux of space compression. Let's analyze and solve this. Stick with the longest-palindromic-subsequence problem; its state-transition logic is essentially:
 
 
 
@@ -86,7 +86,7 @@ int longestPalindromeSubseq(String s) {
 ```java
 for (int i = n - 2; i >= 0; i--) {
     for (int j = i + 1; j < n; j++) {
-        // 状态转移方程
+        // state-transition equation
         if (s.charAt(i) == s.charAt(j)) {
             dp[i][j] = dp[i + 1][j - 1] + 2;
         } else {
@@ -98,9 +98,9 @@ for (int i = n - 2; i >= 0; i--) {
 
 
 
-回想上面的图，「投影」其实就是把多行变成一行，所以想把二维 `dp` 数组压缩成一维，一般来说是把第一个维度，也就是 `i` 这个维度去掉，只剩下 `j` 这个维度。**压缩后的一维 `dp` 数组就是之前二维 `dp` 数组的 `dp[i][..]` 那一行**。
+Recall the earlier figure: "projection" turns multiple rows into one. So compressing 2D `dp` into 1D usually drops the first dimension `i`, leaving only `j`. **The compressed 1D `dp` array is the row `dp[i][..]` of the previous 2D `dp` array**.
 
-我们先将上述代码进行改造，直接无脑去掉 `i` 这个维度，把 `dp` 数组变成一维：
+First, transform the code by mindlessly dropping `i` and turning `dp` into 1D:
 
 
 
@@ -109,7 +109,7 @@ for (int i = n - 2; i >= 0; i--) {
 ```java
 for (int i = n - 2; i >= 0; i--) {
     for (int j = i + 1; j < n; j++) {
-        // 在这里，一维 dp 数组中的数是什么？
+        // What do the entries in this 1D dp array represent?
         if (s.charAt(i) == s.charAt(j)) {
             dp[j] = dp[j - 1] + 2;
         } else {
@@ -121,19 +121,19 @@ for (int i = n - 2; i >= 0; i--) {
 
 
 
-上述代码的一维 `dp` 数组只能表示二维 `dp` 数组的一行 `dp[i][..]`。但是我们想得到 `dp[i+1][j-1], dp[i][j-1], dp[i+1][j]` 这几个必要的的值进行状态转移。
+The 1D `dp` array can only represent one row `dp[i][..]` of the 2D `dp` array. But we want `dp[i+1][j-1]`, `dp[i][j-1]`, `dp[i+1][j]` for the state transition.
 
-因此，我们要先来思考两个问题：
+So consider two questions:
 
-1、在对 `dp[j]` 赋新值之前，`dp[j]` 对应着二维 `dp` 数组中的什么位置？
+1. Before assigning a new value to `dp[j]`, what 2D `dp` entry does `dp[j]` correspond to?
 
-2、`dp[j-1]` 对应着二维 `dp` 数组中的什么位置？
+2. What 2D `dp` entry does `dp[j-1]` correspond to?
 
-**对于问题 1，在对 `dp[j]` 赋新值之前，`dp[j]` 的值就是外层 for 循环上一次迭代算出来的值，也就是对应二维 `dp` 数组中 `dp[i+1][j]` 的位置**。
+**For question 1, before reassigning `dp[j]`, its value is whatever the previous outer-loop iteration computed — i.e. `dp[i+1][j]` in the 2D array**.
 
-**对于问题 2，`dp[j-1]` 的值就是内层 for 循环上一次迭代算出来的值，也就是对应二维 `dp` 数组中 `dp[i][j-1]` 的位置**。
+**For question 2, `dp[j-1]` is the value computed by the previous inner-loop iteration — i.e. `dp[i][j-1]` in the 2D array**.
 
-那么问题已经解决了一大半了，只剩下二维 `dp` 数组中的 `dp[i+1][j-1]` 这个状态我们不能直接从一维 `dp` 数组中得到：
+That's most of the problem solved. Only `dp[i+1][j-1]` from the 2D array can't be obtained directly from the 1D array:
 
 
 
@@ -155,11 +155,11 @@ for (int i = n - 2; i >= 0; i--) {
 
 
 
-因为 for 循环遍历 `i` 和 `j` 的顺序为从左向右，从下向上，所以可以发现，在更新一维 `dp` 数组的时候，`dp[i+1][j-1]` 会被 `dp[i][j-1]` 覆盖掉，图中标出了这四个位置被遍历到的次序：
+Because the for loops iterate `i` and `j` from left to right, bottom to top, when we update the 1D `dp` array, `dp[i+1][j-1]` will be overwritten by `dp[i][j-1]`. The figure shows the order in which these four positions are visited:
 
 ![](https://labuladong.online/algo/images/space-optimal/3.jpeg)
 
-**那么如果我们想得到 `dp[i+1][j-1]`，就必须在它被覆盖之前用一个临时变量 `temp` 把它存起来，并把这个变量的值保留到计算 `dp[i][j]` 的时候**。为了达到这个目的，结合上图，我们可以这样写代码：
+**So to access `dp[i+1][j-1]`, we must save it in a temporary variable `temp` before it's overwritten, and keep that value until we compute `dp[i][j]`**. Combined with the figure, here's the code:
 
 
 
@@ -167,7 +167,7 @@ for (int i = n - 2; i >= 0; i--) {
 
 ```java
 for (int i = n - 2; i >= 0; i--) {
-    // 存储 dp[i+1][j-1] 的变量
+    // variable storing dp[i+1][j-1]
     int pre = 0;
     for (int j = i + 1; j < n; j++) {
         int temp = dp[j];
@@ -177,7 +177,7 @@ for (int i = n - 2; i >= 0; i--) {
         } else {
             dp[j] = Math.max(dp[j], dp[j - 1]);
         }
-        // 到下一轮循环，pre 就是 dp[i+1][j-1] 了
+        // by next loop iteration, pre will be dp[i+1][j-1]
         pre = temp;
     }
 }
@@ -185,9 +185,9 @@ for (int i = n - 2; i >= 0; i--) {
 
 
 
-别小看这段代码，这是一维 `dp` 最精妙的地方，会者不难，难者不会。为了清晰起见，我用具体的数值来拆解这个逻辑：
+Don't underestimate this code — it's the most elegant part of 1D `dp`: easy if you know it, impossible if you don't. For clarity, let's trace this with concrete numbers:
 
-假设现在 `i = 5, j = 7` 且 `s[5] == s[7]`，那么现在会进入下面这个逻辑对吧：
+Suppose `i = 5, j = 7` and `s[5] == s[7]`. We enter this branch:
 
 
 
@@ -206,18 +206,18 @@ for (int i = 5; i--) {
 
 
 
-我问你这个 `pre` 变量是什么？是内层 for 循环上一次迭代的 `temp` 值。
+What is `pre`? It's the `temp` from the previous inner-loop iteration.
 
-那我再问你**内层** for 循环上一次迭代的 `temp` 值是什么？是 `dp[j-1]` 也就是 `dp[6]`，但请注意，这是**外层** for 循环**上一次迭代**对应的 `dp[6]`，不是现在的 `dp[6]`。
+What's that **previous inner-loop iteration's `temp`**? It's `dp[j-1]`, i.e. `dp[6]` — but note this is the **previous outer-loop iteration's** `dp[6]`, not the current `dp[6]`.
 
-这个要对应二维数组的索引来理解。你现在的 `dp[6]` 是二维 `dp` 数组中的 `dp[i][6] = dp[5][6]`，而人家这个 `temp` 是二维 `dp` 数组中的 `dp[i+1][6] = dp[6][6]`。
+Map this back to the 2D array. The current `dp[6]` is `dp[i][6] = dp[5][6]` in the 2D `dp` array. That `temp` is `dp[i+1][6] = dp[6][6]` in the 2D `dp`.
 
-也就是说，`pre` 变量就是 `dp[i+1][j-1] = dp[6][6]`，也就是我们想要的结果。
+So `pre` is `dp[i+1][j-1] = dp[6][6]` — exactly what we want.
 
-那么现在我们成功对状态转移方程进行了降维打击，算是最硬的的骨头啃掉了，但注意到我们还有 base case 要处理呀：
+Now we've successfully reduced the state-transition equation in dimension — the toughest bone is chewed. But there's still the base case to handle:
 
 ```java
-// dp 数组全部初始化为 0
+// initialize the entire dp array to 0
 int[][] dp = new int[n][n];
 // base case
 for (int i = 0; i < n; i++) {
@@ -225,25 +225,25 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
-如何把 base case 也打成一维呢？很简单，记住空间压缩就是投影，我们把 base case 投影到一维看看：
+How do we flatten the base case? Easy — remember, space compression is projection. Let's project the base case to 1D:
 
 ![](https://labuladong.online/algo/images/space-optimal/4.jpeg)
 
-二维 `dp` 数组中的 base case 全都落入了一维 `dp` 数组，不存在冲突和覆盖，所以说我们直接这样写代码就行了：
+The base case in the 2D `dp` array all map to the 1D `dp` array with no conflicts or overwrites. So we can just write:
 
 ```java
-// base case：一维 dp 数组全部初始化为 1
+// base case: initialize the entire 1D dp array to 1
 int[] dp = new int[n];
 Arrays.fill(dp, 1);
 ```
 
-至此，我们把 base case 和状态转移方程都进行了降维，实际上已经写出完整代码了：
+So far we've reduced the dimension of both base case and state transition. We've actually written the complete code:
 
 ```java
 class Solution {
     public int longestPalindromeSubseq(String s) {
         int n = s.length();
-        // base case：一维 dp 数组全部初始化为 1
+        // base case: initialize the entire 1D dp array to 1
         int[] dp = new int[n];
         Arrays.fill(dp, 1);
 
@@ -251,7 +251,7 @@ class Solution {
             int pre = 0;
             for (int j = i + 1; j < n; j++) {
                 int temp = dp[j];
-                // 状态转移方程
+                // state-transition equation
                 if (s.charAt(i) == s.charAt(j))
                     dp[j] = pre + 2;
                 else
@@ -264,13 +264,13 @@ class Solution {
 }
 ```
 
-本文就结束了，不过空间压缩技巧再牛逼，也是基于常规动态规划思路之上的。
+That's the end of this article. As powerful as space compression is, it's still built on top of standard DP thinking.
 
-你也看到了，使用空间压缩技巧对二维 `dp` 数组进行降维打击之后，解法代码的可读性变得非常差了，如果直接看这种解法，任何人都是一脸懵逼的。算法的优化就是这么一个过程，先写出可读性很好的暴力递归算法，然后尝试运用动态规划技巧优化重叠子问题，最后尝试用空间压缩技巧优化空间复杂度。
+You can see that after applying space compression to a 2D `dp` array, the code's readability drops significantly. Anyone reading this kind of solution out of context would be baffled. Algorithm optimization is a process: first write a readable brute-force recursive algorithm, then apply DP to eliminate overlapping subproblems, then try space compression for space.
 
-也就是说，你最起码能够熟练运用我们前文 [动态规划框架套路详解](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) 的套路找出状态转移方程，写出一个正确的动态规划解法，然后才有可能观察状态转移的情况，分析是否可能使用空间压缩技巧来优化。
+In other words, you should at least be fluent with the [DP framework routine](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/) to find state-transition equations and write a correct DP solution. Only then can you observe the state transition and decide whether space compression applies.
 
-希望读者能够稳扎稳打，层层递进，对于这种比较极限的优化，不做也罢。毕竟套路存于心，走遍天下都不怕！
+I hope readers progress steadily, layer by layer. For these extreme optimizations, it's fine to skip them. As long as the patterns are in your head, you can travel anywhere fearlessly!
 
 
 
@@ -280,17 +280,17 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles citing this article</strong></summary>
 
- - [一个方法团灭 LeetCode 股票买卖问题](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/)
- - [动态规划之最小路径和](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/)
- - [动态规划解题套路框架](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
- - [动态规划设计：最大子数组](https://labuladong.online/algo/dynamic-programming/maximum-subarray/)
- - [学习数据结构和算法的框架思维](https://labuladong.online/algo/essential-technique/algorithm-summary/)
- - [经典动态规划：子集背包问题](https://labuladong.online/algo/dynamic-programming/knapsack2/)
- - [经典动态规划：完全背包问题](https://labuladong.online/algo/dynamic-programming/knapsack3/)
- - [经典动态规划：最长公共子序列](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
- - [经典动态规划：高楼扔鸡蛋](https://labuladong.online/algo/dynamic-programming/egg-drop/)
+ - [One method demolishes the LeetCode stock buy/sell series](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/)
+ - [DP: minimum path sum](https://labuladong.online/algo/dynamic-programming/minimum-path-sum/)
+ - [Dynamic programming problem-solving framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
+ - [DP design: maximum subarray](https://labuladong.online/algo/dynamic-programming/maximum-subarray/)
+ - [The framework mindset for learning data structures and algorithms](https://labuladong.online/algo/essential-technique/algorithm-summary/)
+ - [Classic DP: subset-sum knapsack](https://labuladong.online/algo/dynamic-programming/knapsack2/)
+ - [Classic DP: unbounded knapsack](https://labuladong.online/algo/dynamic-programming/knapsack3/)
+ - [Classic DP: longest common subsequence](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
+ - [Classic DP: super-egg-drop](https://labuladong.online/algo/dynamic-programming/egg-drop/)
 
 </details><hr>
 
@@ -299,11 +299,11 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems citing this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | 力扣 | Difficulty |
 | :----: | :----: | :----: |
 | [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
 
@@ -314,6 +314,3 @@ class Solution {
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
-
-
-![](https://labuladong.online/algo/images/souyisou2.png)

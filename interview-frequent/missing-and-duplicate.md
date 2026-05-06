@@ -1,75 +1,75 @@
-# 如何同时寻找缺失和重复的元素
+# Finding Missing and Duplicate Elements Together
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [645. Set Mismatch](https://leetcode.com/problems/set-mismatch/) | [645. 错误的集合](https://leetcode.cn/problems/set-mismatch/) | 🟢 |
+| [645. Set Mismatch](https://leetcode.com/problems/set-mismatch/) | [645. Set Mismatch](https://leetcode.cn/problems/set-mismatch/) | 🟢 |
 
 **-----------**
 
 
 
-今天就聊一道很看起来简单却十分巧妙的问题，寻找缺失和重复的元素。之前的一篇文章 [常用的位操作](https://labuladong.online/algo/frequency-interview/bitwise-operation/) 中也写过类似的问题，不过这次的和上次的问题使用的技巧不同。
+A problem that looks simple but is quite clever — finding both the missing and duplicate elements. The earlier article [Common Bit Operations](https://labuladong.online/algo/frequency-interview/bitwise-operation/) covered a similar problem with different techniques.
 
-这是力扣第 645 题「错误的集合」，我来描述一下这个题目：
+LeetCode 645 "Set Mismatch":
 
-给一个长度为 `N` 的数组 `nums`，其中本来装着 `[1..N]` 这 `N` 个元素，无序。但是现在出现了一些错误，`nums` 中的一个元素出现了重复，也就同时导致了另一个元素的缺失。请你写一个算法，找到 `nums` 中的重复元素和缺失元素的值。
+Given an array `nums` of length `N` originally containing the `N` numbers `[1..N]` (out of order). Some error caused one element to appear twice, also causing another to be missing. Write an algorithm to find the duplicate and missing values.
 
 ```java
-// 返回两个数字，分别是 {dup, missing}
+// Returns two numbers: {dup, missing}
 int[] findErrorNums(int[] nums);
 ```
 
-比如说输入：`nums = [1,2,2,4]`，算法返回 `[2,3]`。
+E.g., `nums = [1,2,2,4]` → `[2,3]`.
 
-其实很容易解决这个问题，先遍历一次数组，用一个哈希表记录每个数字出现的次数，然后遍历一次 `[1..N]`，看看那个元素重复出现，那个元素没有出现，就 OK 了。
+The straightforward solution: scan once to count occurrences with a hash table, then scan `[1..N]` to find which is duplicated and which is missing. Done.
 
-但问题是，这个常规解法需要一个哈希表，也就是 O(N) 的空间复杂度。你看题目给的条件那么巧，在 `[1..N]` 的几个数字中恰好有一个重复，一个缺失，**事出反常必有妖**，对吧。
+But that uses O(N) extra space. Given the conditions — exactly one duplicate, exactly one missing — there must be a clever trick.
 
-O(N) 的时间复杂度遍历数组是无法避免的，所以我们可以想想办法如何降低空间复杂度，是否可以在 O(1) 的空间复杂度之下找到重复和缺失的元素呢？
-
-
+The O(N) scan can't be avoided; can we use O(1) extra space?
 
 
 
 
 
-## 思路分析
 
-这个问题的特点是，每个元素和数组索引有一定的对应关系。
 
-我们现在自己改造下问题，**暂且将 `nums` 中的元素变为 `[0..N-1]`，这样每个元素就和一个数组索引完全对应了，这样方便理解一些**。
+## Idea
 
-如果说 `nums` 中不存在重复元素和缺失元素，那么每个元素就和唯一一个索引值对应，对吧？
+The key observation: each element corresponds in some way to an index.
 
-现在的问题是，有一个元素重复了，同时导致一个元素缺失了，这会产生什么现象呢？**会导致有两个元素对应到了同一个索引，而且会有一个索引没有元素对应过去**。
+Let's reframe — **temporarily treat `nums` as containing `[0..N-1]`, so each element matches an index exactly. Easier to reason about.**
 
-那么，如果我能够通过某些方法，找到这个重复对应的索引，不就是找到了那个重复元素么？找到那个没有元素对应的索引，不就是找到了那个缺失的元素了么？
+If there were no duplicates or missing, every element would correspond to a unique index.
 
-那么，如何不使用额外空间判断某个索引有多少个元素对应呢？这就是这个问题的精妙之处了：
+Now: one duplicate, one missing. **Result: one index has two elements pointing to it; another index has none.**
 
-**通过将每个索引对应的元素变成负数，以表示这个索引被对应过一次了**，算法过程如下 GIF 所示：
+If we can find the index that is "hit twice", that's the duplicate; the index "hit zero times" is the missing.
+
+How do we count hits without extra space? The trick:
+
+**Negate the element at each visited index** to mark it as visited. The GIF:
 
 ![](https://labuladong.online/algo/images/dupmissing/1.gif)
 
-如果出现重复元素 `4`，直观结果就是，索引 `4` 所对应的元素已经是负数了：
+If `4` is the duplicate, the value at index `4` is already negative when we hit it again:
 
 ![](https://labuladong.online/algo/images/dupmissing/2.jpg)
 
-对于缺失元素 `3`，直观结果就是，索引 `3` 所对应的元素是正数：
+If `3` is missing, the value at index `3` stays positive:
 
 ![](https://labuladong.online/algo/images/dupmissing/3.jpg)
 
-对于这个现象，我们就可以翻译成代码了：
+In code:
 
 ```java
 int[] findErrorNums(int[] nums) {
@@ -77,7 +77,7 @@ int[] findErrorNums(int[] nums) {
     int dup = -1;
     for (int i = 0; i < n; i++) {
         int index = Math.abs(nums[i]);
-        // nums[index] 小于 0 则说明重复访问
+        // nums[index] < 0 → duplicate visit
         if (nums[index] < 0)
             dup = Math.abs(nums[i]);
         else
@@ -86,7 +86,7 @@ int[] findErrorNums(int[] nums) {
 
     int missing = -1;
     for (int i = 0; i < n; i++)
-        // nums[i] 大于 0 则说明没有访问
+        // nums[i] > 0 → never visited
         if (nums[i] > 0)
             missing = i;
     
@@ -94,7 +94,7 @@ int[] findErrorNums(int[] nums) {
 }
 ```
 
-这个问题就基本解决了，别忘了我们刚才为了方便分析，假设元素是 `[0..N-1]`，但题目要求是 `[1..N]`，所以只要简单修改两处地方即可得到原题的答案：
+That's the gist. We assumed `[0..N-1]`; the actual problem uses `[1..N]`, so two small tweaks:
 
 ```java
 class Solution {
@@ -102,7 +102,7 @@ class Solution {
         int n = nums.length;
         int dup = -1;
         for (int i = 0; i < n; i++) {
-            // 现在的元素是从 1 开始的
+            // Elements start from 1 now
             int index = Math.abs(nums[i]) - 1;
             if (nums[index] < 0)
                 dup = Math.abs(nums[i]);
@@ -113,7 +113,7 @@ class Solution {
         int missing = -1;
         for (int i = 0; i < n; i++)
             if (nums[i] > 0)
-                // 将索引转换成元素
+                // Convert index to element
                 missing = i + 1;
 
         return new int[]{dup, missing};
@@ -126,7 +126,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/set-mismatch/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🥳 代码可视化动画🥳</strong>
+<strong>🥳 Animated Code Visualization 🥳</strong>
 </summary>
 </details>
 </a>
@@ -134,17 +134,17 @@ class Solution {
 
 
 
-其实，元素从 1 开始是有道理的，也必须从一个非零数开始。因为如果元素从 0 开始，那么 0 的相反数还是自己，所以如果数字 0 出现了重复或者缺失，算法就无法判断 0 是否被访问过。我们之前的假设只是为了简化题目，更通俗易懂。
+Why must elements start from 1? If 0 were valid, negating 0 doesn't change it — we couldn't tell whether 0 was visited.
 
-## 最后总结
+## Wrap-Up
 
-对于这种数组问题，**关键点在于元素和索引是成对儿出现的，常用的方法是排序、异或、映射**。
+For these problems, **the key is that elements pair with indices; common methods are sort, XOR, and mapping.**
 
-映射的思路就是我们刚才的分析，将每个索引和元素映射起来，通过正负号记录某个元素是否被映射。
+Mapping: as analyzed — pair elements with indices and use signs to mark visits.
 
-排序的方法也很好理解，对于这个问题，可以想象如果元素都被从小到大排序，如果发现索引对应的元素如果不相符，就可以找到重复和缺失的元素。
+Sorting: imagine the elements sorted; mismatches between index and element reveal the answer.
 
-异或运算也是常用的，因为异或性质 `a ^ a = 0, a ^ 0 = a`，如果将索引和元素同时异或，就可以消除成对儿的索引和元素，留下的就是重复或者缺失的元素。可以看看前文 [常用的位运算](https://labuladong.online/algo/frequency-interview/bitwise-operation/)，介绍过这种方法。
+XOR: use `a ^ a = 0`, `a ^ 0 = a` — XOR all indices and elements; pairs cancel, leaving the mismatch. See [Common Bit Operations](https://labuladong.online/algo/frequency-interview/bitwise-operation/).
 
 
 
@@ -154,9 +154,9 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】哈希表更多习题](https://labuladong.online/algo/problem-set/hash-table/)
+ - [[Practice] Hash Table Problems](https://labuladong.online/algo/problem-set/hash-table/)
 
 </details><hr>
 
@@ -165,14 +165,14 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [442. Find All Duplicates in an Array](https://leetcode.com/problems/find-all-duplicates-in-an-array/?show=1) | [442. 数组中重复的数据](https://leetcode.cn/problems/find-all-duplicates-in-an-array/?show=1) | 🟠 |
-| [448. Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/?show=1) | [448. 找到所有数组中消失的数字](https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/?show=1) | 🟢 |
+| [442. Find All Duplicates in an Array](https://leetcode.com/problems/find-all-duplicates-in-an-array/?show=1) | [442. Find All Duplicates in an Array](https://leetcode.cn/problems/find-all-duplicates-in-an-array/?show=1) | 🟠 |
+| [448. Find All Numbers Disappeared in an Array](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/?show=1) | [448. Find All Numbers Disappeared in an Array](https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/?show=1) | 🟢 |
 
 </details>
 <hr>

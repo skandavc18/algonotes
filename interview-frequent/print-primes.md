@@ -1,38 +1,38 @@
-# 如何高效寻找素数
+# Efficiently Counting Primes
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [204. Count Primes](https://leetcode.com/problems/count-primes/) | [204. 计数质数](https://leetcode.cn/problems/count-primes/) | 🟠 |
+| [204. Count Primes](https://leetcode.com/problems/count-primes/) | [204. Count Primes](https://leetcode.cn/problems/count-primes/) | 🟠 |
 
 **-----------**
 
 
 
-素数的定义看起来很简单，如果一个数如果只能被 1 和它本身整除，那么这个数就是素数。
+Primes are simple to define: a number is prime if it's only divisible by 1 and itself.
 
-虽然素数的定义并不复杂，恐怕没多少人真的能把素数相关的算法写得高效。
+The definition is easy, but few can write efficient prime-related algorithms.
 
-比如力扣第 204 题「计数质数」，让你写这样一个函数：
+LeetCode 204 "Count Primes":
 
 ```java
-// 返回区间 [2, n) 中有几个素数 
+// Returns the number of primes in [2, n)
 int countPrimes(int n)
 
-// 比如 countPrimes(10) 返回 4
-// 因为 2,3,5,7 是素数
+// E.g., countPrimes(10) returns 4
+// because 2,3,5,7 are primes
 ```
 
-你会如何写这个函数？我想大家应该会这样写：
+Most would write:
 
 ```java
 int countPrimes(int n) {
@@ -42,19 +42,19 @@ int countPrimes(int n) {
     return count;
 }
 
-// 判断整数 n 是否是素数
+// Whether n is prime
 boolean isPrime(int n) {
     for (int i = 2; i < n; i++)
         if (n % i == 0)
-            // 有其他整除因子
+            // Has a non-trivial divisor
             return false;
     return true;
 }
 ```
 
-这样写的话时间复杂度 O(n^2)，问题很大。**首先你用 `isPrime` 函数来辅助的思路就不够高效；而且就算你要用 `isPrime` 函数，这样写算法也是存在计算冗余的**。
+This is O(n^2) — way too slow. **Using `isPrime` as a helper isn't efficient; even if you use it, this version has redundant work.**
 
-先来说下**如果你要判断一个数是不是素数，应该如何写算法**。只需稍微修改一下上面的 `isPrime` 代码中的 for 循环条件：
+First, **how to test whether a number is prime efficiently** — tweak the for loop:
 
 ```java
 boolean isPrime(int n) {
@@ -63,11 +63,7 @@ boolean isPrime(int n) {
 }
 ```
 
-换句话说，`i` 不需要遍历到 `n`，而只需要到 `sqrt(n)` 即可。为什么呢，我们举个例子，假设 `n = 12`。
-
-
-
-
+`i` doesn't need to go up to `n`; only up to `sqrt(n)`. Why? For `n = 12`:
 
 ```java
 12 = 2 × 6
@@ -77,40 +73,38 @@ boolean isPrime(int n) {
 12 = 6 × 2
 ```
 
+The last two are the first two reversed; the turning point is at `sqrt(n)`.
 
+So if no divisor is found in `[2, sqrt(n)]`, `n` is prime — nothing in `[sqrt(n), n]` will divide it either.
 
-可以看到，后两个乘积就是前面两个反过来，反转临界点就在 `sqrt(n)`。
+`isPrime` is now $O(\sqrt{N})$. **But for `countPrimes` we won't use this function** — the `sqrt(n)` insight is needed below.
 
-换句话说，如果在 `[2,sqrt(n)]` 这个区间之内没有发现可整除因子，就可以直接断定 `n` 是素数了，因为在区间 `[sqrt(n),n]` 也一定不会发现可整除因子。
+## Efficient `countPrimes`
 
-现在，`isPrime` 函数的时间复杂度降为 $O(sqrt(N))$，**但是我们实现 `countPrimes` 函数其实并不需要这个函数**，以上只是希望读者明白 `sqrt(n)` 的含义，因为等会还会用到。
+The "sieve method" goes back to ancient Greece's Eratosthenes — also the first to estimate the Earth's circumference via shadows; called the "father of geography".
 
-## 高效实现 `countPrimes`
+The sieve idea is the inverse of the naive approach:
 
-接下来介绍的方法叫做「素数筛选法」，这个方法是古希腊一位名叫埃拉托色尼的大佬发明的，我们在中学的教课书上见过他的大名，因为他就是第一个通过物体的影子正确计算地球周长的人，被推崇为「地理学之父」。
+Start from 2. 2 is prime; 2×2=4, 3×2=6, 4×2=8, ... aren't prime.
 
-回到正题，素数筛选法的核心思路是和上面的常规思路反着来：
+3 is prime; 3×2=6, 3×3=9, 3×4=12, ... aren't prime either.
 
-首先从 2 开始，我们知道 2 是一个素数，那么 2 × 2 = 4, 3 × 2 = 6, 4 × 2 = 8... 都不可能是素数了。
-
-然后我们发现 3 也是素数，那么 3 × 2 = 6, 3 × 3 = 9, 3 × 4 = 12... 也都不可能是素数了。
-
-Wikipedia 的这个 GIF 很形象：
+The Wikipedia GIF illustrates:
 
 ![](https://labuladong.online/algo/images/prime/1.gif)
 
-看到这里，你是否有点明白这个排除法的逻辑了呢？先看我们的第一版代码：
+First version:
 
 ```java
 class Solution {
     public int countPrimes(int n) {
         boolean[] isPrime = new boolean[n];
-        // 将数组都初始化为 true
+        // Initialize all to true
         Arrays.fill(isPrime, true);
 
         for (int i = 2; i < n; i++) {
             if (isPrime[i]) {
-                // i 的倍数不可能是素数了
+                // Multiples of i can't be prime
                 for (int j = 2 * i; j < n; j += i) {
                     isPrime[j] = false;
                 }
@@ -127,9 +121,9 @@ class Solution {
 }
 ```
 
-如果上面这段代码你能够理解，那么你已经掌握了整体思路，但是还有两个细微的地方可以优化。
+If you follow this, you've got the gist. Two further optimizations.
 
-首先，回想本文开头介绍的 `isPrime` 素数判定函数，由于因子的对称性，其中的 for 循环只需要遍历 `[2,sqrt(n)]` 就够了。这里也是类似的，我们外层的 for 循环也只需要遍历到 `sqrt(n)`：
+First, by symmetry of factors, the outer loop only needs to go up to `sqrt(n)`:
 
 ```java
 for (int i = 2; i * i < n; i++) 
@@ -137,25 +131,23 @@ for (int i = 2; i * i < n; i++)
         ...
 ```
 
-除此之外，很难注意到内层的 for 循环也可以优化。我们之前的做法是：
+Second — less obvious — the inner loop has redundancy:
 
 ```java
 for (int j = 2 * i; j < n; j += i) 
     isPrime[j] = false;
 ```
 
-这样可以把 `i` 的整数倍都标记为 `false`，但是仍然存在计算冗余。
+E.g., `n = 25`, `i = 5` marks 5×2=10, 5×3=15, etc., but those were already marked by `i = 2` (2×5) and `i = 3` (3×5).
 
-比如 `n = 25`，`i = 5` 时算法会标记 5 × 2 = 10，5 × 3 = 15 等等数字，但是这两个数字已经被 `i = 2` 和 `i = 3` 的 2 × 5 和 3 × 5 标记了。
-
-我们可以稍微优化一下，让 `j` 从 `i * i` 开始遍历，而不是从 `2 * i` 开始：
+Start `j` from `i * i`:
 
 ```java
 for (int j = i * i; j < n; j += i) 
     isPrime[j] = false;
 ```
 
-这样，素数计数的算法就高效实现了，其实这个算法有一个名字，叫做 Sieve of Eratosthenes。看下完整的最终代码：
+The efficient version — the Sieve of Eratosthenes:
 
 ```java
 class Solution {
@@ -185,7 +177,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/count-primes/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🌈 代码可视化动画🌈</strong>
+<strong>🌈 Animated Code Visualization 🌈</strong>
 </summary>
 </details>
 </a>
@@ -193,14 +185,14 @@ class Solution {
 
 
 
-**该算法的时间复杂度比较难算**，显然时间跟这两个嵌套的 for 循环有关，其操作数应该是：
+**Time complexity is tricky to derive.** It depends on the nested loops; the operation count is:
 
   n/2 + n/3 + n/5 + n/7 + ...
 = n × (1/2 + 1/3 + 1/5 + 1/7...)
 
-括号中是素数的倒数。其最终结果是 $O(N * loglogN)$，有兴趣的读者可以查一下该算法的时间复杂度证明。
+The parenthesized terms are reciprocals of primes. The result is $O(N \log \log N)$. Curious readers can look up the proof.
 
-以上就是素数算法相关的全部内容。怎么样，是不是看似简单的问题却有不少细节可以打磨呀？
+That's everything for prime algorithms. Looks simple, but plenty of detail to polish.
 
 
 
@@ -210,10 +202,10 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】链表双指针经典习题](https://labuladong.online/algo/problem-set/linkedlist-two-pointers/)
- - [一文秒杀所有丑数系列问题](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
+ - [[Practice] Classic Two-Pointer Linked List Problems](https://labuladong.online/algo/problem-set/linkedlist-two-pointers/)
+ - [Sweeping All Ugly-Number Problems](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
 
 </details><hr>
 
@@ -222,14 +214,14 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [264. Ugly Number II](https://leetcode.com/problems/ugly-number-ii/?show=1) | [264. 丑数 II](https://leetcode.cn/problems/ugly-number-ii/?show=1) | 🟠 |
-| - | [剑指 Offer 49. 丑数](https://leetcode.cn/problems/chou-shu-lcof/?show=1) | 🟠 |
+| [264. Ugly Number II](https://leetcode.com/problems/ugly-number-ii/?show=1) | [264. Ugly Number II](https://leetcode.cn/problems/ugly-number-ii/?show=1) | 🟠 |
+| - | [Sword to Offer 49. Ugly Number](https://leetcode.cn/problems/chou-shu-lcof/?show=1) | 🟠 |
 
 </details>
 <hr>

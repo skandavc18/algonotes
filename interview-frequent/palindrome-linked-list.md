@@ -1,56 +1,54 @@
-# 如何判断回文链表
+# Determining a Palindrome Linked List
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/) | [234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/) | 🟢 |
+| [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/) | [234. Palindrome Linked List](https://leetcode.cn/problems/palindrome-linked-list/) | 🟢 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [链表基础](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/)
-> - [链表双指针技巧](https://labuladong.online/algo/essential-technique/linked-list-skills-summary/)
-> - [数组双指针技巧汇总](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
+> - [Linked List Basics](https://labuladong.online/algo/data-structure-basic/linkedlist-basic/)
+> - [Linked List Two-Pointer Tricks](https://labuladong.online/algo/essential-technique/linked-list-skills-summary/)
+> - [Array Two-Pointer Tricks Summary](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
 
-前文 [数组双指针技巧汇总](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/) 讲解了回文串和回文序列相关的问题，先来简单回顾下。
+The earlier article [Array Two-Pointer Tricks Summary](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/) covered palindromic strings/sequences — a quick recap.
 
-**寻找**回文串的核心思想是从中心向两端扩展：
+**Finding** a palindrome: expand from the center:
 
 ```java
-// 在 s 中寻找以 s[left] 和 s[right] 为中心的最长回文串
+// Longest palindrome centered at s[left] and s[right]
 String palindrome(String s, int left, int right) {
-    // 防止索引越界
+    // Bounds check
     while (left >= 0 && right < s.length()
             && s.charAt(left) == s.charAt(right)) {
-        // 双指针，向两边展开
+        // Two pointers — expand
         left--;
         right++;
     }
-    // 返回以 s[left] 和 s[right] 为中心的最长回文串
     return s.substring(left + 1, right);
 }
 ```
 
-因为回文串长度可能为奇数也可能是偶数，长度为奇数时只存在一个中心点，而长度为偶数时存在两个中心点，所以上面这个函数需要传入 `l` 和 `r`。
+Palindromes can be odd or even in length — odd has one center, even has two — so the helper takes both `l` and `r`.
 
-而**判断**一个字符串是不是回文串就简单很多，不需要考虑奇偶情况，只需要[双指针技巧](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)，从两端向中间逼近即可：
+**Checking** whether a string is a palindrome is simpler — no parity concerns; just two pointers from the ends inward:
 
 ```java
 boolean isPalindrome(String s) {
-    // 一左一右两个指针相向而行
     int left = 0, right = s.length() - 1;
     while (left < right) {
         if (s.charAt(left) != s.charAt(right)) {
@@ -63,68 +61,66 @@ boolean isPalindrome(String s) {
 }
 ```
 
-以上代码很好理解吧，**因为回文串是对称的，所以正着读和倒着读应该是一样的，这一特点是解决回文串问题的关键**。
+**Palindromes are symmetric — read left-to-right or right-to-left, same. That's the key.**
 
-下面扩展这一最简单的情况，来解决：如何判断一个「单链表」是不是回文。
+Now: how to check whether a singly linked list is a palindrome.
 
-## 一、判断回文单链表
+## 1. Singly Linked List Palindrome Check
 
-看下力扣第 234 题「回文链表」：
+LeetCode 234 "Palindrome Linked List":
 
 <Problem slug="palindrome-linked-list" />
-
-函数签名如下：
 
 ```java
 boolean isPalindrome(ListNode head);
 ```
 
-这道题的关键在于，单链表无法倒着遍历，无法使用双指针技巧。
+Trick: a singly linked list can't be traversed backward — no two-pointers from the ends.
 
-那么最简单的办法就是，把原始链表反转存入一条新的链表，然后比较这两条链表是否相同。关于如何反转链表，可以参见前文 [递归翻转链表的一部分](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/)。
+Simplest approach: reverse the list into a new one and compare. (See [Recursive Linked List Reversal](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/).)
 
-我在 [学习数据结构的框架思维](https://labuladong.online/algo/essential-technique/algorithm-summary/) 中说过，链表兼具递归结构，树结构不过是链表的衍生。那么，**链表其实也可以有前序遍历和后序遍历，借助二叉树后序遍历的思路，不需要显式反转原始链表也可以倒序遍历链表**：
+In [Framework Thinking for DS&A](https://labuladong.online/algo/essential-technique/algorithm-summary/) I said linked lists are recursive, and trees extend lists. **Linked lists also have preorder and postorder traversals — like binary trees, postorder lets us iterate the list in reverse without explicitly reversing**:
 
 ```java
-// 二叉树遍历框架
+// Binary-tree traversal
 void traverse(TreeNode root) {
-    // 前序遍历代码
+    // Preorder
     traverse(root.left);
-    // 中序遍历代码
+    // Inorder
     traverse(root.right);
-    // 后序遍历代码
+    // Postorder
 }
 
-// 递归遍历单链表
+// Recursive linked list traversal
 void traverse(ListNode head) {
-    // 前序遍历代码
+    // Preorder
     traverse(head.next);
-    // 后序遍历代码
+    // Postorder
 }
 ```
 
-这个框架有什么指导意义呢？如果我想正序打印链表中的 `val` 值，可以在前序遍历位置写代码；反之，如果想倒序遍历链表，就可以在后序遍历位置操作：
+Why does this matter? Print values in order at preorder; print in reverse at postorder:
 
 ```java
-// 倒序打印单链表中的元素值
+// Print list values in reverse
 void traverse(ListNode head) {
     if (head == null) return;
     traverse(head.next);
-    // 后序遍历代码
+    // Postorder
     print(head.val);
 }
 ```
 
-说到这了，其实可以稍作修改，模仿双指针实现回文判断的功能：
+We can mimic the two-pointer palindrome check:
 
 ```java
 class Solution {
-    // 从左向右移动的指针
+    // Pointer moving left -> right
     ListNode left;
-    // 从右向左移动的指针
+    // Pointer moving right -> left
     ListNode right;
 
-    // 记录链表是否为回文
+    // Track palindrome state
     boolean res = true;
 
     boolean isPalindrome(ListNode head) {
@@ -138,11 +134,11 @@ class Solution {
             return;
         }
 
-        // 利用递归，走到链表尾部
+        // Recurse to the tail
         traverse(right.next);
 
-        // 后序遍历位置，此时的 right 指针指向链表右侧尾部
-        // 所以可以和 left 指针比较，判断是否是回文链表
+        // Postorder: right is at the far end
+        // Compare with left to check palindrome
         if (left.val != right.val) {
             res = false;
         }
@@ -151,21 +147,21 @@ class Solution {
 }
 ```
 
-这么做的核心逻辑是什么呢？**实际上就是把链表节点放入一个栈，然后再拿出来，这时候元素顺序就是反的**，只不过我们利用的是递归函数的堆栈而已。
+**The core logic: push nodes onto a stack, then pop them in reverse — using the recursion stack.**
 
 <visual slug='is-palindrome' >
 
-你可以点开下面这个可视化面板，多次点击 <code type="click">if (right === null)</code> 这一行代码，即可看到 `right` 指针利用递归堆栈走到了链表尾部，然后再多次点击 <code type="click">left = left.next;</code> 这一行代码，即可看到 `left` 前进，`right` 指针回退，相向而行，最终完成回文判断：
+Click <code type="click">if (right === null)</code> repeatedly to see `right` walk to the tail via recursion; click <code type="click">left = left.next;</code> repeatedly to see `left` advance and `right` retreat to meet:
 
 </visual>
 
-当然，无论造一条反转链表还是利用后序遍历，算法的时间和空间复杂度都是 O(N)。下面我们想想，能不能不用额外的空间，解决这个问题呢？
+Either approach is O(N) time and space. Can we use O(1) extra space?
 
-## 二、优化空间复杂度
+## 2. Optimizing Space
 
-更好的思路是这样的：
+Better approach:
 
-**1、先通过 [链表双指针技巧](https://labuladong.online/algo/essential-technique/linked-list-skills-summary/) 中的快慢指针来找到链表的中点**：
+**1. Find the midpoint with [linked list fast/slow pointers](https://labuladong.online/algo/essential-technique/linked-list-skills-summary/)**:
 
 ```java
 ListNode slow, fast;
@@ -174,14 +170,14 @@ while (fast != null && fast.next != null) {
     slow = slow.next;
     fast = fast.next.next;
 }
-// slow 指针现在指向链表中点
+// slow now points to the middle
 ```
 
 ![](https://labuladong.online/algo/images/palindrome-list/1.jpg)
 
 
 
-**2、如果`fast`指针没有指向`null`，说明链表长度为奇数，`slow`还要再前进一步**：
+**2. If `fast` is non-null, the length is odd; advance `slow` once more**:
 
 ```java
 if (fast != null)
@@ -190,7 +186,7 @@ if (fast != null)
 
 ![](https://labuladong.online/algo/images/palindrome-list/2.jpg)
 
-**3、从`slow`开始反转后面的链表，现在就可以开始比较回文串了**：
+**3. Reverse the latter half from `slow`; compare**:
 
 ```java
 ListNode left = head;
@@ -209,7 +205,7 @@ return true;
 
 
 
-至此，把上面 3 段代码合在一起就高效地解决这个问题了，其中 `reverse` 函数可以参考 [翻转单链表](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/)：
+Putting it together — see [Reverse Linked List](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/) for `reverse`:
 
 ```java
 class Solution {
@@ -249,37 +245,37 @@ class Solution {
 }
 ```
 
-算法过程如下 GIF 所示：
+GIF:
 
 ![](https://labuladong.online/algo/images/kgroup/8.gif)
 
 <visual slug='palindrome-linked-list'>
 
-你可以点开下面的可视化面板，多次点击 <code type="click">while (right != null)</code> 这一行代码，即可看到 `left` 和 `right` 指针相向而行，最终完成回文判断：
+Click <code type="click">while (right != null)</code> repeatedly to see `left` and `right` move toward each other:
 
 </visual>
 
-算法总体的时间复杂度 O(N)，空间复杂度 O(1)，已经是最优的了。
+O(N) time, O(1) space — optimal.
 
-我知道肯定有读者会问：这种解法虽然高效，但破坏了输入链表的原始结构，能不能避免这个瑕疵呢？
+Some readers ask: this destroys the input. Can we restore it?
 
-其实这个问题很好解决，关键在于得到`p, q`这两个指针位置：
+The key is to remember `p` and `q` (the boundaries):
 
 ![](https://labuladong.online/algo/images/palindrome-list/4.jpg)
 
-这样，只要在函数 return 之前加一段代码即可恢复原先链表顺序：
+Add one line before return:
 
 ```java
 p.next = reverse(q);
 ```
 
-篇幅所限，我就不写了，读者可以自己尝试一下。
+Try it yourself.
 
-## 三、最后总结
+## 3. Wrap-Up
 
-首先，寻找回文串是从中间向两端扩展，判断回文串是从两端向中间收缩。对于单链表，无法直接倒序遍历，可以造一条新的反转链表，可以利用链表的后序遍历，也可以用栈结构倒序处理单链表。
+Finding palindromes: expand from the center. Checking palindromes: contract from the ends. For singly linked lists, you can't traverse backward directly — reverse a copy, use postorder, or use a stack.
 
-具体到回文链表的判断问题，由于回文的特殊性，可以不完全反转链表，而是仅仅反转部分链表，将空间复杂度降到 O(1)。
+For palindrome linked-list checking specifically, the symmetry lets us reverse only the second half — O(1) extra space.
 
 
 
@@ -292,13 +288,13 @@ p.next = reverse(q);
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer II 027. 回文链表](https://leetcode.cn/problems/aMhZSa/?show=1) | 🟢 |
+| - | [Sword to Offer II 027. Palindrome Linked List](https://leetcode.cn/problems/aMhZSa/?show=1) | 🟢 |
 
 </details>
 <hr>

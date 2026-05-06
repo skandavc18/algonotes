@@ -1,80 +1,80 @@
-# 二叉搜索树心法（特性篇）
+# Binary Search Tree Tactics (Properties)
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1038. Binary Search Tree to Greater Sum Tree](https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/) | [1038. 从二叉搜索树到更大和树](https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/) | 🟠 |
-| [230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) | [230. 二叉搜索树中第K小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/) | 🟠 |
-| [538. Convert BST to Greater Tree](https://leetcode.com/problems/convert-bst-to-greater-tree/) | [538. 把二叉搜索树转换为累加树](https://leetcode.cn/problems/convert-bst-to-greater-tree/) | 🟠 |
+| [1038. Binary Search Tree to Greater Sum Tree](https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/) | [1038. Binary Search Tree to Greater Sum Tree](https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/) | 🟠 |
+| [230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) | [230. Kth Smallest Element in a BST](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/) | 🟠 |
+| [538. Convert BST to Greater Tree](https://leetcode.com/problems/convert-bst-to-greater-tree/) | [538. Convert BST to Greater Tree](https://leetcode.cn/problems/convert-bst-to-greater-tree/) | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [二叉树结构基础](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
-> - [二叉树的 DFS/BFS 遍历](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
+> - [Binary Tree Structure Basics](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)
+> - [DFS/BFS Traversal of Binary Trees](https://labuladong.online/algo/data-structure-basic/binary-tree-traverse-basic/)
 
-前文手把手带你刷二叉树已经写了 [思维篇](https://labuladong.online/algo/data-structure/binary-tree-part1/)，[构造篇](https://labuladong.online/algo/data-structure/binary-tree-part2/)，[后序篇](https://labuladong.online/algo/data-structure/binary-tree-part3/) 和 [序列化篇](https://labuladong.online/algo/data-structure/serialize-and-deserialize-binary-tree/)。
+In earlier articles I walked through binary trees in [Part 1](https://labuladong.online/algo/data-structure/binary-tree-part1/), [Part 2 (Construction)](https://labuladong.online/algo/data-structure/binary-tree-part2/), [Part 3 (Postorder)](https://labuladong.online/algo/data-structure/binary-tree-part3/), and [Serialization](https://labuladong.online/algo/data-structure/serialize-and-deserialize-binary-tree/).
 
-今天开启二叉搜索树（Binary Search Tree，后文简写 BST）的系列文章，手把手带你刷 BST。
+Today we begin the Binary Search Tree (BST) series and walk through BSTs hand-in-hand.
 
-首先，BST 的特性大家应该都很熟悉了（详见基础知识章节的 [二叉树基础](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/)）：
+First, the BST properties (see [Binary Tree Basics](https://labuladong.online/algo/data-structure-basic/binary-tree-basic/) in the basics chapter):
 
-1、对于 BST 的每一个节点 `node`，左子树节点的值都比 `node` 的值要小，右子树节点的值都比 `node` 的值大。
+1. For every node `node`, all values in its left subtree are smaller than `node.val`, and all values in its right subtree are larger.
 
-2、对于 BST 的每一个节点 `node`，它的左侧子树和右侧子树都是 BST。
+2. For every node `node`, both its left and right subtrees are BSTs.
 
-二叉搜索树并不算复杂，但我觉得它可以算是数据结构领域的半壁江山，直接基于 BST 的数据结构有 AVL 树，红黑树等等，拥有了自平衡性质，可以提供 logN 级别的增删查改效率；还有 B+ 树，线段树等结构都是基于 BST 的思想来设计的。
+BSTs aren't very complex, but I'd say they account for half of the data-structure landscape: AVL trees, red-black trees, and other self-balancing BSTs (with logN insert/delete/search) are direct extensions of BSTs. B+ trees, segment trees, and other structures are also designed around BST ideas.
 
-**从做算法题的角度来看 BST，除了它的定义，还有一个重要的性质：BST 的中序遍历结果是有序的（升序）**。
+**For the purposes of solving algorithm problems, in addition to the definition there's one important property: the in-order traversal of a BST yields its values in sorted (ascending) order**.
 
-也就是说，如果输入一棵 BST，以下代码可以将 BST 中每个节点的值升序打印出来：
+That is, given a BST, the following code prints every node's value in ascending order:
 
 ```java
 void traverse(TreeNode root) {
     if (root == null) return;
     traverse(root.left);
-    // 中序遍历代码位置
+    // In-order position
     print(root.val);
     traverse(root.right);
 }
 ```
 
-那么根据这个性质，我们来做两道算法题。
+Using this property, let's solve two problems.
 
-## 寻找第 K 小的元素
+## Finding the Kth Smallest Element
 
-这是力扣第 230 题「二叉搜索树中第 K 小的元素」，看下题目：
+LeetCode 230 "Kth Smallest Element in a BST". Look at the problem:
 
 <Problem slug="kth-smallest-element-in-a-bst" />
 
-这个需求很常见吧，一个直接的思路就是升序排序，然后找第 `k` 个元素呗。BST 的中序遍历其实就是升序排序的结果，找第 `k` 个元素肯定不是什么难事。
+Common requirement; one direct idea is to sort in ascending order and pick the `k`-th element. The BST in-order traversal already gives ascending order, so finding the `k`-th element is easy.
 
-按照这个思路，可以直接写出代码：
+Direct code:
 
 ```java
 class Solution {
     int kthSmallest(TreeNode root, int k) {
-        // 利用 BST 的中序遍历特性
+        // Use BST's in-order traversal property
         traverse(root, k);
         return res;
     }
 
-    // 记录结果
+    // Records the result
     int res = 0;
-    // 记录当前元素的排名
+    // Records the rank of the current element
     int rank = 0;
     void traverse(TreeNode root, int k) {
         if (root == null) {
@@ -82,10 +82,10 @@ class Solution {
         }
         traverse(root.left, k);
 
-        // 中序代码位置
+        // In-order position
         rank++;
         if (k == rank) {
-            // 找到第 k 小的元素
+            // Found the kth smallest element
             res = root.val;
             return;
         }
@@ -100,7 +100,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/kth-smallest-element-in-a-bst/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🍭 代码可视化动画🍭</strong>
+<strong>🍭 Animated Code Visualization 🍭</strong>
 </summary>
 </details>
 </a>
@@ -108,94 +108,94 @@ class Solution {
 
 
 
-这道题就做完了，不过呢，还是要多说几句，因为这个解法并不是最高效的解法，而是仅仅适用于这道题。
+This solves the problem, but a few more words: this isn't the most efficient solution — it just works for this problem.
 
-我们前文 [高效计算数据流的中位数](https://labuladong.online/algo/practice-in-action/find-median-from-data-stream/) 中就提过今天的这个问题：
+In the earlier article [Computing the Median of a Data Stream Efficiently](https://labuladong.online/algo/practice-in-action/find-median-from-data-stream/), I posed the same question:
 
 > [!NOTE]
-> 如果让你实现一个在二叉搜索树中通过排名计算对应元素的方法 `select(int k)`，你会怎么设计？
+> If you were asked to implement `select(int k)` to retrieve the element at rank `k` in a BST, how would you design it?
 
-如果按照我们刚才说的方法，利用「BST 中序遍历就是升序排序结果」这个性质，每次寻找第 `k` 小的元素都要中序遍历一次，最坏的时间复杂度是 $O(N)$，`N` 是 BST 的节点个数。
+Using the method above, every call to find the `k`-th smallest does a full in-order traversal in the worst case at $O(N)$, where `N` is the number of nodes.
 
-要知道 BST 性质是非常牛逼的，像红黑树这种改良的自平衡 BST，增删查改都是 $O(logN)$ 的复杂度，让你算一个第 `k` 小元素，时间复杂度竟然要 $O(N)$，有点低效了。
+BST properties are powerful — improved self-balancing BSTs like red-black trees do insert/delete/search in $O(\log N)$ — yet computing the `k`-th smallest costs $O(N)$ here, which is inefficient.
 
-所以说，计算第 `k` 小元素，最好的算法肯定也是对数级别的复杂度，不过这个依赖于 BST 节点记录的信息有多少。
+So the best algorithm should also be logarithmic. That depends on how much information each BST node records.
 
-我们想一下 BST 的操作为什么这么高效？就拿搜索某一个元素来说，BST 能够在对数时间找到该元素的根本原因还是在 BST 的定义里，左子树小右子树大嘛，所以每个节点都可以通过对比自身的值判断去左子树还是右子树搜索目标值，从而避免了全树遍历，达到对数级复杂度。
+Why are BST operations efficient? Take searching for an element: BSTs locate any element in logarithmic time fundamentally because of the BST definition — left small, right large — so each node compares its value and decides whether to descend left or right, avoiding a full traversal.
 
-那么回到这个问题，想找到第 `k` 小的元素，或者说找到排名为 `k` 的元素，如果想达到对数级复杂度，关键也在于每个节点得知道他自己排第几。
+Back to this problem: to find the element of rank `k` in logarithmic time, the key is that each node knows its own rank.
 
-比如说你让我查找排名为 `k` 的元素，当前节点知道自己排名第 `m`，那么我可以比较 `m` 和 `k` 的大小：
+Suppose I want the element of rank `k`, and the current node knows it has rank `m`. Compare:
 
-1、如果 `m == k`，显然就是找到了第 `k` 个元素，返回当前节点就行了。
+1. If `m == k`, this is the element of rank `k`; return the current node.
 
-2、如果 `k < m`，那说明排名第 `k` 的元素在左子树，所以可以去左子树搜索第 `k` 个元素。
+2. If `k < m`, the rank-`k` element is in the left subtree; recurse left for the `k`-th element.
 
-3、如果 `k > m`，那说明排名第 `k` 的元素在右子树，所以可以去右子树搜索第 `k - m - 1` 个元素。
+3. If `k > m`, the rank-`k` element is in the right subtree; recurse right for the `(k - m - 1)`-th element.
 
-这样就可以将时间复杂度降到 $O(logN)$ 了。
+This brings the complexity to $O(\log N)$.
 
-那么，如何让每一个节点知道自己的排名呢？
+How does each node know its own rank?
 
-这就是我们之前说的，需要在二叉树节点中维护额外信息。**每个节点需要记录，以自己为根的这棵二叉树有多少个节点**。
+As we said, we maintain extra information in the tree. **Each node records the total number of nodes in the subtree rooted at itself.**
 
-也就是说，我们 `TreeNode` 中的字段应该如下：
+That is, our `TreeNode` should look like:
 
 ```java
 class TreeNode {
     int val;
-    // 以该节点为根的树的节点总数
+    // Total number of nodes in the subtree rooted at this node
     int size;
     TreeNode left;
     TreeNode right;
 }
 ```
 
-有了 `size` 字段，外加 BST 节点左小右大的性质，对于每个节点 `node` 就可以通过 `node.left` 推导出 `node` 的排名，从而做到我们刚才说到的对数级算法。
+Given `size` plus the BST left-small / right-large property, for any node `node` we can derive its rank using `node.left`, achieving the logarithmic algorithm.
 
-当然，`size` 字段需要在增删元素的时候需要被正确维护，力扣提供的 `TreeNode` 是没有 `size` 这个字段的，所以我们这道题就只能利用 BST 中序遍历的特性实现了，但是我们上面说到的优化思路是 BST 的常见操作，还是有必要理解的。
+The `size` field must be maintained correctly on inserts and deletes. LeetCode's `TreeNode` doesn't have a `size` field, so we can only use the in-order BST property here. But this optimization idea is a common BST operation worth understanding.
 
-## BST 转化累加树
+## Converting a BST to a Greater Sum Tree
 
-力扣第 538 题和 1038 题都是这道题，完全一样，你可以把它们一块做掉。看下题目：
+LeetCode 538 and 1038 are the same problem; you can do both at once. Let's read the problem:
 
 <Problem slug="convert-bst-to-greater-tree" />
 
-题目应该不难理解，比如图中的节点 5，转化成累加树的话，比 5 大的节点有 6，7，8，加上 5 本身，所以累加树上这个节点的值应该是 5+6+7+8=26。
+The problem is easy to understand. For example, for node 5 in the figure, nodes greater than 5 are 6, 7, 8, plus 5 itself, so 5 becomes 5+6+7+8 = 26 in the greater-sum tree.
 
-我们需要把 BST 转化成累加树，函数签名如下：
+We need to convert the BST into a greater-sum tree. Signature:
 
 ```java
 TreeNode convertBST(TreeNode root)
 ```
 
-按照二叉树的通用思路，需要思考每个节点应该做什么，但是这道题上很难想到什么思路。
+Following the generic binary-tree thinking, we ask what each node should do. But this problem is hard to attack that way.
 
-BST 的每个节点左小右大，这似乎是一个有用的信息，既然累加和是计算大于等于当前值的所有元素之和，那么每个节点都去计算右子树的和，不就行了吗？
+A BST node is "left small, right large" — useful information. Since the cumulative sum is the sum of all elements ≥ the current value, can each node simply compute the sum of its right subtree?
 
-这是不行的。对于一个节点来说，确实右子树都是比它大的元素，但问题是它的父节点也可能是比它大的元素呀？这个没法确定的，我们又没有触达父节点的指针，所以二叉树的通用思路在这里用不了。
+No. For a given node, the right subtree is indeed all greater, but its parent could also be greater than it — and we have no parent pointer. So the generic approach doesn't work.
 
-**此路不通，我们不妨换一个思路，还是利用 BST 的中序遍历特性**。
+**This path is blocked, so let's try a different idea — still using the BST in-order property.**
 
-刚才我们说了 BST 的中序遍历代码可以升序打印节点的值，那如果我想降序打印节点的值怎么办？
+We said the in-order traversal prints values in ascending order. What if we want them in descending order?
 
-很简单，只要把递归顺序改一下，先遍历右子树，后遍历左子树就行了：
+Easy: swap the recursion order — right subtree first, then left subtree:
 
 ```java
 void traverse(TreeNode root) {
     if (root == null) return;
-    // 先递归遍历右子树
+    // Recurse on the right subtree first
     traverse(root.right);
-    // 中序遍历代码位置
+    // In-order position
     print(root.val);
-    // 后递归遍历左子树
+    // Then recurse on the left subtree
     traverse(root.left);
 }
 ```
 
-**这段代码可以降序打印 BST 节点的值，如果维护一个外部累加变量 `sum`，然后把 `sum` 赋值给 BST 中的每一个节点，不就将 BST 转化成累加树了吗**？
+**This prints node values in descending order. If we maintain an external running sum `sum` and assign `sum` to each node, we convert the BST into a greater-sum tree.**
 
-看下代码就明白了：
+The code makes it clear:
 
 ```java
 class Solution {
@@ -204,16 +204,16 @@ class Solution {
         return root;
     }
 
-    // 记录累加和
+    // Running sum
     int sum = 0;
     void traverse(TreeNode root) {
         if (root == null) {
             return;
         }
         traverse(root.right);
-        // 维护累加和
+        // Maintain the running sum
         sum += root.val;
-        // 将 BST 转化成累加树
+        // Convert BST into greater-sum tree
         root.val = sum;
         traverse(root.left);
     }
@@ -225,7 +225,7 @@ class Solution {
 <a href="https://labuladong.online/algo-visualize/leetcode/convert-bst-to-greater-tree/" target="_blank">
 <details style="max-width:90%;max-height:400px">
 <summary>
-<strong>🥳 代码可视化动画🥳</strong>
+<strong>🥳 Animated Code Visualization 🥳</strong>
 </summary>
 </details>
 </a>
@@ -233,11 +233,11 @@ class Solution {
 
 
 
-这道题就解决了，核心还是 BST 的中序遍历特性，只不过我们修改了递归顺序，降序遍历 BST 的元素值，从而契合题目累加树的要求。
+Done. The core is again the BST in-order property — we just changed the recursion order to traverse values in descending order, matching the problem's greater-sum tree requirement.
 
-简单总结下吧，BST 相关的问题，要么利用 BST 左小右大的特性提升算法效率，要么利用中序遍历的特性满足题目的要求，也就这么些事儿吧。
+In short: BST problems either exploit the left-small/right-large property to make algorithms efficient, or use the in-order property to satisfy requirements. Pretty much that's all there is.
 
-本文就到这里，更多经典的二叉树习题以及递归思维的训练，请参见二叉树章节中的 [习题部分](https://labuladong.online/algo/problem-set/bst1/)
+That's it for this article. For more classic binary-tree problems and recursion practice, see the [Practice section](https://labuladong.online/algo/problem-set/bst1/) in the binary-tree chapter.
 
 
 
@@ -247,11 +247,11 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [【强化练习】二叉搜索树经典例题 I](https://labuladong.online/algo/problem-set/bst1/)
- - [二叉搜索树心法（基操篇）](https://labuladong.online/algo/data-structure/bst-part2/)
- - [二叉搜索树心法（构造篇）](https://labuladong.online/algo/data-structure/bst-part3/)
+ - [[Practice] Classic BST Problems I](https://labuladong.online/algo/problem-set/bst1/)
+ - [Binary Search Tree Tactics (Basic Operations)](https://labuladong.online/algo/data-structure/bst-part2/)
+ - [Binary Search Tree Tactics (Construction)](https://labuladong.online/algo/data-structure/bst-part3/)
 
 </details><hr>
 
@@ -260,13 +260,13 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的题目</strong></summary>
+<summary><strong>Problems that reference this article</strong></summary>
 
-<strong>安装 [我的 Chrome 刷题插件](https://labuladong.online/algo/intro/chrome/) 点开下列题目可直接查看解题思路：</strong>
+<strong>Install [my Chrome problem-solving plugin](https://labuladong.online/algo/intro/chrome/) to view solutions directly from the problem pages:</strong>
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer II 054. 所有大于等于节点的值之和](https://leetcode.cn/problems/w6cpku/?show=1) | 🟠 |
+| - | [Sword to Offer II 054. Sum of Values of All Greater-or-Equal Nodes](https://leetcode.cn/problems/w6cpku/?show=1) | 🟠 |
 
 </details>
 <hr>

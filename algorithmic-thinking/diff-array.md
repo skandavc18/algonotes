@@ -1,49 +1,49 @@
-# 小而美的算法技巧：差分数组
+# A Small but Elegant Technique: the Difference Array
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
-读完本文，你不仅学会了算法套路，还可以顺便解决如下题目：
+After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | 难度 |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1094. Car Pooling](https://leetcode.com/problems/car-pooling/) | [1094. 拼车](https://leetcode.cn/problems/car-pooling/) | 🟠 |
-| [1109. Corporate Flight Bookings](https://leetcode.com/problems/corporate-flight-bookings/) | [1109. 航班预订统计](https://leetcode.cn/problems/corporate-flight-bookings/) | 🟠 |
-| [370. Range Addition](https://leetcode.com/problems/range-addition/)🔒 | [370. 区间加法](https://leetcode.cn/problems/range-addition/)🔒 | 🟠 |
+| [1094. Car Pooling](https://leetcode.com/problems/car-pooling/) | [1094. Car Pooling](https://leetcode.cn/problems/car-pooling/) | 🟠 |
+| [1109. Corporate Flight Bookings](https://leetcode.com/problems/corporate-flight-bookings/) | [1109. Corporate Flight Bookings](https://leetcode.cn/problems/corporate-flight-bookings/) | 🟠 |
+| [370. Range Addition](https://leetcode.com/problems/range-addition/)🔒 | [370. Range Addition](https://leetcode.cn/problems/range-addition/)🔒 | 🟠 |
 
 **-----------**
 
 
 
 > [!NOTE]
-> 阅读本文前，你需要先学习：
+> Before reading this article, you should first study:
 > 
-> - [数组基础](https://labuladong.online/algo/data-structure-basic/array-basic/)
-> - [前缀和技巧](https://labuladong.online/algo/data-structure/prefix-sum/)
+> - [Array Basics](https://labuladong.online/algo/data-structure-basic/array-basic/)
+> - [Prefix Sum Technique](https://labuladong.online/algo/data-structure/prefix-sum/)
 
-[前缀和技巧](https://labuladong.online/algo/data-structure/prefix-sum/) 主要适用的场景是原始数组不会被修改的情况下，频繁查询某个区间的累加和，核心代码就是下面这段：
+The [Prefix Sum Technique](https://labuladong.online/algo/data-structure/prefix-sum/) is mainly used when the original array is not modified and we frequently query the sum of a range. Core code:
 
 ```java
 class PrefixSum {
-    // 前缀和数组
+    // Prefix-sum array
     private int[] preSum;
 
-    // 输入一个数组，构造前缀和
+    // Build the prefix sums from the input array
     public PrefixSum(int[] nums) {
-        // preSum[0] = 0，便于计算累加和
+        // preSum[0] = 0 makes range sums easier to compute
         preSum = new int[nums.length + 1];
-        // 计算 nums 的累加和
+        // Compute the running sum of nums
         for (int i = 1; i < preSum.length; i++) {
             preSum[i] = preSum[i - 1] + nums[i - 1];
         }
     }
     
-    // 查询闭区间 [left, right] 的累加和
+    // Sum of the closed range [left, right]
     public int sumRange(int left, int right) {
         return preSum[right + 1] - preSum[left];
     }
@@ -54,21 +54,21 @@ class PrefixSum {
 
 
 
-`preSum[i]` 就代表着 `nums[0..i-1]` 所有元素的累加和，如果我们想求区间 `nums[i..j]` 的累加和，只要计算 `preSum[j+1] - preSum[i]` 即可，而不需要遍历整个区间求和。
+`preSum[i]` is the sum of `nums[0..i-1]`. To get the sum of `nums[i..j]`, compute `preSum[j+1] - preSum[i]` — no need to scan the range.
 
-本文讲一个和前缀和思想非常类似的算法技巧「差分数组」，**差分数组的主要适用场景是频繁对原始数组的某个区间的元素进行增减**。
+This article covers a similar trick: the **difference array**, which is mainly used when **we frequently increment/decrement elements over a range of the original array**.
 
-比如说，我给你输入一个数组 `nums`，然后又要求给区间 `nums[2..6]` 全部加 1，再给 `nums[3..9]` 全部减 3，再给 `nums[0..4]` 全部加 2，再给...
+For example, given an array `nums`: add 1 to `nums[2..6]`, subtract 3 from `nums[3..9]`, add 2 to `nums[0..4]`, ...
 
-一通操作猛如虎，然后问你，最后 `nums` 数组的值是什么？
+After all that, what is `nums`?
 
-常规的思路很容易，你让我给区间 `nums[i..j]` 加上 `val`，那我就一个 for 循环给它们都加上呗，还能咋样？这种思路的时间复杂度是 $O(N)$，由于这个场景下对 `nums` 的修改非常频繁，所以效率会很低下。
+The naive approach: for each operation, loop through `[i, j]` and add `val` — O(N) per update. With many updates this is slow.
 
-这里就需要差分数组的技巧，类似前缀和技巧构造的 `preSum` 数组，我们先对 `nums` 数组构造一个 `diff` 差分数组，**`diff[i]` 就是 `nums[i]` 和 `nums[i-1]` 之差**：
+This is where the difference-array trick helps. Like prefix sums, we build a `diff` array, where **`diff[i]` is `nums[i] - nums[i-1]`**:
 
 ```java
 int[] diff = new int[nums.length];
-// 构造差分数组
+// Build the difference array
 diff[0] = nums[0];
 for (int i = 1; i < nums.length; i++) {
     diff[i] = nums[i] - nums[i - 1];
@@ -79,45 +79,45 @@ for (int i = 1; i < nums.length; i++) {
 
 
 
-通过这个 `diff` 差分数组是可以反推出原始数组 `nums` 的，代码逻辑如下：
+We can recover `nums` from `diff`:
 
 ```java
 int[] res = new int[diff.length];
-// 根据差分数组构造结果数组
+// Reconstruct nums from diff
 res[0] = diff[0];
 for (int i = 1; i < diff.length; i++) {
     res[i] = res[i - 1] + diff[i];
 }
 ```
 
-**这样构造差分数组 `diff`，就可以快速进行区间增减的操作**，如果你想对区间 `nums[i..j]` 的元素全部加 3，那么只需要让 `diff[i] += 3`，然后再让 `diff[j+1] -= 3` 即可：
+**With `diff`, we can perform fast range increments**: to add 3 to all elements in `nums[i..j]`, just do `diff[i] += 3` and `diff[j+1] -= 3`:
 
 ![](https://labuladong.online/algo/images/difference/3.jpeg)
 
-**原理很简单，回想 `diff` 数组反推 `nums` 数组的过程，`diff[i] += 3` 意味着给 `nums[i..]` 所有的元素都加了 3，然后 `diff[j+1] -= 3` 又意味着对于 `nums[j+1..]` 所有元素再减 3，那综合起来，是不是就是对 `nums[i..j]` 中的所有元素都加 3 了**？
+**Why? Recall that we recover `nums` from `diff`. `diff[i] += 3` means "add 3 to all of `nums[i..]`"; `diff[j+1] -= 3` means "subtract 3 from all of `nums[j+1..]`". Combined: add 3 to `nums[i..j]`.**
 
-只要花费 O(1) 的时间修改 `diff` 数组，就相当于给 `nums` 的整个区间做了修改。多次修改 `diff`，然后通过 `diff` 数组反推，即可得到 `nums` 修改后的结果。
+Updating `diff` is O(1) per range. After multiple updates, derive the modified `nums` from `diff`.
 
-现在我们把差分数组抽象成一个类，包含 `increment` 方法和 `result` 方法：
+Let's wrap the trick in a class with `increment` and `result` methods:
 
 ```java
-// 差分数组工具类
+// Difference-array helper class
 class Difference {
-    // 差分数组
+    // Difference array
     private int[] diff;
     
-    // 输入一个初始数组，区间操作将在这个数组上进行
+    // Take an initial array; range operations apply to it
     public Difference(int[] nums) {
         assert nums.length > 0;
         diff = new int[nums.length];
-        // 根据初始数组构造差分数组
+        // Build the diff from nums
         diff[0] = nums[0];
         for (int i = 1; i < nums.length; i++) {
             diff[i] = nums[i] - nums[i - 1];
         }
     }
 
-    // 给闭区间 [i, j] 增加 val（可以是负数）
+    // Add val (can be negative) to closed range [i, j]
     public void increment(int i, int j, int val) {
         diff[i] += val;
         if (j + 1 < diff.length) {
@@ -125,10 +125,10 @@ class Difference {
         }
     }
 
-    // 返回结果数组
+    // Reconstruct the resulting array
     public int[] result() {
         int[] res = new int[diff.length];
-        // 根据差分数组构造结果数组
+        // Build the result from diff
         res[0] = diff[0];
         for (int i = 1; i < diff.length; i++) {
             res[i] = res[i - 1] + diff[i];
@@ -138,7 +138,7 @@ class Difference {
 }
 ```
 
-这里注意一下 `increment` 方法中的 if 语句：
+Note the `if` in `increment`:
 
 ```java
 void increment(int i, int j, int val) {
@@ -149,28 +149,28 @@ void increment(int i, int j, int val) {
 }
 ```
 
-当 `j+1 >= diff.length` 时，说明是对 `nums[i]` 及以后的整个数组都进行修改，那么就不需要再给 `diff` 数组减 `val` 了。
+When `j+1 >= diff.length`, the update applies to all elements from `nums[i]` onward, so we don't need to subtract `val` from anything later.
 
 <visual slug="diff-array-example" >
 
-你可以点开下面的可视化面板，多次点击 <code type="click">diff[i] = nums[i] - nums[i - 1]</code> 这行代码就可以看到 `diff` 数组的构建过程，再多次点击 <code type="click">df.increment</code> 这行代码可以看到 `diff` 数组的操作：
+Click the visualization below; click <code type="click">diff[i] = nums[i] - nums[i - 1]</code> repeatedly to see `diff` being built; click <code type="click">df.increment</code> repeatedly to see range updates:
 
 </visual>
 
-## 算法实践
+## Practice
 
-首先，力扣第 370 题「区间加法」 就直接考察了差分数组技巧：
+LeetCode 370 "Range Addition" tests the difference-array trick directly:
 
 <Problem slug="range-addition" />
 
-那么我们直接复用刚才实现的 `Difference` 类就能把这道题解决掉：
+Reuse `Difference`:
 
 ```java
 class Solution {
     public int[] getModifiedArray(int length, int[][] updates) {
-        // nums 初始化为全 0
+        // nums initialized to all zeros
         int[] nums = new int[length];
-        // 构造差分解法
+        // Build the difference helper
         Difference df = new Difference(nums);
         
         for (int[] update : updates) {
@@ -185,104 +185,103 @@ class Solution {
 }
 ```
 
-当然，实际的算法题可能需要我们对题目进行联想和抽象，不会这么直接地让你看出来要用差分数组技巧，这里看一下力扣第 1109 题「航班预订统计」：
+Real problems may need more imagination to spot the technique. LeetCode 1109 "Corporate Flight Bookings":
 
 <Problem slug="corporate-flight-bookings" />
 
-函数签名如下：
+Signature:
 
 ```java
 int[] corpFlightBookings(int[][] bookings, int n)
 ```
 
-这个题目就在那绕弯弯，其实它就是个差分数组的题，我给你翻译一下：
+The wording is roundabout. In plain terms:
 
-给你输入一个长度为 `n` 的数组 `nums`，其中所有元素都是 0。再给你输入一个 `bookings`，里面是若干三元组 `(i, j, k)`，每个三元组的含义就是要求你给 `nums` 数组的闭区间 `[i-1,j-1]` 中所有元素都加上 `k`。请你返回最后的 `nums` 数组是多少？
+Given an array `nums` of length `n` (all zeros) and a list of triples `(i, j, k)`, for each triple, add `k` to `nums[i-1..j-1]`. Return `nums`.
 
 > [!NOTE]
-> 因为题目说的 `n` 是从 1 开始计数的，而数组索引从 0 开始，所以对于输入的三元组 `(i, j, k)`，数组区间应该对应 `[i-1,j-1]`。
+> The problem uses 1-based numbering, but arrays are 0-indexed; for triple `(i, j, k)`, the range is `[i-1, j-1]`.
 
-这么一看，不就是一道标准的差分数组题嘛？我们可以直接复用刚才写的类：
+This is a textbook difference-array problem:
 
 ```java
 class Solution {
     public int[] corpFlightBookings(int[][] bookings, int n) {
-        // nums 初始化为全 0
+        // nums initialized to all zeros
         int[] nums = new int[n];
-        // 构造差分解法
+        // Build the difference helper
         Difference df = new Difference(nums);
 
         for (int[] booking : bookings) {
-            // 注意转成数组索引要减一哦
+            // Convert to 0-based
             int i = booking[0] - 1;
             int j = booking[1] - 1;
             int val = booking[2];
-            // 对区间 nums[i..j] 增加 val
+            // Add val to nums[i..j]
             df.increment(i, j, val);
         }
-        // 返回最终的结果数组
+        // Return the final array
         return df.result();
     }
 }
 ```
 
-这道题就解决了。
+Solved.
 
-还有一道很类似的题目是力扣第 1094 题「拼车」，我简单描述下题目：
+A similar problem is LeetCode 1094 "Car Pooling":
 
-你是一个开公交车的司机，公交车的最大载客量为 `capacity`，沿途要经过若干车站，给你一份乘客行程表 `int[][] trips`，其中 `trips[i] = [num, start, end]` 代表着有 `num` 个旅客要从站点 `start` 上车，到站点 `end` 下车，请你计算是否能够一次把所有旅客运送完毕（不能超过最大载客量 `capacity`）。
+You're a bus driver with capacity `capacity`, passing several stops. Given `int[][] trips` where `trips[i] = [num, start, end]` means `num` passengers board at `start` and alight at `end`. Determine if all passengers can be carried without exceeding `capacity`.
 
-函数签名如下：
+Signature:
 
 ```java
 boolean carPooling(int[][] trips, int capacity);
 ```
 
-比如输入：
+Example input:
 
 ```
 trips = [[2,1,5],[3,3,7]], capacity = 4
 ```
 
-这就不能一次运完，因为 `trips[1]` 最多只能上 2 人，否则车就会超载。
+This can't all be carried in one go: `trips[1]` adds passengers exceeding capacity.
 
-相信你已经能够联想到差分数组技巧了：**`trips[i]` 代表着一组区间操作，旅客的上车和下车就相当于数组的区间加减；只要结果数组中的元素都小于 `capacity`，就说明可以不超载运输所有旅客**。
+The difference-array approach: **`trips[i]` is a range update; boarding/alighting are range increments. If all values stay below `capacity`, success**.
 
-但问题是，差分数组的长度（车站的个数）应该是多少呢？题目没有直接给，但给出了数据取值范围：
+What length should the difference array be (number of stops)? Not stated directly, but the constraints give us:
 
 ```java
 0 <= trips[i][1] < trips[i][2] <= 1000
 ```
 
-车站编号从 0 开始，最多到 1000，也就是最多有 1001 个车站，那么我们的差分数组长度可以直接设置为 1001，这样索引刚好能够涵盖所有车站的编号：
+Stops are numbered 0..1000 — up to 1001 of them. Set the diff array length to 1001:
 
 ```java
 class Solution {
     public boolean carPooling(int[][] trips, int capacity) {
-        // 最多有 1001 个车站
+        // Up to 1001 stops
         int[] nums = new int[1001];
 
-        // 构造差分解法
+        // Build the difference helper
         Difference df = new Difference(nums);
 
         for (int[] trip : trips) {
-            // 乘客数量
+            // Number of passengers
             int val = trip[0];
 
-            // 第 trip[1] 站乘客上车
+            // Boarding at stop trip[1]
             int i = trip[1];
 
-            // 第 trip[2] 站乘客已经下车，
-            // 即乘客在车上的区间是 [trip[1], trip[2] - 1]
+            // Alight at stop trip[2]; passengers are on the bus over [trip[1], trip[2] - 1]
             int j = trip[2] - 1;
 
-            // 进行区间操作
+            // Range update
             df.increment(i, j, val);
         }
 
         int[] res = df.result();
 
-        // 客车自始至终都不应该超载
+        // The bus must never exceed capacity
         for (int i = 0; i < res.length; i++) {
             if (capacity < res[i]) {
                 return false;
@@ -293,9 +292,9 @@ class Solution {
 }
 ```
 
-至此，这道题也解决了。
+Solved.
 
-差分数组和前缀和数组都是比较常见且巧妙的算法技巧，分别适用不同的场景，而且是会者不难，难者不会。所以，关于差分数组的使用，你学会了吗？
+Difference arrays and prefix sums are common, elegant techniques for different scenarios — trivial once you know them, baffling if you don't. Mastered the difference array yet?
 
 
 
@@ -305,12 +304,12 @@ class Solution {
 
 <hr>
 <details class="hint-container details">
-<summary><strong>引用本文的文章</strong></summary>
+<summary><strong>Articles that reference this one</strong></summary>
 
- - [二维数组的花式遍历技巧](https://labuladong.online/algo/practice-in-action/2d-array-traversal-summary/)
- - [学习数据结构和算法的框架思维](https://labuladong.online/algo/essential-technique/algorithm-summary/)
- - [扫描线技巧：安排会议室](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
- - [算法刷题的重点和坑](https://labuladong.online/algo/intro/how-to-learn-algorithms/)
+ - [Tricks for Traversing 2D Arrays](https://labuladong.online/algo/practice-in-action/2d-array-traversal-summary/)
+ - [Framework Thinking for Learning Data Structures and Algorithms](https://labuladong.online/algo/essential-technique/algorithm-summary/)
+ - [Sweep-Line Technique: Meeting Rooms](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
+ - [Key Points and Pitfalls in Practice](https://labuladong.online/algo/intro/how-to-learn-algorithms/)
 
 </details><hr>
 

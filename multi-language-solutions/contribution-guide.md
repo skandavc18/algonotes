@@ -1,25 +1,25 @@
-# 修正 labuladong 刷题插件中的错误
+# Fixing errors in the labuladong problem-solving plugins
 
-## 背景
+## Background
 
-为了帮助大家更好地学习算法，我之前写了很多算法教程，并开发了一系列刷题插件，统称为《labuladong 的刷题全家桶》，详情见 [这里](https://labuladong.github.io/article/fname.html?fname=全家桶简介)。
+To help everyone learn algorithms better, I previously wrote many algorithm tutorials and developed a series of problem-solving plugins, collectively called the *labuladong problem-solving bundle*. See [here](https://labuladong.github.io/article/fname.html?fname=全家桶简介) for details.
 
-在我的教程和插件中的解法主要使用的是 Java 语言，原因是 Java 这门语言中规中矩，就算之前没有接触过，也能比较容易看懂逻辑。不过现在这不是 chatGPT 横空出世了嘛，我就借助 chatGPT 把我的解法改写成多种语言，希望对不同技术背景的小伙伴更加友好。
+The solutions in my tutorials and plugins are mostly written in Java, because Java is a fairly conventional language — even if you've never used it, the logic is relatively easy to follow. But now that ChatGPT has come along, I've used ChatGPT to rewrite my solutions in multiple languages, hoping to be friendlier to people from different technical backgrounds.
 
-chatGPT 的改写效果还是非常不错的，不过难免还是存在一些错误，所以我希望能够和大家一起来修正这些错误。
+ChatGPT's rewrites are pretty good, but inevitably some errors slip through, so I'd like to work with everyone to fix them.
 
-## 如何反馈错误
+## How to report errors
 
-如果你发现某些解法代码不能通过力扣的所有测试用例（一般都是 chatGPT 改写的解法代码会出现这种情况，我的解法代码都是通过测试才发布的），可以 [点这里](https://github.com/labuladong/fucking-algorithm/issues/new?assignees=&labels=code+bug&template=bug_report.yml&title=%5Bbug%5D%5B%7B%E8%BF%99%E9%87%8C%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%87%BA%E9%94%99%E7%9A%84%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%7D%5D+%7B%E8%BF%99%E9%87%8C%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%87%BA%E9%94%99%E7%9A%84%E5%8A%9B%E6%89%A3%E9%A2%98%E7%9B%AE%E6%A0%87%E8%AF%86%E7%AC%A6%7D+) 按照模板提交 issue，我和其他小伙伴会提交 PR 修复这些错误。
+If you find a solution that fails to pass all of LeetCode's test cases (this typically happens with the ChatGPT-rewritten solutions; my own solutions are only published after passing the tests), you can [click here](https://github.com/labuladong/fucking-algorithm/issues/new?assignees=&labels=code+bug&template=bug_report.yml&title=%5Bbug%5D%5B%7B%E8%BF%99%E9%87%8C%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%87%BA%E9%94%99%E7%9A%84%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%7D%5D+%7B%E8%BF%99%E9%87%8C%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%87%BA%E9%94%99%E7%9A%84%E5%8A%9B%E6%89%A3%E9%A2%98%E7%9B%AE%E6%A0%87%E8%AF%86%E7%AC%A6%7D+) and submit an issue using the template. The other contributors and I will submit PRs to fix the errors.
 
-## 如何修正错误
+## How to fix errors
 
-首先，感谢你愿意为我的插件提供的解法代码纠错，你向本仓库提交 PR 修复错误后，你将成为本仓库的 contributor，出现在仓库首页的贡献者列表中。本仓库已经获得了 115k star，你的贡献将会被许多人看到。
+First, thank you for being willing to fix solution code in my plugins. After you submit a PR to this repo and fix the errors, you'll become a contributor to this repo and appear in the contributors list on the home page. This repo has already gathered 115k stars, and your contributions will be seen by many.
 
-修复代码很简单，所有多语言解法代码都存储在 [多语言解法代码/solution_code.md](https://github.com/labuladong/fucking-algorithm/blob/master/%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%A7%A3%E6%B3%95%E4%BB%A3%E7%A0%81/solution_code.md) 中，你只要修改这个文件就行了。其内容的组织形如如下：
+Fixing the code is simple. All multi-language solutions are stored in [multi-language-solutions/solution_code.md](https://github.com/labuladong/fucking-algorithm/blob/master/%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%A7%A3%E6%B3%95%E4%BB%A3%E7%A0%81/solution_code.md). You only need to modify that file. Its content is organized like this:
 
 
-    https://leetcode.cn/problems/xxx 的多语言解法👇
+    Multi-language solutions for https://leetcode.cn/problems/xxx 👇
 
     ```cpp
     class Solution {
@@ -56,19 +56,19 @@ chatGPT 的改写效果还是非常不错的，不过难免还是存在一些错
     }
     ```
 
-    https://leetcode.cn/problems/xxx 的多语言解法👆
+    Multi-language solutions for https://leetcode.cn/problems/xxx 👆
 
 
-比如你想修改 [https://leetcode-cn.com/problems/longest-palindromic-substring/](https://leetcode-cn.com/problems/longest-palindromic-substring/) 的 JavaScript 解法，你可以在 [多语言解法代码/solution_code.md](https://github.com/labuladong/fucking-algorithm/blob/master/%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%A7%A3%E6%B3%95%E4%BB%A3%E7%A0%81/solution_code.md) 中搜索 `longest-palindromic-substring` 关键词，即可找到这道题的多语言解法，然后修改 JavaScript 对应的解法代码，提交 PR 即可。
+For example, if you want to modify the JavaScript solution for [https://leetcode-cn.com/problems/longest-palindromic-substring/](https://leetcode-cn.com/problems/longest-palindromic-substring/), search for the keyword `longest-palindromic-substring` in [multi-language-solutions/solution_code.md](https://github.com/labuladong/fucking-algorithm/blob/master/%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%A7%A3%E6%B3%95%E4%BB%A3%E7%A0%81/solution_code.md) to find the multi-language solutions for that problem, then modify the JavaScript code and submit a PR.
 
-我的插件会自动拉取这个文件的最新内容，所以你的 PR 被合进 master 分支后，插件中的内容修改也会生效。
+My plugins automatically pull the latest content of this file, so once your PR is merged into the `master` branch, the content shown by the plugins will be updated as well.
 
-## 提交 PR 的要求
+## PR requirements
 
-1、你的 PR 必须是针对 [多语言解法代码/solution_code.md](https://github.com/labuladong/fucking-algorithm/blob/master/%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%A7%A3%E6%B3%95%E4%BB%A3%E7%A0%81/solution_code.md) 文件中代码部分的修改，不要修改其他文件和其他内容。
+1. Your PR must only modify the code section of [multi-language-solutions/solution_code.md](https://github.com/labuladong/fucking-algorithm/blob/master/%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%A7%A3%E6%B3%95%E4%BB%A3%E7%A0%81/solution_code.md). Do not modify any other files or other content.
 
-2、把我的解法翻译成多语言的目的是帮助不同背景的小伙伴理解算法思维，所以你修改的代码可以不是效率最优的，但应该尽可能和我的解法思路保持一致，且包含我的解法中的完整注释。
+2. The purpose of translating my solutions into multiple languages is to help readers from different backgrounds understand the algorithmic thinking. Your modified code does not have to be the most efficient, but it should follow my original solution as closely as possible and include the full comments from my original solution.
 
-3、你的 PR 描述中需要包含代码通过所有测试用例截图。PR 标题的格式为 `[fix][{lang}] {slug}`，其中 `{lang}` 需要替换为你修复的解法语言，比如 `[fix][cpp]`，`{slug}` 需要替换为你修复的题目的标识符（题目 URL 的最后一部分），比如 [https://leetcode.cn/problems/search-a-2d-matrix/](https://leetcode.cn/problems/search-a-2d-matrix/) 这道题的标识符就是 `search-a-2d-matrix`。
+3. Your PR description should include a screenshot showing the code passing all test cases. The PR title format is `[fix][{lang}] {slug}`, where `{lang}` is the language you fixed (e.g. `[fix][cpp]`), and `{slug}` is the identifier of the problem (the last part of the problem URL). For example, the slug for [https://leetcode.cn/problems/search-a-2d-matrix/](https://leetcode.cn/problems/search-a-2d-matrix/) is `search-a-2d-matrix`.
 
-**你可以查看这个 PR 作为案例**：https://github.com/labuladong/fucking-algorithm/pull/1112
+**You can refer to this PR as an example**: https://github.com/labuladong/fucking-algorithm/pull/1112

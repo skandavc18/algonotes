@@ -1,10 +1,10 @@
-# 几个反直觉的概率问题
+# A Few Counterintuitive Probability Problems
 
 
 
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
-**通知：为满足广大读者的需求，网站上架 [速成目录](https://labuladong.online/algo/intro/quick-learning-plan/)，如有需要可以看下，谢谢大家的支持~另外，建议你在我的 [网站](https://labuladong.online/algo/) 学习文章，体验更好。**
+**Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
 
@@ -12,19 +12,17 @@
 
 
 
-上篇文章 [谈谈游戏中的随机算法](https://labuladong.online/algo/frequency-interview/random-algorithm/) 讲到了验证概率算法的蒙特卡罗方法，今天聊点轻松的内容：几个和概率相关的有趣问题。
+The earlier article [Random Algorithms in Games](https://labuladong.online/algo/frequency-interview/random-algorithm/) discussed Monte Carlo methods for verifying probability algorithms. Today, something lighter: a few interesting probability puzzles.
 
-计算概率有下面两个最简单的原则：
+Two simple principles for computing probabilities:
 
-原则一、计算概率一定要有一个参照系，称作「样本空间」，即随机事件可能出现的所有结果。事件 A 发生的概率 = A 包含的样本点 / 样本空间的样本总数。
+Principle 1: there must be a frame of reference, called the "sample space" — all possible outcomes. P(A) = (number of sample points in A) / (total sample points).
 
-原则二、计算概率一定要明白，概率是一个连续的整体，不可以把连续的概率分割开，也就是所谓的条件概率。
+Principle 2: probability is a continuous whole; you can't arbitrarily slice continuous probability — that's the meaning of conditional probability.
 
-上述两个原则高中就学过，但是我们还是很容易犯错，而且犯错的流程也有异曲同工之妙：
+These were taught in high school, yet we still mess them up — and the mistakes follow a familiar pattern: we ignore Principle 2, miscount the sample space, and then misapply Principle 1.
 
-先是忽略了原则二，错误地计算了样本空间，然后通过原则一算出了错误的答案。
-
-下面介绍几个简单却具有迷惑性的问题，分别是男孩女孩问题、生日悖论、三门问题。当然，三门问题可能是大家最耳熟的，所以就多说一些有趣的思考。
+Below: the boy/girl problem, the birthday paradox, and the Monty Hall problem. The Monty Hall problem is the most famous, so we'll spend more time on it.
 
 
 
@@ -32,27 +30,25 @@
 
 
 
-### 一、男孩女孩问题
+### 1. The Boy/Girl Problem
 
-假设有一个家庭，有两个孩子，现在告诉你其中有一个男孩，请问另一个也是男孩的概率是多少？
+A family has two children. You're told that one of them is a boy. What is the probability that the other is also a boy?
 
-很多人，包括我在内，不假思索地回答：1/2 啊，因为另一个孩子要么是男孩，要么是女孩，而且概率相等呀。但是实际上，答案是 1/3。
+Many people, myself included, instinctively answer 1/2 because the other child is either a boy or a girl with equal probability. But the answer is 1/3.
 
-上述思想为什么错误呢？因为没有正确计算样本空间，导致原则一计算错误。有两个孩子，那么样本空间为 4，即哥哥妹妹，哥哥弟弟，姐姐妹妹，姐姐弟弟这四种情况。已知有一个男孩，那么排除姐姐妹妹这种情况，所以样本空间变成 3。另一个孩子也是男孩只有哥哥弟弟这 1 种情况，所以概率为 1/3。
+Why is the intuition wrong? Because the sample space is wrong, so Principle 1 is misapplied. With two children, the sample space has 4 outcomes: older-bro/younger-sis, older-bro/younger-bro, older-sis/younger-sis, older-sis/younger-bro. Knowing one of them is a boy excludes "older-sis/younger-sis", leaving 3 outcomes. Both being boys is just "older-bro/younger-bro" — 1 out of 3.
 
-为什么计算样本空间会出错呢？因为我们忽略了条件概率，即混淆了下面两个问题：
+Why is the sample space miscalculated? We ignored conditional probability and conflated:
 
-这个家庭只有一个孩子，这个孩子是男孩的概率是多少？
+This family has only one child; what's the probability the child is a boy?
 
-这个家庭有两个孩子，其中一个是男孩，另一个孩子是男孩的概率是多少？
+This family has two children, one of whom is a boy; what's the probability the other is a boy?
 
-根据原则二，概率问题是连续的，不可以把上述两个问题混淆。第二个问题需要用条件概率，即求一个孩子是男孩的条件下，另一个也是男孩的概率。运用条件概率的公式也很好算，就不多说了。
+By Principle 2, probability is continuous; the two questions are different. The second is conditional: given one is a boy, what's the chance the other is too. The conditional-probability formula handles it; we'll skip the calculation.
 
-通过这个问题，读者应该理解两个概率计算原则的关系了，最具有迷惑性的就是条件概率的忽视。为了不要被迷惑，最简单的办法就是把所有可能结果穷举出来。
+The relationship between the two principles should be clearer now. The most misleading factor is overlooking conditional probability. The simplest defense: enumerate all outcomes.
 
-最后，对于此问题我见过一个很奇葩的质疑：如果这两个孩子是双胞胎，不存在年龄上的差异怎么办？
-
-我竟然觉得有那么一丝道理！但其实，我们只是通过年龄差异来表示两个孩子的独立性，也就是说即便两个孩子同性，也有两种可能。所以不要用双胞胎抬杠了。
+I've seen one funny objection: what if the children are twins, with no age difference? It almost sounds reasonable! But age was just a way to express the children's independence — even same-gender twins still represent two outcomes. So no twin loopholes.
 
 
 
@@ -60,41 +56,41 @@
 
 
 
-### 二、生日悖论
+### 2. The Birthday Paradox
 
-生日悖论是由这样一个问题引出的：一个屋子里需要有多少人，才能使得存在至少两个人生日是同一天的概率达到 50%？
+The birthday paradox: how many people are needed in a room for the probability that at least two share a birthday to reach 50%?
 
-答案是 23 个人，也就是说房子里如果有 23 个人，那么就有 50% 的概率会存在两个人生日相同。这个结论看起来不可思议，所以被称为悖论。按照直觉，要得到 50% 的概率，起码得有 183 个人吧，因为一年有 365 天呀？其实不是的，觉得这个结论不可思议主要有两个思维误区：
+Answer: 23 people. So with 23 people in a room, there's already a 50% chance two share a birthday. It seems unbelievable — hence the name. Intuition says you'd need 183 (half of 365). Two intuitive errors:
 
-**第一个误区是误解「存在」这个词的含义**。
+**Error 1: misinterpreting "exists".**
 
-读者可能认为，如果 23 个人中出现相同生日的概率就能达到 50%，是不是意味着：
+You might think: with 23 people the probability hits 50%, so:
 
-假设现在屋子里坐着 22 个人，然后我走进去，那么有 50% 的概率我可以找到一个人和我生日相同。但这怎么可能呢？
+If 22 people are in the room and I walk in, there's a 50% chance someone shares my birthday. But that can't be right!
 
-并不是的，你这种想法是以自我为中心，而题目的概率是在描述整体。也就是说「存在」的含义是指 23 人中的任意两个人，涉及排列组合，大概率和你没啥关系。
+Yes — your thinking is self-centered. The puzzle's probability is about the group as a whole. "Exists" refers to any pair among the 23 — combinatorics — and likely doesn't involve you specifically.
 
-如果你非要计算存在和自己生日相同的人的概率是多少，可以这样计算：
+If you really want to know the probability that someone shares your birthday:
 
-1 - P(22 个人都和我的生日不同) = 1 -(364/365)^22 = 0.06
+1 - P(22 people all have a birthday different from mine) = 1 - (364/365)^22 ≈ 0.06
 
-这样计算得到的结果是不是看起来合理多了？生日悖论计算对象的不是某一个人，而是一个整体，其中包含了所有人的排列组合，它们的概率之和当然会大得多。
+Now it sounds more reasonable. The birthday paradox is about the group, not any one person, and the combinations vastly inflate the probability.
 
-**第二个误区是认为概率是线性变化的**。
+**Error 2: thinking probability is linear.**
 
-读者可能认为，如果 23 个人中出现相同生日的概率就能达到 50%，是不是意味着 46 个人的概率就能达到 100%？
+You might think: with 23 people the probability is 50%, so 46 people would be 100%?
 
-不是的，就像中奖率 50% 的游戏，你玩两次的中奖率就是 100% 吗？显然不是，你玩两次的中奖率是 75%：
+No. Just like a 50%-win game — playing twice doesn't give 100%; it gives 75%:
 
-`P(两次能中奖) = P(第一次就中了) + P(第一次没中但第二次中了) = 1/2 + 1/2*1/2 = 75%`
+`P(win) = P(win on first try) + P(miss first, win second) = 1/2 + 1/2 × 1/2 = 75%`
 
-那么换到生日悖论也是一个道理，概率不是简单叠加，而要考虑一个连续的过程，所以这个结论并没有什么不合常理之处。
+Same here — probabilities don't simply add; we have a continuous process. So the conclusion isn't unreasonable.
 
-那为什么只要 23 个人出现相同生日的概率就能大于 50% 了呢？我们先计算 23 个人生日都唯一（不重复）的概率。只有 1 个人的时候，生日唯一的概率是 `365/365`，2 个人时，生日唯一的概率是 `365/365 × 364/365`，以此类推可知 23 人的生日都唯一的概率：
+Why is 23 enough for >50%? Compute the probability that 23 people all have unique birthdays. With 1 person it's `365/365`; with 2, `365/365 × 364/365`; etc. With 23:
 
 ![](https://labuladong.online/algo/images/probability/p.png)
 
-算出来大约是 0.493，所以存在相同生日的概率就是 0.507，差不多就是 50% 了。实际上，按照这个算法，当人数达到 70 时，存在两个人生日相同的概率就上升到了 99.9%，基本可以认为是 100% 了。所以从概率上说，一个几十人的小团体中存在生日相同的人真没啥稀奇的。
+That's about 0.493, so the probability of a shared birthday is 0.507 — close to 50%. By 70 people, the probability rises to 99.9%, basically 100%. So statistically, it's no surprise to find shared birthdays in a group of a few dozen.
 
 
 
@@ -102,37 +98,35 @@
 
 
 
-### 三、三门问题
+### 3. The Monty Hall Problem
 
-这个游戏很经典了：游戏参与者面对三扇门，其中两扇门后面是山羊，一扇门后面是跑车。参与者只要随便选一扇门，门后面的东西就归他（跑车的价值当然更大）。但是主持人决定帮一下参与者：在他选择之后，先不急着打开这扇门，而是由主持人打开剩下两扇门中的一扇，展示其中的山羊（主持人知道每扇门后面是什么），然后给参与者一次换门的机会，此时参与者应该换门还是不换门呢？
+A classic: a contestant faces three doors. Behind two are goats; behind one is a sports car. The contestant picks a door and gets what's behind it (the car is more valuable, of course). The host helps: after the choice, instead of opening it immediately, the host opens one of the remaining two doors (the host knows what's behind each) and reveals a goat. Then the host gives the contestant a chance to switch. Should the contestant switch?
 
-为了防止第一次看到这个问题的读者迷惑，再具体描述一下这个问题：
-
-你是游戏参与者，现在有门 1,2,3，假设你随机选择了门 1，然后主持人打开了门 3 告诉你那后面是山羊。现在，你是坚持你最初的选择门 1，还是选择换成门 2 呢？
+In case it's not clear: you're the contestant, doors 1, 2, 3. You picked door 1; the host opens door 3 to reveal a goat. Stick with door 1, or switch to door 2?
 
 ![](https://labuladong.online/algo/images/probability/sanmen.png)
 
-答案是应该换门，换门之后抽到跑车的概率是 2/3，不换的话是 1/3。又一次反直觉，感觉换不换的中奖概率应该都一样啊，因为最后肯定就剩两个门，一个是羊，一个是跑车，这是事实，所以不管选哪个的概率不都是 1/2 吗？
+Answer: switch. Switching wins the car with probability 2/3; staying with 1/3. Counterintuitive again — surely two doors mean 1/2 either way?
 
-类似前面说的男孩女孩问题，最简单稳妥的方法就是把所有可能结果穷举出来：
+As before, the simplest method is to enumerate:
 
 ![](https://labuladong.online/algo/images/probability/tree.png)
 
-很容易看到选择换门中奖的概率是 2/3，不换的话是 1/3。
+Easy to see: switching = 2/3, staying = 1/3.
 
-关于这个问题还有更简单的方法：主持人开门实际上在「浓缩」概率。一开始你选择到跑车的概率当然是 1/3，剩下两个门中包含跑车的概率当然是 2/3，这没啥可说的。但是主持人帮你排除了一个含有山羊的门，相当于把那 2/3 的概率浓缩到了剩下的这一扇门上。那么，你说你是抱着原来那扇 1/3 的门，还是换成那扇经过「浓缩」的 2/3 概率的门呢？
+A simpler explanation: the host's action concentrates probability. Initially, your door has 1/3 chance of being the car; the other two together have 2/3. Once the host reveals a goat behind one of the other two, that 2/3 collapses entirely onto the remaining unopened door. So would you stick with the 1/3 door or switch to the now-2/3 door?
 
-再直观一点，假设你三选一，剩下 2 扇门，再给你加入 98 扇装山羊的门，把这 100 扇门随机打乱，问你换不换？肯定不换对吧，这明摆着把概率稀释了，肯定抱着原来的那扇门是最可能中跑车的。再假设，初始有 100 扇门，你选了一扇，然后主持人在剩下 99 扇门中帮你排除 98 个山羊，问你换不换一扇门？肯定换对吧，你手上那扇门是 1%，另一扇门是 99%，或者也可以这样理解，不换只是选择了 1 扇门，换门相当于选择了 99 扇门，这样结果很明显了吧？
+To make it even more vivid: imagine 100 doors. You pick one. The host reveals 98 goats among the other 99. Switching is obviously better — your original door has 1% odds; the other has 99%. (Equivalently, staying = picking 1 door; switching = picking the other 99 doors.)
 
-以上思想，也许有的读者都思考过，下面我们思考这样一个问题：假设你在决定是否换门的时候，小明破门而入，要求帮你做出选择。他完全不知道之前发生的事，他只知道面前有两扇门，一扇是跑车一扇是山羊，那么他抽中跑车的概率是多大？
+Now consider this: while you're deciding to switch, Mr. X bursts in and demands to choose for you. He knows nothing of what just happened — he only sees two closed doors, one with the car. What's his probability of getting the car?
 
-当然是 1/2，这也是很多人做错三门问题的根本原因。类似生日悖论，人们总是容易以自我为中心，通过这个小明的视角来计算是否换门，这显然会进入误区。
+Of course 1/2 — and that's why people get the Monty Hall problem wrong. Like the birthday paradox, people self-center using Mr. X's perspective.
 
-就好比有两个箱子，一号箱子有 4 个黑球 2 个红球，二号箱子有 2 个黑球 4 个红球，随便选一个箱子，随便摸一个球，问你摸出红球的概率。
+Analogy: two boxes — Box 1 has 4 black balls and 2 red, Box 2 has 2 black and 4 red. You pick a box at random and a ball at random. P(red) = ?
 
-对于不知情的小明，他会随机选择一个箱子，随机摸球，摸到红球的概率是：1/2 × 2/6 + 1/2 × 4/6 = 1/2
+For Mr. X (no info): P = 1/2 × 2/6 + 1/2 × 4/6 = 1/2.
 
-对于知情的你，你知道在二号箱子摸球概率大，所以只在二号箱摸，摸到红球的概率是：0 × 2/6 + 1 × 4/6 = 2/3
+For you (in the know): you'd always pick Box 2: P = 0 × 2/6 + 1 × 4/6 = 2/3.
 
 
 
