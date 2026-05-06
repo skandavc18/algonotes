@@ -1,11 +1,9 @@
 # Solving the Trapping Rain Water Problem Efficiently
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -16,8 +14,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | [42. Trapping Rain Water](https://leetcode.cn/problems/trapping-rain-water/) | 🔴 |
 
 **-----------**
-
-
 
 
 > [!NOTE]
@@ -66,7 +62,6 @@ water[i] = min(
 ![](https://labuladong.online/algo/images/rain-water/1.jpg)
 
 ![](https://labuladong.online/algo/images/rain-water/2.jpg)
-
 
 
 The brute force:
@@ -139,7 +134,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 Same idea, no recomputation. O(N) time but O(N) space. We can reduce space to O(1).
@@ -291,7 +285,6 @@ class Solution {
 <hr/>
 
 
-
 Why move the lower side?
 
 ```java
@@ -310,15 +303,7 @@ Moving the lower side may raise it, possibly increasing the area. Moving the hig
 Done.
 
 
-
-
-
-
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,22 +1,19 @@
 # Mental switch between DP and backtracking
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [139. Word Break](https://leetcode.com/problems/word-break/) | [139. 单词拆分](https://leetcode.cn/problems/word-break/) | 🟠 |
-| [140. Word Break II](https://leetcode.com/problems/word-break-ii/) | [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii/) | 🔴 |
+| [139. Word Break](https://leetcode.com/problems/word-break/) | [139. Word Break](https://leetcode.cn/problems/word-break/) | 🟠 |
+| [140. Word Break II](https://leetcode.com/problems/word-break-ii/) | [140. Word Break II](https://leetcode.cn/problems/word-break-ii/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -91,9 +88,6 @@ class Solution {
 For input `nums = [1,2,3]`, output is 3^3 = 27 combinations:
 
 
-
-
-
 ```java
 [
   [1,1,1],[1,1,2],[1,1,3],[1,2,1],[1,2,2],[1,2,3],[1,3,1],[1,3,2],[1,3,3],
@@ -101,7 +95,6 @@ For input `nums = [1,2,3]`, output is 3^3 = 27 combinations:
   [3,1,1],[3,1,2],[3,1,3],[3,2,1],[3,2,2],[3,2,3],[3,3,1],[3,3,2],[3,3,3]
 ]
 ```
-
 
 
 This essentially traverses a perfect `N`-ary tree of height `N + 1` (`N` = length of `nums`), where each root-to-leaf path is one permutation:
@@ -551,9 +544,6 @@ Plus string concatenation is slow, and the memo consumes lots of memory storing 
 Conclusion: for permutation/combination problems we usually use backtracking to "traverse" the backtracking tree, not "decompose". Storing subproblem results requires lots of time and space; only when overlapping subproblems are extremely many is it worth it.
 
 That's it. Hope you have a deeper understanding of backtracking and decompose-the-problem.
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

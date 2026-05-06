@@ -12,12 +12,11 @@
 **Notice: [the new site membership](https://labuladong.online/algo/intro/site-vip/) is about to get a price hike; existing users can renew. Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [651. 4 Keys Keyboard](https://leetcode.com/problems/4-keys-keyboard/)🔒 | [651. 4键键盘](https://leetcode.cn/problems/4-keys-keyboard/)🔒 | 🟠
+| [651. 4 Keys Keyboard](https://leetcode.com/problems/4-keys-keyboard/)🔒 | [651. 4 Keys Keyboard](https://leetcode.cn/problems/4-keys-keyboard/)🔒 | 🟠
 
 **-----------**
 
@@ -218,7 +217,6 @@ In approach 2, with a moment's thought, we realize the optimal sequence has the 
 Based on this fact, we redefined the state and the transition, logically reducing invalid subproblems and improving efficiency.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -227,9 +225,6 @@ Based on this fact, we redefined the state and the transition, logically reducin
  - [Optimal substructure and dp-array traversal direction](https://labuladong.online/algo/dynamic-programming/faq-summary/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

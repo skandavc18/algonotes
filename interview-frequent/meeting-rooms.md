@@ -1,11 +1,9 @@
 # Sweep-Line Technique: Meeting Rooms
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [253. Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/)🔒 | [253. Meeting Rooms II](https://leetcode.cn/problems/meeting-rooms-ii/)🔒 | 🟠 |
 
 **-----------**
-
 
 
 I was once asked a classic and practical problem in an interview: meeting room scheduling.
@@ -42,11 +39,6 @@ We've covered interval algorithms before. With [Difference Arrays](https://labul
 This problem is essentially: given an all-zero array and several intervals, increment each by 1; what's the max?
 
 But difference arrays require building the all-zero array — its length depends on the maximum time. For `meetings = [[0,30],[5,10],[10^8,10^9]]`, you'd need an array of length 10^9 — a problem. The given constraint here is up to 10^6, so it works, but the technique below avoids the issue.
-
-
-
-
-
 
 
 ## Problem Spectrum
@@ -84,11 +76,6 @@ LeetCode 1235 "Maximum Profit in Job Scheduling" is similar; see my Chrome plugi
 OK, let's solve it.
 
 
-
-
-
-
-
 ## Analysis
 
 The essence:
@@ -108,11 +95,6 @@ Treat the timeline as an all-zero array; each meeting `[i, j]` is a subarray to 
 E.g., `meetings = [[0,30],[5,10],[15,20]]`: increment those three subarrays; scan for max.
 
 Difference arrays do range increments in O(1), so they fit. But not the most efficient — I'll skip the explicit code; refer to [Difference Arrays](https://labuladong.online/algo/data-structure/diff-array/) and try yourself.
-
-
-
-
-
 
 
 **From the difference-array idea, derive a more elegant, more efficient solution.**
@@ -199,12 +181,6 @@ We use [two pointers](https://labuladong.online/algo/essential-technique/array-t
 Done. A variant: given meetings and `k` rooms, decide if `k` is enough — the same code easily handles this.
 
 
-
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems that reference this article</strong></summary>
@@ -219,9 +195,7 @@ Done. A variant: given meetings and `k` rooms, decide if `k` is enough — the s
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

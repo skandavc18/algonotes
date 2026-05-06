@@ -1,11 +1,9 @@
 # What are processes, threads, and file descriptors in Linux?
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 **-----------**
@@ -127,7 +125,6 @@ Of course, only Linux treats threads as data-sharing processes without special h
 In Linux, both creating threads and creating processes are very efficient. For the memory copy problem when creating processes, Linux uses copy-on-write — it doesn't actually copy the parent's memory until a write happens. **So creating processes and threads in Linux is both very fast**.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -136,9 +133,6 @@ In Linux, both creating threads and creating processes are very efficient. For t
  - [Tips for using the Linux shell](https://labuladong.online/algo/fname.html?fname=linuxshell)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

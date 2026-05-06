@@ -2166,7 +2166,7 @@ class RandomizedSet {
         swap(nums[index], nums.back());
         // delete element val from the array
         nums.pop_back();
-        // delete the index entry corresponds to to val
+        // delete the index entry corresponds to val
         valToIndex.erase(val);
         return true;
     }
@@ -2215,7 +2215,7 @@ func (r *RandomizedSet) remove(val int) bool {
     r.nums[index], r.nums[len(r.nums)-1] = r.nums[len(r.nums)-1], r.nums[index]
     // delete element val from the array
     r.nums = r.nums[:len(r.nums)-1]
-    // delete the index entry corresponds to to val
+    // delete the index entry corresponds to val
     delete(r.valToIndex, val)
     return true
 }
@@ -2260,7 +2260,7 @@ class RandomizedSet {
         Collections.swap(nums, index, nums.size()-1);
         // delete element val from the array
         nums.remove(nums.size()-1);
-        // delete the index entry corresponds to to val
+        // delete the index entry corresponds to val
         valToIndex.remove(val);
         return true;
     }
@@ -2319,7 +2319,7 @@ RandomizedSet.prototype.remove = function(val) {
     [this.nums[index], this.nums[this.nums.length - 1]] = [this.nums[this.nums.length - 1], this.nums[index]];
     // delete element val from the array
     this.nums.pop();
-    // delete the index entry corresponds to to val
+    // delete the index entry corresponds to val
     this.valToIndex.delete(val);
     return true;
 };
@@ -2365,7 +2365,7 @@ class RandomizedSet:
         self.nums[index], self.nums[-1] = self.nums[-1], self.nums[index]
         # delete element val from the array
         self.nums.pop()
-        # delete the index entry corresponds to to val
+        # delete the index entry corresponds to val
         self.valToIndex.pop(val)
         return True
 
@@ -14224,7 +14224,6 @@ class Solution {
         res[p] = head.val;
         p++;
     }
-
 
 
     // use the "decompose the problem" mindset to write the recursive solution
@@ -30482,7 +30481,7 @@ class RandomizedSet {
         swap(nums[index], nums.back());
         // delete element val from the array
         nums.pop_back();
-        // delete the index entry corresponds to to val
+        // delete the index entry corresponds to val
         valToIndex.erase(val);
         return true;
     }
@@ -30535,7 +30534,7 @@ func (this *RandomizedSet) Remove(val int) bool {
     this.nums[index], this.nums[len(this.nums)-1] = this.nums[len(this.nums)-1], this.nums[index]
     // delete element val from the array
     this.nums = this.nums[:len(this.nums)-1]
-    // delete the index entry corresponds to to val
+    // delete the index entry corresponds to val
     delete(this.valToIndex, val)
     return true
 }
@@ -30584,7 +30583,7 @@ class RandomizedSet {
         Collections.swap(nums, index, nums.size() - 1);
         // delete element val from the array
         nums.remove(nums.size() - 1);
-        // delete the index entry corresponds to to val
+        // delete the index entry corresponds to val
         valToIndex.remove(val);
         return true;
     }
@@ -30632,7 +30631,7 @@ RandomizedSet.prototype.remove = function(val) {
     this.nums[this.nums.length - 1] = temp;
     // delete element val from the array
     this.nums.pop();
-    // delete the index entry corresponds to to val
+    // delete the index entry corresponds to val
     delete this.valToIndex[val];
     return true;
 };
@@ -30682,7 +30681,7 @@ class RandomizedSet:
         self.nums[index], self.nums[-1] = self.nums[-1], self.nums[index]
         # delete element val from the array
         self.nums.pop()
-        # delete the index entry corresponds to to val
+        # delete the index entry corresponds to val
         del self.valToIndex[val]
         return True
 
@@ -34156,7 +34155,7 @@ public:
         if (!keyToVal.count(key)) {
             return -1;
         }
-        // increase the freq corresponds to to key
+        // increase the freq corresponds to key
         increaseFreq(key);
         return keyToVal[key];
     }
@@ -34257,7 +34256,7 @@ func (this *LFUCache) Get(key int) int {
     if _, ok := this.keyToVal[key]; !ok {
         return -1
     }
-    // increase the freq corresponds to to key
+    // increase the freq corresponds to key
     this.increaseFreq(key)
     return this.keyToVal[key]
 }
@@ -34426,7 +34425,7 @@ class LFUCache {
         if (!keyToVal.containsKey(key)) {
             return -1;
         }
-        // increase the freq corresponds to to key
+        // increase the freq corresponds to key
         increaseFreq(key);
         return keyToVal.get(key);
     }
@@ -34525,7 +34524,7 @@ LFUCache.prototype.get = function(key) {
     if (!this.keyToVal.has(key)) {
         return -1;
     }
-    // increase the freq corresponds to to key
+    // increase the freq corresponds to key
     this.increaseFreq(key);
     return this.keyToVal.get(key);
 };
@@ -34632,7 +34631,7 @@ class LFUCache:
     def get(self, key: int) -> int:
         if key not in self.keyToVal:
             return -1
-        # increase the freq corresponds to to key
+        # increase the freq corresponds to key
         self.__increaseFreq(key)
         return self.keyToVal[key]
 
@@ -38376,7 +38375,7 @@ public:
         int freq = --valToFreq[v];
         // update maxFreq
         if (vals.empty()) {
-            // if the elements corresponds to to maxFreq are empty
+            // if the elements corresponds to maxFreq are empty
             maxFreq--;
         }
         return v;
@@ -38423,7 +38422,7 @@ func (this *FreqStack) Pop() int {
     this.valToFreq[v] = freq
     // update maxFreq
     if vals.Len() == 0 {
-        // if the elements corresponds to to maxFreq are empty
+        // if the elements corresponds to maxFreq are empty
         this.maxFreq--
     }
     return v
@@ -38460,7 +38459,7 @@ class FreqStack {
         valToFreq.put(v, freq);
         // update maxFreq
         if (vals.isEmpty()) {
-            // if the elements corresponds to to maxFreq are empty
+            // if the elements corresponds to maxFreq are empty
             maxFreq--;
         }
         return v;
@@ -38510,7 +38509,7 @@ FreqStack.prototype.pop = function() {
     this.valToFreq.set(v, freq);
     // update maxFreq
     if (vals.length === 0) {
-        // if the elements corresponds to to maxFreq are empty
+        // if the elements corresponds to maxFreq are empty
         this.maxFreq--;
     }
     return v;
@@ -38547,7 +38546,7 @@ class FreqStack:
         self.valToFreq[v] = freq
         # update maxFreq
         if not vals:
-            # if the elements corresponds to to maxFreq are empty
+            # if the elements corresponds to maxFreq are empty
             self.maxFreq -= 1
         return v
 ```
@@ -59611,7 +59610,7 @@ public:
             if (path[i] == '/' || i == path.size()) {
                 string part = path.substr(start + 1, i - start - 1);
                 if (part == "" || part == ".") {
-                    // part is emptyoras  . , ignore
+                    // part is emptyoras. , ignore
                 } else if (part == "..") {
                     if (!parts.empty()) parts.pop_back();
                 } else {
@@ -68702,7 +68701,6 @@ class Solution {
         return true;
     }
 }
-
 
 
 class Solution2 {

@@ -1,11 +1,9 @@
 # Backtracking Algorithm Framework
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -17,7 +15,6 @@ After reading this article, you will not only master the algorithm pattern but a
 **-----------**
 
 
-
 > [!NOTE]
 > Before reading this article, you should first study:
 > 
@@ -26,7 +23,6 @@ After reading this article, you will not only master the algorithm pattern but a
 > - [N-ary Tree Structure and Traversal Framework](https://labuladong.online/algo/data-structure-basic/n-ary-tree-traverse-basic/)
 
 > tip: a video version is available: [Backtracking Framework Walk-through](https://www.bilibili.com/video/BV1P5411N7Xc/). Follow my Bilibili account; I'll guide you through more difficult algorithm techniques on video.
-
 
 
 This is the upgraded version of an older article on backtracking. Once the framework is clear, all backtracking problems follow the same pattern.
@@ -63,11 +59,6 @@ def backtrack(path, choices):
         backtrack(path, choices)
         undo choice
 ```
-
-
-
-
-
 
 
 **At its core, recursion inside a for loop, "making a choice" before each recursive call and "undoing the choice" after**. Very simple.
@@ -209,7 +200,6 @@ class Solution {
 <hr/>
 
 
-
 We didn't track an explicit "choices" list — `used` tells us which `nums` elements are already in `track`:
 
 ![](https://labuladong.online/algo/images/backtracking/6.jpg)
@@ -237,11 +227,6 @@ def backtrack(...):
 Backtracking and DP — similar in some ways? In DP we emphasize "state", "choice", and "base case" — corresponding to "path", "choices", and "termination" here.
 
 Both abstract the problem into a tree, but their reasoning differs. See [Binary Tree Tactics (Outline)](https://labuladong.online/algo/essential-technique/binary-tree-summary/) for the deeper distinctions.
-
-
-
-
-
 
 
 <hr>
@@ -273,8 +258,6 @@ Both abstract the problem into a tree, but their reasoning differs. See [Binary 
  - [Answers to Common Backtracking/DFS Questions](https://labuladong.online/algo/essential-technique/backtrack-vs-dfs/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -315,9 +298,7 @@ Both abstract the problem into a tree, but their reasoning differs. See [Binary 
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

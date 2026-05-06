@@ -1,11 +1,9 @@
 # Extension: How to Implement a Calculator
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -17,7 +15,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [772. Basic Calculator III](https://leetcode.com/problems/basic-calculator-iii/)🔒 | [772. Basic Calculator III](https://leetcode.cn/problems/basic-calculator-iii/)🔒 | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -188,7 +185,6 @@ int calculate(String s) {
 ![](https://labuladong.online/algo/images/calculator/3.jpg)
 
 
-
 **The fact that multiplication/division come before addition/subtraction shows up as: `*`/`/` combine with the top of the stack, while `+`/`-` simply push themselves onto the stack.**
 
 Now let's deal with possible spaces. With the current code we don't actually have to do anything special. Look at the `if`: when `c` is a space, neither branch matches and we skip it.
@@ -336,7 +332,6 @@ class Solution {
 ![](https://labuladong.online/algo/images/calculator/6.jpg)
 
 
-
 A couple of extra lines and parentheses are handled — that's the magic of recursion. The full calculator is done. By breaking the problem down step by step, the problem looks much less daunting.
 
 ## 5. Wrap-Up
@@ -350,11 +345,6 @@ Hard problems aren't usually solved in one shot — they spiral outward. If you 
 Once you understand the algorithm, **save the resulting full-featured calculator code**. Other problems may ask you to evaluate an expression — you can drop this class in directly without rewriting it.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -364,11 +354,7 @@ Once you understand the algorithm, **save the resulting full-featured calculator
 </details><hr>
 
 
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

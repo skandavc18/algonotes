@@ -1,11 +1,9 @@
 # A Small but Elegant Technique: the Prefix-Sum Array
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -16,7 +14,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [304. Range Sum Query 2D - Immutable](https://leetcode.com/problems/range-sum-query-2d-immutable/) | [304. Range Sum Query 2D - Immutable](https://leetcode.cn/problems/range-sum-query-2d-immutable/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -154,11 +151,6 @@ Click the visualization below; click <code type="click">preSum[i][j] = ...</code
 That covers prefix sums — easy if you know the trick. Practice spotting it.
 
 
-
-
-
-
-
 ## Extensions
 
 The technique generalizes beyond sums — to range max/min/products, etc.
@@ -170,11 +162,6 @@ Prefix sums often combine with other techniques. See [Prefix-Sum Practice Proble
 If an element changes, all `preSum` entries past it are invalidated and must be recomputed in O(n) — no better than brute force.
 
 For mutable elements, use [segment trees](https://labuladong.online/algo/data-structure/segment-tree-implement/) instead.
-
-
-
-
-
 
 
 <hr>
@@ -196,8 +183,6 @@ For mutable elements, use [segment trees](https://labuladong.online/algo/data-st
  - [Issues with Selection Sort](https://labuladong.online/algo/data-structure-basic/select-sort/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -232,9 +217,7 @@ For mutable elements, use [segment trees](https://labuladong.online/algo/data-st
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

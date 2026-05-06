@@ -12,11 +12,9 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 **-----------**
 
 > tip: a video version is available: [Framework Thinking for Learning DS&A](https://www.bilibili.com/video/BV1EN4y1M79p/). Follow my Bilibili account; I'll guide you through more difficult algorithm techniques on video.
-
 
 
 This is a revised version of an older article. The original was well-received; if you haven't read it, no worries — this article covers everything plus many code examples.
@@ -342,9 +340,6 @@ Storage: linked or sequential. Operations: insert/delete/search/update. Traversa
 After mastering the basics, do binary trees first. With framework thinking, understand trees deeply, then tackle backtracking, DP, divide-and-conquer — your understanding will be much deeper.
 
 
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -376,8 +371,6 @@ After mastering the basics, do binary trees first. With framework thinking, unde
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems that reference this article</strong></summary>
@@ -392,7 +385,6 @@ After mastering the basics, do binary trees first. With framework thinking, unde
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

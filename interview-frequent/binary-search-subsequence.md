@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -225,9 +224,6 @@ int left_bound(ArrayList<Integer> arr, int target) {
 ```
 
 
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
 **"labuladong's Algorithm Notes" has been published. Follow the official account for details; reply with "all-in-one bundle" to download the companion PDF and the full problem-solving bundle**:
@@ -306,7 +302,6 @@ public:
 ```
 
 
-
 ### javascript
 
 Two-pointer linear scan:
@@ -326,7 +321,6 @@ var isSubsequence = function (s, t) {
     return i === s.length;
 };
 ```
-
 
 
 **Upgrade: binary-search version (handles many s's):**

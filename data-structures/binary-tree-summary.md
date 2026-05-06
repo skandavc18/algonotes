@@ -1,11 +1,9 @@
 # Core Outline of the Binary-Tree Algorithm Series
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -17,7 +15,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [543. Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/) | [543. Diameter of Binary Tree](https://leetcode.cn/problems/diameter-of-binary-tree/) | 🟢 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -48,11 +45,6 @@ Either way, ask:
 The examples are the simplest possible, so don't worry about getting lost. From these tiny problems we'll extract every binary-tree commonality, then transfer the binary-tree mindset over to [Dynamic Programming](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), [Backtracking](https://labuladong.online/algo/essential-technique/backtrack-framework/), [Divide and Conquer](https://labuladong.online/algo/essential-technique/divide-and-conquer/), and [Graph Algorithms](https://labuladong.online/algo/data-structure-basic/graph-basic/) — which is exactly why I keep emphasizing framework thinking. After learning those advanced topics, come back to this article — you'll see them with fresh eyes.
 
 First, let me reiterate the importance of binary trees and their algorithms.
-
-
-
-
-
 
 
 ## Why Binary Trees Matter
@@ -229,11 +221,6 @@ The big idea:
 **Every binary-tree problem boils down to placing clever code at the pre/in/postorder positions to achieve your goal. You only need to think about what each node should do; everything else is taken care of by the recursion framework.**
 
 In [Graph Algorithm Basics](https://labuladong.online/algo/data-structure-basic/graph-basic/) we extend the binary-tree traversal to graphs and build many classic graph algorithms on it — but that's another story.
-
-
-
-
-
 
 
 ## Two Solving Mindsets
@@ -425,11 +412,6 @@ The general workflow when meeting a binary-tree problem:
 The site's [Recursion Practice Set](https://labuladong.online/algo/intro/binary-tree-practice/) lists 100+ binary-tree exercises walking you through both mindsets to fully internalize recursive thinking.
 
 
-
-
-
-
-
 ## Why Postorder is Special
 
 Briefly on preorder/inorder.
@@ -606,11 +588,6 @@ Conversely, if you write a recursion-inside-recursion solution, ask yourself whe
 For more postorder problems see [Walk-Through: Binary Trees (Postorder)](https://labuladong.online/algo/data-structure/binary-tree-part3/), [Walk-Through: BST (Postorder)](https://labuladong.online/algo/data-structure/bst-part4/), and [[Practice] Postorder Position](https://labuladong.online/algo/problem-set/binary-tree-post-order-i/).
 
 
-
-
-
-
-
 ## DP / Backtracking / DFS — Binary-Tree-Style Distinctions and Connections
 
 I've said DP and backtracking are two manifestations of binary-tree thinking. Sharp readers ask: you haven't really written a separate article on DFS — what about it?
@@ -663,7 +640,6 @@ int fib(int N) {
 ![](https://labuladong.online/algo/images/dynamic-programming/2.jpg)
 
 
-
 ### Example 2: Backtracking Mindset
 
 Given a tree, traverse it and print the steps:
@@ -710,17 +686,16 @@ void backtrack(...) {
 
     for (int i = 0; i < ...; i++) {
         // Make a choice
-        ...
+...
 
         // Recurse to next decision level
         backtrack(...);
 
         // Undo the choice
-        ...
+...
     }
 }
 ```
-
 
 
 **Backtracking traversal focuses on movement between nodes — the "edges".**
@@ -747,7 +722,6 @@ void backtrack(int[] nums) {
 ```
 
 ![](https://labuladong.online/algo/images/permutation/2.jpeg)
-
 
 
 ### Example 3: DFS Mindset
@@ -788,7 +762,6 @@ void dfs(int[][] grid, int i, int j) {
 ```
 
 ![](https://labuladong.online/algo/images/island/5.jpg)
-
 
 
 DP focuses on the subtree, backtracking on the edge, DFS on the node.
@@ -954,11 +927,6 @@ class Solution {
 This `traverse` resembles a recursive list traversal — each level is treated as a "node" in a list.
 
 Compared to the previous, this is genuine top-down level order — closer to BFS spirit. A nice recursive BFS extension.
-
-
-
-
-
 
 
 <hr>
@@ -1130,9 +1098,7 @@ Compared to the previous, this is genuine top-down level order — closer to BFS
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

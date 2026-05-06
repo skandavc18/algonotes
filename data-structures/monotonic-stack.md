@@ -1,11 +1,9 @@
 # Solving Three Examples with the Monotonic Stack Algorithm Template
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -18,7 +16,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | - | [Sword to Offer II 038. Daily Temperatures](https://leetcode.cn/problems/iIQa4I/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -131,8 +128,6 @@ class Solution {
 <hr/>
 
 
-
-
 ### 739. Daily Temperatures
 
 LeetCode 739 "Daily Temperatures":
@@ -233,17 +228,11 @@ class Solution {
 <hr/>
 
 
-
 That cleanly solves the circular-array case in $O(N)$ time.
 
 A few questions to close: the template here is `nextGreaterElement`, computing each element's next greater. What if a problem asks for the previous greater, or the previous greater-or-equal? How would you adapt the template? And in real problems, you won't be asked for the next/previous greater/smaller directly; how do you reformulate the problem into a monotonic-stack one?
 
 I'll compare several monotonic-stack variants and present classic problems in [Monotonic-Stack Variants and Problems](https://labuladong.online/algo/problem-set/monotonic-stack/). For more data-structure-design problems, see [Classic Data-Structure Design Problems](https://labuladong.online/algo/problem-set/ds-design/).
-
-
-
-
-
 
 
 <hr>
@@ -258,8 +247,6 @@ I'll compare several monotonic-stack variants and present classic problems in [M
  - [Extension: Array Deduplication (Hard Version)](https://labuladong.online/algo/frequency-interview/remove-duplicate-letters/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -281,9 +268,7 @@ I'll compare several monotonic-stack variants and present classic problems in [M
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,23 +1,20 @@
 # One method demolishes the LeetCode House Robber series
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [198. House Robber](https://leetcode.com/problems/house-robber/) | [198. 打家劫舍](https://leetcode.cn/problems/house-robber/) | 🟠 |
-| [213. House Robber II](https://leetcode.com/problems/house-robber-ii/) | [213. 打家劫舍 II](https://leetcode.cn/problems/house-robber-ii/) | 🟠 |
-| [337. House Robber III](https://leetcode.com/problems/house-robber-iii/) | [337. 打家劫舍 III](https://leetcode.cn/problems/house-robber-iii/) | 🟠 |
+| [198. House Robber](https://leetcode.com/problems/house-robber/) | [198. House Robber](https://leetcode.cn/problems/house-robber/) | 🟠 |
+| [213. House Robber II](https://leetcode.com/problems/house-robber-ii/) | [213. House Robber II](https://leetcode.cn/problems/house-robber-ii/) | 🟠 |
+| [337. House Robber III](https://leetcode.com/problems/house-robber-iii/) | [337. House Robber III](https://leetcode.cn/problems/house-robber-iii/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -47,11 +44,6 @@ int rob(int[] nums);
 For example, with `nums=[2,1,7,9,3,1]`, the algorithm returns 12. The thief robs `nums[0], nums[3], nums[5]`, totaling 2 + 9 + 1 = 12 — the optimal choice.
 
 The problem is easy to understand and clearly DP. As summarized in the earlier [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), **solving DP problems is just finding "states" and "choices", that's it**.
-
-
-
-
-
 
 
 Imagine you're this professional robber walking left to right past the houses. At each house, you have two **choices**: rob or skip.
@@ -140,7 +132,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 That's the top-down DP solution. We can lightly modify it to write a **bottom-up** version:
@@ -295,7 +286,6 @@ class Solution {
 <hr/>
 
 
-
 Time-complexity analysis: although the recursion looks like a 4-ary tree, with memoization the function effectively visits each node once — so time complexity is $O(N)$ where `N` is the number of tree nodes. Space complexity is the memo size, $O(N)$.
 
 If you're confused about time/space complexity, see the [Practical guide to time/space complexity analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/).
@@ -335,26 +325,19 @@ Notice this differs from our approach: the recursive function's definition is ch
 In practice this solution runs much faster than ours, even though the asymptotic time complexity matches. Reason: it doesn't use a memo, reducing data-operation overhead, so actual runtime is faster.
 
 
-
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer II 089. 房屋偷盗](https://leetcode.cn/problems/Gu0c2T/?show=1) | 🟠 |
-| - | [剑指 Offer II 090. 环形房屋偷盗](https://leetcode.cn/problems/PzWKhm/?show=1) | 🟠 |
+| - | [Sword to Offer II 089. House Robber](https://leetcode.cn/problems/Gu0c2T/?show=1) | 🟠 |
+| - | [Sword to Offer II 090. House Robber II](https://leetcode.cn/problems/PzWKhm/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

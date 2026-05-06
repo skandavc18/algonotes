@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -202,9 +201,6 @@ A careful reader may notice the two ideas declare `arr` differently — inside o
 Part 1 covered the shuffle, proved 4 forms via a simple counting argument, and showed a common wrong version.
 
 Part 2 gave the correctness criterion — uniform outcome probability — and used Monte Carlo to verify with a sledgehammer. Different ideas work; we just want a quick sanity check.
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

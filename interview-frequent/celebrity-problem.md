@@ -1,11 +1,9 @@
 # Find the Celebrity Problem
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [277. Find the Celebrity](https://leetcode.com/problems/find-the-celebrity/)🔒 | [277. Find the Celebrity](https://leetcode.cn/problems/find-the-celebrity/)🔒 | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -114,11 +111,6 @@ For each candidate, we run an inner loop to verify it.
 The inner loop is wasteful: confirming "is celebrity" requires checking everyone, but confirming "isn't" doesn't.
 
 **Since the celebrity is unique, we can use elimination — exclude obvious non-celebrities to reduce nesting.**
-
-
-
-
-
 
 
 ## Optimized
@@ -244,15 +236,7 @@ class Solution extends Relation {
 O(N) time, O(1) space — optimal.
 
 
-
-
-
-
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

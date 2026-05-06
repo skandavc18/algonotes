@@ -1,15 +1,12 @@
 # A Few Counterintuitive Probability Problems
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 **-----------**
-
 
 
 The earlier article [Random Algorithms in Games](https://labuladong.online/algo/frequency-interview/random-algorithm/) discussed Monte Carlo methods for verifying probability algorithms. Today, something lighter: a few interesting probability puzzles.
@@ -23,11 +20,6 @@ Principle 2: probability is a continuous whole; you can't arbitrarily slice cont
 These were taught in high school, yet we still mess them up — and the mistakes follow a familiar pattern: we ignore Principle 2, miscount the sample space, and then misapply Principle 1.
 
 Below: the boy/girl problem, the birthday paradox, and the Monty Hall problem. The Monty Hall problem is the most famous, so we'll spend more time on it.
-
-
-
-
-
 
 
 ### 1. The Boy/Girl Problem
@@ -49,11 +41,6 @@ By Principle 2, probability is continuous; the two questions are different. The 
 The relationship between the two principles should be clearer now. The most misleading factor is overlooking conditional probability. The simplest defense: enumerate all outcomes.
 
 I've seen one funny objection: what if the children are twins, with no age difference? It almost sounds reasonable! But age was just a way to express the children's independence — even same-gender twins still represent two outcomes. So no twin loopholes.
-
-
-
-
-
 
 
 ### 2. The Birthday Paradox
@@ -93,11 +80,6 @@ Why is 23 enough for >50%? Compute the probability that 23 people all have uniqu
 That's about 0.493, so the probability of a shared birthday is 0.507 — close to 50%. By 70 people, the probability rises to 99.9%, basically 100%. So statistically, it's no surprise to find shared birthdays in a group of a few dozen.
 
 
-
-
-
-
-
 ### 3. The Monty Hall Problem
 
 A classic: a contestant faces three doors. Behind two are goats; behind one is a sports car. The contestant picks a door and gets what's behind it (the car is more valuable, of course). The host helps: after the choice, instead of opening it immediately, the host opens one of the remaining two doors (the host knows what's behind each) and reveals a goat. Then the host gives the contestant a chance to switch. Should the contestant switch?
@@ -129,15 +111,7 @@ For Mr. X (no info): P = 1/2 × 2/6 + 1/2 × 4/6 = 1/2.
 For you (in the know): you'd always pick Box 2: P = 0 × 2/6 + 1 × 4/6 = 2/3.
 
 
-
-
-
-
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

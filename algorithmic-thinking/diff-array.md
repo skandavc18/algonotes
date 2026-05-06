@@ -1,11 +1,9 @@
 # A Small but Elegant Technique: the Difference Array
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -17,7 +15,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [370. Range Addition](https://leetcode.com/problems/range-addition/)🔒 | [370. Range Addition](https://leetcode.cn/problems/range-addition/)🔒 | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -53,7 +50,6 @@ class PrefixSum {
 ![](https://labuladong.online/algo/images/difference/1.jpeg)
 
 
-
 `preSum[i]` is the sum of `nums[0..i-1]`. To get the sum of `nums[i..j]`, compute `preSum[j+1] - preSum[i]` — no need to scan the range.
 
 This article covers a similar trick: the **difference array**, which is mainly used when **we frequently increment/decrement elements over a range of the original array**.
@@ -76,7 +72,6 @@ for (int i = 1; i < nums.length; i++) {
 ```
 
 ![](https://labuladong.online/algo/images/difference/2.jpeg)
-
 
 
 We can recover `nums` from `diff`:
@@ -297,11 +292,6 @@ Solved.
 Difference arrays and prefix sums are common, elegant techniques for different scenarios — trivial once you know them, baffling if you don't. Mastered the difference array yet?
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -314,11 +304,7 @@ Difference arrays and prefix sums are common, elegant techniques for different s
 </details><hr>
 
 
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

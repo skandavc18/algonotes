@@ -1,11 +1,9 @@
 # Union-Find (Disjoint Set) Algorithm
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -18,7 +16,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [990. Satisfiability of Equality Equations](https://leetcode.com/problems/satisfiability-of-equality-equations/) | [990. Satisfiability of Equality Equations](https://leetcode.cn/problems/satisfiability-of-equality-equations/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -69,11 +66,6 @@ Calling `union(1, 2)` connects 0, 1, 2; `connected(0, 2)` returns true; componen
 This equivalence relation is useful in many places — compilers tracking variable references, social-network friend circles, etc.
 
 So, you've roughly got dynamic connectivity. The crux is the efficiency of `union` and `connected`. What model represents the graph's connectivity? What data structure?
-
-
-
-
-
 
 
 ## 2. Basic Idea
@@ -394,11 +386,6 @@ Recap of the optimizations:
 > Most coding tests let you use your own IDE; have a `UF` class ready in your favorite language so you don't waste time rewriting it on the spot.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -415,8 +402,6 @@ Recap of the optimizations:
  - [Beat Algorithms with Algorithms](https://labuladong.online/algo/fname.html?fname=algorithm-in-pdf)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -443,9 +428,7 @@ Recap of the optimizations:
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

@@ -3,9 +3,6 @@
 This article has been rewritten. Please read [Binary Heap Basics](https://labuladong.online/algo/data-structure-basic/binary-heap-basic/) and [Implementing a Priority Queue with a Binary Heap](https://labuladong.online/algo/data-structure-basic/binary-heap-implement/).
 
 
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
 
 **"labuladong's Algorithm Notes" has been published. Follow the official account for details; reply with "all-in-one bundle" to download the companion PDF and the full problem-solving bundle**:

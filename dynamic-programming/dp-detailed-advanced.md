@@ -1,22 +1,19 @@
 # Dynamic programming problem-solving framework
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [322. Coin Change](https://leetcode.com/problems/coin-change/) | [322. 零钱兑换](https://leetcode.cn/problems/coin-change/) | 🟠 |
-| [509. Fibonacci Number](https://leetcode.com/problems/fibonacci-number/) | [509. 斐波那契数](https://leetcode.cn/problems/fibonacci-number/) | 🟢 |
+| [322. Coin Change](https://leetcode.com/problems/coin-change/) | [322. Coin Change](https://leetcode.cn/problems/coin-change/) | 🟠 |
+| [509. Fibonacci Number](https://leetcode.com/problems/fibonacci-number/) | [509. Fibonacci Number](https://leetcode.cn/problems/fibonacci-number/) | 🟢 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -26,7 +23,6 @@ After reading this article, you'll not only learn the algorithmic pattern but al
 > - [N-ary tree structure and traversal framework](https://labuladong.online/algo/data-structure-basic/n-ary-tree-traverse-basic/)
 
 > Tip: this article has a video version: [DP framework explained](https://www.bilibili.com/video/BV1XV411Y7oE). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
-
 
 
 This article is the upgraded version of an old, 200+ tipped [DP detailed explanation](https://mp.weixin.qq.com/s/1V3aHVonWBEXlNUvK3S28w) from years ago. I've added more substance, hoping this article serves as a "guide" to solving DP.
@@ -46,11 +42,6 @@ Since we're optimizing, what's the core question? **The core of solving DP is en
 DP is so simple — just enumerate? But the DP problems I see are very hard!
 
 
-
-
-
-
-
 First, while DP's core idea is enumerate-then-pick-the-optimum, problems vary widely. Enumerating all feasible solutions isn't easy — you must be fluent in recursive thinking; only by listing the **correct "state-transition equation"** can you enumerate correctly. Plus you need to determine whether the algorithm has **optimal substructure** — whether you can derive the original problem's optimum from subproblem optima. Also, DP problems have **overlapping subproblems**; brute-force enumeration is inefficient, so you need a memo or DP table to avoid redundant computation.
 
 The three elements are: overlapping subproblems, optimal substructure, and state-transition equation. We'll detail each shortly. In practice, writing the state-transition equation is hardest — that's why many find DP hard. Here's my mental framework:
@@ -58,11 +49,6 @@ The three elements are: overlapping subproblems, optimal substructure, and state
 **identify "state" -> identify "choice" -> define `dp` array/function meaning**.
 
 Following this routine, the solution code looks like:
-
-
-
-
-
 
 
 ```python
@@ -112,7 +98,6 @@ int fib(int N) {
 <hr/>
 
 
-
 Nothing to add — recursion teachers in school all use this. Concise but very inefficient. Why? Suppose n = 20. Draw the recursion tree:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/1.jpg)
@@ -133,11 +118,6 @@ So total complexity = O(2^n). Exponential — explosive.
 Looking at the tree, the inefficiency is clear: enormous redundant computation. `f(18)` is computed twice; the subtree rooted at `f(18)` is huge — recomputing wastes a lot of time. And `f(18)` isn't the only repeated node, so the algorithm is extremely inefficient.
 
 This is DP's first property: **overlapping subproblems**. Now let's solve it.
-
-
-
-
-
 
 
 ### Memoized recursive solution
@@ -177,7 +157,6 @@ int dp(int[] memo, int n) {
 <hr/>
 
 
-
 Now draw the recursion tree to see what the memo did.
 
 ![](https://labuladong.online/algo/images/dynamic-programming/2.jpg)
@@ -193,11 +172,6 @@ Subproblem count = nodes in this graph; with no redundancy, the subproblems are 
 Per-subproblem time: same as before, O(1).
 
 Total: O(n) — vast improvement over brute force.
-
-
-
-
-
 
 
 By now the memoized recursion is as efficient as the iterative DP. It's already similar to the common DP solution — the difference is "top-down recursion" vs the more common "bottom-up iteration".
@@ -237,7 +211,6 @@ int fib(int N) {
 <hr/>
 
 
-
 Drawing the diagram makes it clear — the DP table looks much like the pruned tree, just computed in reverse:
 
 ![](https://labuladong.online/algo/images/dynamic-programming/4.jpg)
@@ -245,11 +218,6 @@ Drawing the diagram makes it clear — the DP table looks much like the pruned t
 Actually, the `memo` array in the memoized solution becomes the `dp` array here — compare the two algorithms in the visualization panel.
 
 So top-down and bottom-up are essentially the same; mostly with similar efficiency.
-
-
-
-
-
 
 
 ### Extension
@@ -307,7 +275,6 @@ int fib(int n) {
 <hr/>
 
 
-
 This is usually DP's last optimization step: if each transition only needs part of the DP table, shrink the table to record only the necessary data, lowering space.
 
 Above shrunk DP table size from `n` to 2 — one order of magnitude space reduction. The later post [Dimensional reduction on DP](https://labuladong.online/algo/dynamic-programming/space-optimization/) explores space compression in depth — usually compressing 2D DP to 1D, from O(n^2) to O(n).
@@ -342,11 +309,6 @@ But add a condition: your Chinese and math scores constrain each other — they 
 Now you can't reach the total-perfect-score, and the previous approach gives a wrong result. The "max each subject" subproblems aren't independent — Chinese and math interact, so they can't be simultaneously optimal — optimal substructure breaks.
 
 Back to coin change: why does it have optimal substructure? Suppose denominations are `1, 2, 5` and we want the minimum coins for `amount = 11` (original). If we know the minimum coins for `amount = 10, 9, 6` (subproblems), just add 1 (one more coin of denomination 1, 2, or 5) and take the minimum — that's the original answer. Coins are unlimited, so subproblems don't constrain each other — independent.
-
-
-
-
-
 
 
 > [!TIP]
@@ -496,7 +458,6 @@ class Solution {
 <hr/>
 
 
-
 No diagram — clearly the memo greatly reduces the subproblem count, eliminating redundancy. Subproblem count is bounded by amount $n$, so $O(n)$. Per-subproblem time is still $O(k)$, so total $O(kn)$.
 
 ### Iterative dp-array solution
@@ -554,11 +515,6 @@ Memo and DP table are "how to enumerate cleverly". Trading space for time is the
 We have a chapter dedicated to DP problems later. Re-read this article anytime. When reading each problem and solution, lean on "state" and "choice" to internalize this framework.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -606,46 +562,43 @@ We have a chapter dedicated to DP problems later. Re-read this article anytime. 
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/?show=1) | [111. 二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/?show=1) | 🟢 |
-| [112. Path Sum](https://leetcode.com/problems/path-sum/?show=1) | [112. 路径总和](https://leetcode.cn/problems/path-sum/?show=1) | 🟢 |
-| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. 不同的subsequence](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
-| [139. Word Break](https://leetcode.com/problems/word-break/?show=1) | [139. 单词拆分](https://leetcode.cn/problems/word-break/?show=1) | 🟠 |
-| [1696. Jump Game VI](https://leetcode.com/problems/jump-game-vi/?show=1) | [1696. 跳跃游戏 VI](https://leetcode.cn/problems/jump-game-vi/?show=1) | 🟠 |
-| [221. Maximal Square](https://leetcode.com/problems/maximal-square/?show=1) | [221. 最大正方形](https://leetcode.cn/problems/maximal-square/?show=1) | 🟠 |
-| [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/?show=1) | [240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/?show=1) | 🟠 |
-| [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. 粉刷房子](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
-| [279. Perfect Squares](https://leetcode.com/problems/perfect-squares/?show=1) | [279. 完全平方数](https://leetcode.cn/problems/perfect-squares/?show=1) | 🟠 |
-| [343. Integer Break](https://leetcode.com/problems/integer-break/?show=1) | [343. 整数拆分](https://leetcode.cn/problems/integer-break/?show=1) | 🟠 |
-| [365. Water and Jug Problem](https://leetcode.com/problems/water-and-jug-problem/?show=1) | [365. 水壶问题](https://leetcode.cn/problems/water-and-jug-problem/?show=1) | 🟠 |
-| [542. 01 Matrix](https://leetcode.com/problems/01-matrix/?show=1) | [542. 01 矩阵](https://leetcode.cn/problems/01-matrix/?show=1) | 🟠 |
-| [576. Out of Boundary Paths](https://leetcode.com/problems/out-of-boundary-paths/?show=1) | [576. 出界的路径数](https://leetcode.cn/problems/out-of-boundary-paths/?show=1) | 🟠 |
-| [62. Unique Paths](https://leetcode.com/problems/unique-paths/?show=1) | [62. 不同路径](https://leetcode.cn/problems/unique-paths/?show=1) | 🟠 |
-| [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
-| [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/?show=1) | [70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/?show=1) | 🟢 |
-| [91. Decode Ways](https://leetcode.com/problems/decode-ways/?show=1) | [91. 解码方法](https://leetcode.cn/problems/decode-ways/?show=1) | 🟠 |
-| - | [剑指 Offer 04. 二维数组中的查找](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/?show=1) | 🟠 |
-| - | [剑指 Offer 10- I. 斐波那契数列](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/?show=1) | 🟢 |
-| - | [剑指 Offer 10- II. 青蛙跳台阶问题](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/?show=1) | 🟢 |
-| - | [剑指 Offer 14- I. 剪绳子](https://leetcode.cn/problems/jian-sheng-zi-lcof/?show=1) | 🟠 |
-| - | [剑指 Offer 46. 把数字翻译成字符串](https://leetcode.cn/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/?show=1) | 🟠 |
-| - | [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
-| - | [剑指 Offer II 097. subsequence的数目](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
-| - | [剑指 Offer II 098. 路径的数目](https://leetcode.cn/problems/2AoeFn/?show=1) | 🟠 |
-| - | [剑指 Offer II 103. 最少的硬币数目](https://leetcode.cn/problems/gaM7Ch/?show=1) | 🟠 |
+| [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/?show=1) | [111. Minimum Depth of Binary Tree](https://leetcode.cn/problems/minimum-depth-of-binary-tree/?show=1) | 🟢 |
+| [112. Path Sum](https://leetcode.com/problems/path-sum/?show=1) | [112. Path Sum](https://leetcode.cn/problems/path-sum/?show=1) | 🟢 |
+| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. Distinct Subsequences](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
+| [139. Word Break](https://leetcode.com/problems/word-break/?show=1) | [139. Word Break](https://leetcode.cn/problems/word-break/?show=1) | 🟠 |
+| [1696. Jump Game VI](https://leetcode.com/problems/jump-game-vi/?show=1) | [1696. Jump Game VI](https://leetcode.cn/problems/jump-game-vi/?show=1) | 🟠 |
+| [221. Maximal Square](https://leetcode.com/problems/maximal-square/?show=1) | [221. Maximal Square](https://leetcode.cn/problems/maximal-square/?show=1) | 🟠 |
+| [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/?show=1) | [240. Search a 2D Matrix II](https://leetcode.cn/problems/search-a-2d-matrix-ii/?show=1) | 🟠 |
+| [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. Paint House](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
+| [279. Perfect Squares](https://leetcode.com/problems/perfect-squares/?show=1) | [279. Perfect Squares](https://leetcode.cn/problems/perfect-squares/?show=1) | 🟠 |
+| [343. Integer Break](https://leetcode.com/problems/integer-break/?show=1) | [343. Integer Break](https://leetcode.cn/problems/integer-break/?show=1) | 🟠 |
+| [365. Water and Jug Problem](https://leetcode.com/problems/water-and-jug-problem/?show=1) | [365. Water and Jug Problem](https://leetcode.cn/problems/water-and-jug-problem/?show=1) | 🟠 |
+| [542. 01 Matrix](https://leetcode.com/problems/01-matrix/?show=1) | [542. 01 Matrix](https://leetcode.cn/problems/01-matrix/?show=1) | 🟠 |
+| [576. Out of Boundary Paths](https://leetcode.com/problems/out-of-boundary-paths/?show=1) | [576. Out of Boundary Paths](https://leetcode.cn/problems/out-of-boundary-paths/?show=1) | 🟠 |
+| [62. Unique Paths](https://leetcode.com/problems/unique-paths/?show=1) | [62. Unique Paths](https://leetcode.cn/problems/unique-paths/?show=1) | 🟠 |
+| [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. Unique Paths II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
+| [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/?show=1) | [70. Climbing Stairs](https://leetcode.cn/problems/climbing-stairs/?show=1) | 🟢 |
+| [91. Decode Ways](https://leetcode.com/problems/decode-ways/?show=1) | [91. Decode Ways](https://leetcode.cn/problems/decode-ways/?show=1) | 🟠 |
+| - | [Sword to Offer 04. Search a 2D Matrix](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer 10-I. Fibonacci Number](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/?show=1) | 🟢 |
+| - | [Sword to Offer 10-II. Frog Jumping Stairs](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/?show=1) | 🟢 |
+| - | [Sword to Offer 14-I. Cutting Rope](https://leetcode.cn/problems/jian-sheng-zi-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer 46. Translate Numbers to Strings](https://leetcode.cn/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer II 091. Paint House](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
+| - | [Sword to Offer II 097. Number of Distinct Subsequences](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
+| - | [Sword to Offer II 098. Number of Paths](https://leetcode.cn/problems/2AoeFn/?show=1) | 🟠 |
+| - | [Sword to Offer II 103. Coin Change](https://leetcode.cn/problems/gaM7Ch/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

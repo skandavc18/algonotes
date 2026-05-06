@@ -1,11 +1,9 @@
 # Binary Tree Tactics (Construction)
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -18,7 +16,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/) | [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -144,7 +141,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 That's it — pretty simple. Two harder problems follow.
@@ -480,7 +476,6 @@ class Solution {
 <hr/>
 
 
-
 With the previous setup, this one comes quickly — just `rootVal` becomes the last element and the parameters change a bit.
 
 ## Build a Tree from Preorder and Postorder Traversals
@@ -582,7 +577,6 @@ class Solution {
 <hr/>
 
 
-
 Why is the result not unique? The key line:
 
 ```java
@@ -598,11 +592,6 @@ To echo the introduction: **construction problems use the "decomposition" mindse
 Hope this clears up the trick.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -616,8 +605,6 @@ Hope this clears up the trick.
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems that reference this article</strong></summary>
@@ -626,7 +613,7 @@ Hope this clears up the trick.
 
 | LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | [1008. Construct BST from Preorder Traversal](https://leetcode.cn/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | 🟠 |
+| [1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | [1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.cn/problems/construct-binary-search-tree-from-preorder-traversal/?show=1) | 🟠 |
 | - | [Sword to Offer 07. Reconstruct Binary Tree](https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/?show=1) | 🟠 |
 | - | [Sword to Offer 33. Postorder Traversal Sequence of a BST](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/?show=1) | 🟠 |
 
@@ -634,9 +621,7 @@ Hope this clears up the trick.
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

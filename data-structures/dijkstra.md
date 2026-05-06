@@ -1,15 +1,12 @@
 # Dijkstra Algorithm Template and Applications
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 **-----------**
-
 
 
 > [!NOTE]
@@ -117,11 +114,6 @@ The visualization panel sets up a weighted graph. Click the <code type="click">c
 The Dijkstra algorithm we're about to implement extends this idea: each node records the shortest path weight from the source, and combined with a [priority queue](https://labuladong.online/algo/data-structure-basic/binary-heap-implement/) — a structure that orders elements dynamically — we can compute shortest paths efficiently.
 
 Now let's lay out a generic Dijkstra implementation.
-
-
-
-
-
 
 
 ## Dijkstra Function Signature
@@ -340,11 +332,6 @@ But logarithms grow slowly, so the practical performance is still very good. The
 In the next section, [Dijkstra Practice Problems](https://labuladong.online/algo/problem-set/dijkstra/), we'll apply Dijkstra to concrete problems.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -363,8 +350,6 @@ In the next section, [Dijkstra Practice Problems](https://labuladong.online/algo
  - [Cycle Detection and Topological Sort](https://labuladong.online/algo/data-structure/topological-sort/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -388,9 +373,7 @@ In the next section, [Dijkstra Practice Problems](https://labuladong.online/algo
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

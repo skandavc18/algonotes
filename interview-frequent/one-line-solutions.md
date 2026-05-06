@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -140,7 +139,6 @@ So a bulb ends on iff its index is a perfect square. The count is `floor(sqrt(n)
 For 16: sqrt(16) = 4 → 4 bulbs on (1, 4, 9, 16). For non-square `n`, the integer square root gives the count of perfect squares ≤ n.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -150,9 +148,6 @@ For 16: sqrt(16) = 4 → 4 bulbs on (1, 4, 9, 16). For non-square `n`, the integ
  - [Classic DP: Game Theory](https://labuladong.online/algo/dynamic-programming/game-theory/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
@@ -168,7 +163,6 @@ For 16: sqrt(16) = 4 → 4 bulbs on (1, 4, 9, 16). For non-square `n`, the integ
 [877. Stone Game](https://leetcode-cn.com/problems/stone-game)
 
 [319. Bulb Switcher](https://leetcode-cn.com/problems/bulb-switcher)
-
 
 
 ### python
@@ -204,7 +198,6 @@ class Solution:
 ```
 
 
-
 ### c++
 
 877. Stone Game (C++):
@@ -220,8 +213,6 @@ public:
 ```
 
 
-
-
 319. Bulb Switcher (C++):
 
 ```cpp
@@ -233,7 +224,6 @@ public:
     }
 };
 ```
-
 
 
 ### javascript

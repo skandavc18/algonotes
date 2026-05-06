@@ -1,11 +1,9 @@
 # Weighted Random Selection
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -16,7 +14,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | - | [Sword to Offer II 071. Random Number with Weight](https://leetcode.cn/problems/cuyjEf/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -52,11 +49,6 @@ LeetCode 528 "Random Pick with Weight":
 Let's solve it.
 
 
-
-
-
-
-
 ## Approach
 
 A quick history:
@@ -82,11 +74,6 @@ If I throw a stone at this line, the color it hits gives the index — and the p
 ![](https://labuladong.online/algo/images/random-weight/2.jpeg)
 
 
-
-
-
-
-
 How do we simulate "throwing a stone"?
 
 A random number, of course. For `preSum`, valid range is `[1, 7]`; pick `target = 5`:
@@ -108,11 +95,6 @@ Steps:
 3. Subtract 1 (because of the prefix-sum offset) to get the index in `w`:
 
 ![](https://labuladong.online/algo/images/random-weight/5.jpeg)
-
-
-
-
-
 
 
 ## Code
@@ -224,13 +206,6 @@ With the prep above, this should make sense — the weighted-random problem is s
 Readers often joke they "cloud-solve" by reading my articles. Many problems are clear once explained, but the details have traps — like this one. So practice and reflect.
 
 
-
-
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -241,11 +216,7 @@ Readers often joke they "cloud-solve" by reading my articles. Many problems are 
 </details><hr>
 
 
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,21 +1,18 @@
 # DP helped me clear "Magic Tower"
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [174. Dungeon Game](https://leetcode.com/problems/dungeon-game/) | [174. 地下城游戏](https://leetcode.cn/problems/dungeon-game/) | 🔴 |
+| [174. Dungeon Game](https://leetcode.com/problems/dungeon-game/) | [174. Dungeon Game](https://leetcode.cn/problems/dungeon-game/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -87,7 +84,7 @@ int dp(int[][] grid, int i, int j) {
         // make sure the knight survives upon landing
         return grid[i][j] > 0 ? 1 : -grid[i][j] + 1;
     }
-    ...
+...
 }
 ```
 
@@ -149,7 +146,7 @@ int dp(int[][] grid, int i, int j) {
     if (i == m - 1 && j == n - 1) {
         return grid[i][j] >= 0 ? 1 : -grid[i][j] + 1;
     }
-    ...
+...
 }
 ```
 
@@ -168,9 +165,6 @@ Suppose `A`'s value is 1. Knowing the next step is `C` and `dp(1, 0) = 4` means 
 If `A`'s value is 10 — a big potion on landing, exceeding what's needed — then `4 - 10 = -6`, i.e. the knight's initial HP is negative, which can't happen (HP < 1 = death). In this case the initial HP should be 1.
 
 So the state-transition equation is:
-
-
-
 
 
 ```java
@@ -242,17 +236,9 @@ class Solution {
 <hr/>
 
 
-
 This is the top-down memoized DP solution. With reference to the earlier [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), it's easy to convert into an iterative `dp` array solution. I'll skip that — try writing it yourself.
 
 The core of this problem is defining the `dp` function and finding the correct state-transition equation, which then yields the right answer.
-
-
-
-
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

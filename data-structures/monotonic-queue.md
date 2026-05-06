@@ -1,11 +1,9 @@
 # Solving Sliding-Window Problems with the Monotonic Queue
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -13,10 +11,9 @@ After reading this article, you will not only master the algorithm pattern but a
 | LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
 | [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) | [239. Sliding Window Maximum](https://leetcode.cn/problems/sliding-window-maximum/) | 🔴 |
-| [Sword to Offer 59 - II. Maximum Value of a Queue (LCOF)](https://leetcode.com/problems/dui-lie-de-zui-da-zhi-lcof/) | [Sword to Offer 59 - II. Maximum Value of a Queue](https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/) | 🟠 |
+| [Sword to Offer 59 - II. Maximum Value of a Queue (LCOF)](https://leetcode.com/problems/dui-lie-de-zui-da-zhi-lcof/) | [Sword to Offer 59 - II. Maximum Value of a Queue (LCOF)](https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -71,7 +68,6 @@ Window position                 Max
  1  3  -1  -3 [5  3  6] 7       6
  1  3  -1  -3  5 [3  6  7]      7
 ```
-
 
 
 We will use a monotonic queue to compute the max of each window in $O(1)$ amortized time, giving a linear-time algorithm overall.
@@ -131,7 +127,6 @@ int[] maxSlidingWindow(int[] nums, int k) {
 ```
 
 ![](https://labuladong.online/algo/images/monotonic-queue/1.png)
-
 
 
 The idea is simple. Now the main act: implementing the monotonic queue.
@@ -253,11 +248,6 @@ You can also analyze it holistically: the algorithm pushes and pops each element
 Space complexity is the window size, $O(k)$.
 
 
-
-
-
-
-
 ### Extensions
 
 Some questions to ponder:
@@ -294,11 +284,6 @@ class MonotonicQueue<E extends Comparable<E>> {
 I'll provide a general-purpose implementation and classic problems in [General-Purpose Monotonic Queue and Applications](https://labuladong.online/algo/problem-set/monotonic-queue/). For more data-structure-design problems, see [Classic Data-Structure Design Problems](https://labuladong.online/algo/problem-set/ds-design/).
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -307,8 +292,6 @@ I'll provide a general-purpose implementation and classic problems in [General-P
  - [Practical Guide to Time/Space Complexity Analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -329,9 +312,7 @@ I'll provide a general-purpose implementation and classic problems in [General-P
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

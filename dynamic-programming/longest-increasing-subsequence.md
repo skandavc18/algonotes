@@ -1,22 +1,19 @@
 # DP design: longest increasing subsequence
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | [300. 最长递增subsequence](https://leetcode.cn/problems/longest-increasing-subsequence/) | 🟠 |
-| [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/) | [354. 俄罗斯套娃信封问题](https://leetcode.cn/problems/russian-doll-envelopes/) | 🔴 |
+| [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | [300. Longest Increasing Subsequence](https://leetcode.cn/problems/longest-increasing-subsequence/) | 🟠 |
+| [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/) | [354. Russian Doll Envelopes](https://leetcode.cn/problems/russian-doll-envelopes/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -32,9 +29,6 @@ Don't worry — the hard part of DP is finding the right state-transition equati
 The longest increasing subsequence (LIS) is a very classic problem. The DP solution comes to mind relatively easily, with O(N^2) time complexity. We'll use this problem to walk through finding state transitions and writing DP solutions step by step. The harder-to-think-of solution uses binary search at O(N log N); we'll use a simple card game to help understand that clever solution.
 
 LeetCode 300 "Longest Increasing Subsequence" is exactly this problem:
-
-
-
 
 
 <Problem slug="longest-increasing-subsequence"/>
@@ -76,9 +70,6 @@ This GIF shows the algorithm's evolution:
 By this definition, the final result (the maximum subsequence length) is the maximum entry in the dp array.
 
 
-
-
-
 ```java
 int res = 0;
 for (int i = 0; i < dp.length; i++) {
@@ -86,7 +77,6 @@ for (int i = 0; i < dp.length; i++) {
 }
 return res;
 ```
-
 
 
 Readers may ask: in the algorithm trace, we eyeballed each `dp[i]`. How do we design the algorithm to compute each `dp[i]` correctly?
@@ -108,9 +98,6 @@ What's the longest-increasing-subseq length for those elements as endings? Recal
 In our example, `nums[0]` and `nums[4]` are both less than `nums[5]`. Comparing `dp[0]` and `dp[4]`, we attach `nums[5]` to the longer subseq, yielding `dp[5] = 3`:
 
 
-
-
-
 ![](https://labuladong.online/algo/images/lis/7.jpeg)
 
 ```java
@@ -122,13 +109,9 @@ for (int j = 0; j < i; j++) {
 ```
 
 
-
 When `i = 5`, this code computes `dp[5]`. We're basically done with this problem.
 
 Readers may ask: we only computed `dp[5]`. What about `dp[4]`, `dp[3]`, etc.? Like induction — if you can compute `dp[5]`, you can compute all the others:
-
-
-
 
 
 ```java
@@ -143,7 +126,6 @@ for (int i = 0; i < nums.length; i++) {
     }
 }
 ```
-
 
 
 With our base case, the complete code:
@@ -184,7 +166,6 @@ class Solution {
 <hr/>
 
 
-
 That solves it, in $O(N^2)$. Summary of how to find the DP state-transition relation:
 
 1. Clearly define the `dp` array. This is critical for any DP problem; an inadequate or unclear definition blocks subsequent steps.
@@ -194,11 +175,6 @@ That solves it, in $O(N^2)$. Summary of how to find the DP state-transition rela
 If you can't complete this step, the `dp` definition is probably inadequate — redefine it; or maybe `dp` doesn't store enough info to derive the next answer — extend `dp` to 2D or even 3D.
 
 The current solution is standard DP, but for LIS this isn't optimal — it may not pass all test cases. Let's discuss a more efficient solution.
-
-
-
-
-
 
 
 ## 2. Binary-search solution
@@ -212,11 +188,6 @@ For simplicity, we'll skip all math proofs and use a simplified example to under
 First, given a row of cards. Like iterating an array, we go through them left to right and finally divide them into several piles.
 
 ![](https://labuladong.online/algo/images/lis/poker1.jpeg)
-
-
-
-
-
 
 
 **The rules for handling the cards**:
@@ -287,17 +258,11 @@ class Solution {
 <hr/>
 
 
-
 That covers the binary-search solution.
 
 It's genuinely hard to come up with. First the math proof — who'd think these rules give the LIS? Then the binary search itself; without firm grasp of the details, even with the hint it's hard to write right.
 
 So treat this as a thinking-expansion exercise. But fully understand the DP design technique: assume previous answers known and use induction to correctly derive state transitions.
-
-
-
-
-
 
 
 ## 3. Extension to 2D
@@ -313,11 +278,6 @@ Standard LIS finds the longest subseq in a 1D array, but our envelopes are 2D pa
 ![](https://labuladong.online/algo/images/nest-envelope/0.jpg)
 
 Readers may think: compute area `w × h` and run standard LIS on the areas. With a moment's thought, this fails. E.g. `1 × 10` is bigger than `3 × 3`, but obviously these can't nest each other.
-
-
-
-
-
 
 
 The trick:
@@ -376,15 +336,9 @@ class Solution {
 <hr/>
 
 
-
 To reuse the previous function, I split into two functions; you could merge them and save the `height` array space.
 
 Because the test cases are large, you must use the binary-search version of `lengthOfLIS` to pass them all. Total time complexity is $O(N \log N)$ — sorting and LIS each take $O(N \log N)$, so combined still $O(N \log N)$. Space is $O(N)$ since LIS needs a `top` array.
-
-
-
-
-
 
 
 <hr>
@@ -401,24 +355,21 @@ Because the test cases are large, you must use the binary-search version of `len
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1425. Constrained Subsequence Sum](https://leetcode.com/problems/constrained-subsequence-sum/?show=1) | [1425. 带限制的subsequence和](https://leetcode.cn/problems/constrained-subsequence-sum/?show=1) | 🔴 |
-| [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. 粉刷房子](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
-| [368. Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/?show=1) | [368. 最大整除subset](https://leetcode.cn/problems/largest-divisible-subset/?show=1) | 🟠 |
-| - | [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
+| [1425. Constrained Subsequence Sum](https://leetcode.com/problems/constrained-subsequence-sum/?show=1) | [1425. Constrained Subsequence Sum](https://leetcode.cn/problems/constrained-subsequence-sum/?show=1) | 🔴 |
+| [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. Paint House](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
+| [368. Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/?show=1) | [368. Largest Divisible Subset](https://leetcode.cn/problems/largest-divisible-subset/?show=1) | 🟠 |
+| - | [Sword to Offer II 091. Paint House](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

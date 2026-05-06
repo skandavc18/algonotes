@@ -1,11 +1,9 @@
 # A history of cryptographic algorithms
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 **-----------**
@@ -186,9 +184,6 @@ A public-key certificate is a public key + signature, issued by a trusted third-
 The SSL/TLS layer in HTTPS combines several encryption methods. **So don't install non-legitimate browsers, and don't randomly install certificates from unknown sources**.
 
 Cryptography is only a small part of security. Even certified HTTPS sites aren't necessarily trustworthy; they only mean the data transmission is secure. Tech alone can never truly protect you. The most important thing is to raise your personal security awareness, stay alert, and handle sensitive data carefully.
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

@@ -1,11 +1,9 @@
 # Sliding Window Core Code Template
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -18,7 +16,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) | [76. Minimum Window Substring](https://leetcode.cn/problems/minimum-window-substring/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -106,7 +103,7 @@ void slidingWindow(String s) {
         // Expand the window
         right++;
         // Update the window's data
-        ...
+...
 
         // *** debug print location ***
         // Don't print in your final solution — IO is slow and may TLE
@@ -121,7 +118,7 @@ void slidingWindow(String s) {
             // Shrink the window
             left++;
             // Update the window's data
-            ...
+...
         }
     }
 }
@@ -134,11 +131,6 @@ Some readers comment that hash maps are slow and arrays would be faster, or that
 The point is the algorithmic thinking — internalize the framework first; tweak as you like.
 
 Now four LeetCode problems applied to the framework — the first explained in detail; the rest should fall out instantly.
-
-
-
-
-
 
 
 ## 1. Minimum Window Substring
@@ -181,11 +173,6 @@ If both ends were open, `(0, 1)` is still empty; if both ends were closed, `[0, 
 4. Repeat 2 and 3 until `right` reaches the end of `S`.
 
 **Step 2 finds a "feasible" answer; step 3 optimizes it; in the end you have the minimum**. Pointers alternate; the window stretches and contracts like a caterpillar — hence "sliding window".
-
-
-
-
-
 
 
 Pictures: `needs` and `window` are counters tracking character frequencies in `T` and the window.
@@ -234,7 +221,7 @@ while (right < s.length()) {
     // Move right
     right++;
     // Update the window's data
-    ...
+...
 }
 ```
 
@@ -324,11 +311,6 @@ Algorithm done. **For sliding-window problems, write this code, change three thi
 Now apply it to the next problems.
 
 
-
-
-
-
-
 ## 2. Permutation in String
 
 LeetCode 567 "Permutation in String" (Medium):
@@ -398,11 +380,6 @@ Differences from minimum window substring:
 
 > [!NOTE]
 > The window is **fixed length** `t.length()`. Each step shifts a single character; the inner `while` could be `if` with the same effect.
-
-
-
-
-
 
 
 ## 3. Find All Anagrams
@@ -525,11 +502,6 @@ That's the sliding-window template. To recap, when you see a subarray/substring 
 [Sliding Window Practice](https://labuladong.online/algo/problem-set/sliding-window/) has more classic problems for reinforcement.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -548,8 +520,6 @@ That's the sliding-window template. To recap, when you see a subarray/substring 
  - [Practical Guide to Time/Space Complexity Analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -587,9 +557,7 @@ That's the sliding-window template. To recap, when you see a subarray/substring 
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

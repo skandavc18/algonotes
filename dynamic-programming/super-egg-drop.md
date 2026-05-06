@@ -1,21 +1,18 @@
 # Classic DP: super egg drop
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [887. Super Egg Drop](https://leetcode.com/problems/super-egg-drop/) | [887. 鸡蛋掉落](https://leetcode.cn/problems/super-egg-drop/) | 🔴 |
+| [887. Super Egg Drop](https://leetcode.com/problems/super-egg-drop/) | [887. Super Egg Drop](https://leetcode.cn/problems/super-egg-drop/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -396,7 +393,6 @@ class Solution {
 <hr/>
 
 
-
 If this still seems hard, equivalently:
 
 ```java
@@ -442,11 +438,6 @@ while (lo < hi) {
 Quick summary: the first binary optimization uses the monotonicity of the `dp` function to quickly find the answer; the second cleverly modifies the state-transition equation, simplifying the procedure but harder to think of; further math + binary on the second is possible but not worth memorizing.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -456,9 +447,6 @@ Quick summary: the first binary optimization uses the monotonicity of the `dp` f
  - [Classic DP: burst balloons](https://labuladong.online/algo/dynamic-programming/burst-balloons/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

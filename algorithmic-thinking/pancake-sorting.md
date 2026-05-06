@@ -1,11 +1,9 @@
 # Pancake Sorting
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [969. Pancake Sorting](https://leetcode.com/problems/pancake-sorting/) | [969. Pancake Sorting](https://leetcode.cn/problems/pancake-sorting/) | 🟠 |
 
 **-----------**
-
 
 
 LeetCode 969 "Pancake Sorting" is an interesting practical problem: suppose a plate has `n` pancakes of **different sizes**. How can you, using a spatula, perform a series of flips so the pancakes end up sorted (smallest on top, largest at the bottom)?
@@ -134,7 +131,6 @@ class Solution {
 <hr/>
 
 
-
 With the explanation above, the code should be clear.
 
 Time complexity: there are `n` recursive calls, each scanning O(n), so the total is O(n^2).
@@ -155,15 +151,7 @@ If the algorithm has to compute the **shortest** flip sequence, how would you do
 Feel free to share your thoughts.
 
 
-
-
-
-
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

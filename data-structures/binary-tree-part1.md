@@ -1,11 +1,9 @@
 # Binary Tree Tactics (Approach)
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -19,7 +17,6 @@ After reading this article, you will not only master the algorithm pattern but a
 **-----------**
 
 
-
 > [!NOTE]
 > Before reading this article, you should first study:
 > 
@@ -28,7 +25,6 @@ After reading this article, you will not only master the algorithm pattern but a
 > - [Binary Tree Tactics (Outline)](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
 
 > tip: a video version is available: [Framework Thinking for Binary Trees / Recursion (Outline)](https://www.bilibili.com/video/BV1nG411x77H/). Follow my Bilibili account; I'll guide you through more difficult algorithm techniques on video.
-
 
 
 This article continues from [Binary Tree Tactics (Outline)](https://labuladong.online/algo/essential-technique/binary-tree-summary/). First, recall the outline:
@@ -45,11 +41,6 @@ This article continues from [Binary Tree Tactics (Outline)](https://labuladong.o
 > **What does an individual binary-tree node need to do? At what point (preorder / inorder / postorder) should it do it?** You don't need to worry about the other nodes; the recursive function will perform the same operation on every node.
 
 We'll work through a few simple problems to practice these rules and to see the difference and connection between the "traversal" and "decomposition" mindsets.
-
-
-
-
-
 
 
 ## Problem 1: Invert Binary Tree
@@ -128,7 +119,6 @@ class Solution {
 <hr/>
 
 
-
 You can move the preorder code to postorder; in-order won't work directly without a small change — you can probably see why.
 
 The problem is solved, but for comparison let's continue.
@@ -179,7 +169,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 The key to "decomposition" thinking is to give the recursive function a fitting definition and explain your code in terms of that definition. If the logic is self-consistent, the algorithm is correct.
@@ -380,7 +369,6 @@ class Solution {
 <hr/>
 
 
-
 That's the magic of recursion. How exactly does `flatten` flatten the subtrees?
 
 It's not easy to describe step by step, but as long as `flatten`'s definition holds, each node does its job and `flatten` works as defined.
@@ -404,11 +392,6 @@ Take this to heart and apply it to all binary-tree problems.
 For more classic binary-tree problems and recursion practice, see [Recursion Practice](https://labuladong.online/algo/intro/binary-tree-practice/) in the binary-tree chapter.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -423,8 +406,6 @@ For more classic binary-tree problems and recursion practice, see [Recursion Pra
  - [Divide-and-Conquer: Operator Precedence](https://labuladong.online/algo/fname.html?fname=divide-and-conquer)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -442,9 +423,7 @@ For more classic binary-tree problems and recursion practice, see [Recursion Pra
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

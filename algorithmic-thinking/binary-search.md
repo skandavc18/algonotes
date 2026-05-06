@@ -1,11 +1,9 @@
 # Binary Search Core Code Template
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -19,14 +17,12 @@ After reading this article, you will not only master the algorithm pattern but a
 **-----------**
 
 
-
 > [!NOTE]
 > Before reading this article, you should first study:
 > 
 > - [Array Basics](https://labuladong.online/algo/data-structure-basic/array-basic/)
 
 > tip: a video version is available: [Binary Search Core Framework](https://www.bilibili.com/video/BV1Gt4y1b79Q/). Follow my Bilibili account; I'll guide you through more difficult algorithm techniques on video.
-
 
 
 This is a revised version of the older article on binary search, with more detailed analysis.
@@ -40,11 +36,6 @@ The guard split the books into two stacks; the first stack triggered the alarm �
 After `logN` checks, the guard found the culprit and grinned smugly. Adong walked off with the rest.
 
 The library lost `N - 1` books that day (j/k).
-
-
-
-
-
 
 
 Binary search isn't trivial. Knuth (yes, the KMP guy) said: **the idea is simple; the details are devilish**. People love to talk about integer overflow, but the real traps are: `mid + 1` or `mid - 1`? `<=` or `<` in `while`?
@@ -64,7 +55,7 @@ int binarySearch(int[] nums, int target) {
     while(...) {
         int mid = left + (right - left) / 2;
         if (nums[mid] == target) {
-            ...
+...
         } else if (nums[mid] < target) {
             left = ...
         } else if (nums[mid] > target) {
@@ -80,11 +71,6 @@ int binarySearch(int[] nums, int target) {
 The `...` marks are where details lurk. We'll vary them with examples.
 
 **Compute `mid` to avoid overflow**: `left + (right - left) / 2` equals `(left + right) / 2` but avoids overflow for large `left` and `right`.
-
-
-
-
-
 
 
 ## 1. Searching for a Number (Standard Binary Search)
@@ -128,13 +114,7 @@ class Solution {
 <hr/>
 
 
-
 This solves LeetCode 704. Let's dive into details.
-
-
-
-
-
 
 
 ### Why `<=` and not `<` in `while`?
@@ -175,11 +155,6 @@ Some code uses `right = mid` or `left = mid` — when?
 If you understand the "search interval" idea, this is easy. Here the interval is closed: `[left, right]`. After checking `mid` and not matching, where to search next?
 
 `[left, mid - 1]` or `[mid + 1, right]` — **`mid` was checked; remove it**.
-
-
-
-
-
 
 
 ### Limitations
@@ -232,11 +207,6 @@ int left_bound(int[] nums, int target) {
 ### What does `target` not existing mean?
 
 If `nums` doesn't contain `target`, what does the returned index mean? How to return -1 instead?
-
-
-
-
-
 
 
 ::: important Meaning of `left_bound`'s return when `target` is absent
@@ -302,11 +272,6 @@ The key is in the `nums[mid] == target` case:
 ```
 
 Don't return immediately; shrink the right bound to keep searching left.
-
-
-
-
-
 
 
 ### Why return `left` not `right`?
@@ -389,7 +354,6 @@ int left_bound(int[] nums, int target) {
 <hr/>
 
 
-
 Now both variants use closed intervals and return `left`. Pick whichever style you prefer.
 
 ## 3. Searching for the Right Bound
@@ -427,11 +391,6 @@ if (nums[mid] == target) {
 Don't return immediately; expand `left` to keep searching right.
 
 
-
-
-
-
-
 ### Why return `left - 1`?
 
 Why not `left`? Or `right` since this is the right bound?
@@ -449,7 +408,6 @@ if (nums[mid] == target) {
 ```
 
 ![](https://labuladong.online/algo/images/binary-search/3.jpg)
-
 
 
 Since `left = mid + 1`, when the loop ends `nums[left]` may not equal `target`, but `nums[left-1]` may.
@@ -518,7 +476,6 @@ int right_bound(int[] nums, int target) {
 </details>
 </a>
 <hr/>
-
 
 
 Since the loop ends at `right == left - 1`, you can replace `left - 1` with `right`:
@@ -611,11 +568,6 @@ Lastly, the framework above is the "art"; the "tao" is: **binary thinking aggres
 This article ensures you write correct binary searches. Real problems rarely ask for raw binary search — see [Binary Search in Action](https://labuladong.online/algo/frequency-interview/binary-search-in-action/) and [More Binary Search Practice](https://labuladong.online/algo/problem-set/binary-search/) for applications.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -635,8 +587,6 @@ This article ensures you write correct binary searches. Real problems rarely ask
  - [Two Common Factorial Problems](https://labuladong.online/algo/frequency-interview/factorial-problems/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -669,9 +619,7 @@ This article ensures you write correct binary searches. Real problems rarely ask
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

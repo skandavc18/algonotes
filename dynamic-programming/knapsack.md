@@ -1,15 +1,12 @@
 # Classic DP: 0-1 knapsack
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 **-----------**
-
 
 
 > [!NOTE]
@@ -18,7 +15,6 @@
 > - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
 > Tip: this article has a video version: [0-1 knapsack explained](https://www.bilibili.com/video/BV15B4y1P7X7/). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
-
 
 
 People keep asking about the knapsack problem in the comments. It's actually not that hard — using the DP framework, it's still just states + choices, nothing special. Today we'll cover the most common variant: 0-1 knapsack. Description:
@@ -40,11 +36,6 @@ The algorithm returns 6: pick the first two items, total weight 3 ≤ W, max val
 Simple problem statement, classic DP. The items can't be split — either packed whole or not at all. That's where the "0-1" name comes from.
 
 There's no clever sorting trick — we have to enumerate all possibilities. Following our [DP framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/), just go through the steps.
-
-
-
-
-
 
 
 ## Standard DP routine
@@ -75,11 +66,6 @@ We have two states, so we need a 2D `dp` array.
 For example, if `dp[3][5] = 6`, it means: considering only the first 3 items and capacity 5, the maximum value packable is 6.
 
 
-
-
-
-
-
 > [!NOTE]
 > Why this definition? Because it leads to a clean state-transition relation — or rather, this is the canonical definition for knapsack. Memorize it as part of the routine; for future DP problems, try this style of definition.
 
@@ -106,11 +92,6 @@ return dp[N][W]
 Simply put: how do we express "pack item `i`" and "don't pack item `i`" in code?
 
 We must connect this with the `dp` array's definition and see how each choice affects the state:
-
-
-
-
-
 
 
 Restating our `dp` definition:
@@ -177,16 +158,10 @@ int knapsack(int W, int N, int[] wt, int[] val) {
 <hr/>
 
 
-
 > [!NOTE]
 > Note that the `N` parameter in the signature is just `wt.length`, so passing `N` is technically redundant. But to keep the original 0-1 knapsack flavor, I kept it. You can omit it in your own code.
 
 That's it for the knapsack problem. Comparatively, this is one of the simpler DP problems because the state transition flows naturally — once the `dp` array's definition is clear, the transition follows almost automatically.
-
-
-
-
-
 
 
 <hr>
@@ -201,21 +176,18 @@ That's it for the knapsack problem. Comparatively, this is one of the simpler DP
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1235. Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/?show=1) | [1235. 规划兼职工作](https://leetcode.cn/problems/maximum-profit-in-job-scheduling/?show=1) | 🔴 |
+| [1235. Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/?show=1) | [1235. Maximum Profit in Job Scheduling](https://leetcode.cn/problems/maximum-profit-in-job-scheduling/?show=1) | 🔴 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

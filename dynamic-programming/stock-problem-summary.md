@@ -1,26 +1,23 @@
 # One method demolishes the LeetCode stock buy/sell series
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [121. Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) | [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/) | 🟢 |
-| [122. Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) | [122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/) | 🟠 |
-| [123. Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/) | [123. 买卖股票的最佳时机 III](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/) | 🔴 |
-| [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/) | [188. 买卖股票的最佳时机 IV](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/) | 🔴 |
-| [309. Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/) | [309. 最佳买卖股票时机含冷冻期](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/) | 🟠 |
-| [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) | [714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) | 🟠 |
+| [121. Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) | [121. Best Time to Buy and Sell Stock](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/) | 🟢 |
+| [122. Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) | [122. Best Time to Buy and Sell Stock II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/) | 🟠 |
+| [123. Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/) | [123. Best Time to Buy and Sell Stock III](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/) | 🔴 |
+| [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/) | [188. Best Time to Buy and Sell Stock IV](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/) | 🔴 |
+| [309. Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/) | [309. Best Time to Buy and Sell Stock with Cooldown](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/) | 🟠 |
+| [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) | [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -33,9 +30,6 @@ Many readers complain that the LeetCode stock series has too many solutions. If 
 This article references the [English upvoted answer](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/discuss/108870/Most-consistent-ways-of-dealing-with-the-series-of-stock-problems), using the state-machine technique. All submissions pass. Don't be intimidated by the term — it's just a DP table; once you see it, you'll get it.
 
 Let me randomly pull out one and look at someone's solution:
-
-
-
 
 
 ```java
@@ -54,7 +48,6 @@ int maxProfit(int[] prices) {
 ```
 
 
-
 Can you understand it? Could you write it yourself? Of course not — that's normal. Even if you barely understand it, you couldn't solve the next problem. Why can others write such weird, efficient solutions? Because there's a framework, but they won't tell you. Once told, you'd grasp it in five minutes, and the algorithm wouldn't be mysterious anymore.
 
 This article gives you that framework, then walks through one problem after another. Using state-machine techniques, all six problems pass. Don't be scared by the term — it's just a DP table.
@@ -66,11 +59,6 @@ These 6 problems share commonality. We just need to extract LeetCode 188 "Best T
 Problem 1 allows only one transaction (`k = 1`); problem 2 has unlimited transactions (`k = +infinity`); problem 3 allows only 2 transactions (`k = 2`); the other two are unlimited but add a "cooldown" or "transaction fee" — variants of problem 2, easy to handle.
 
 Now let's solve them.
-
-
-
-
-
 
 
 ## 1. Enumeration framework
@@ -96,11 +84,6 @@ But you can't freely pick any of the three each day. `sell` must follow a `buy`,
 > I'll often use "transaction"; **one buy + one sell counts as one "transaction"**.
 
 
-
-
-
-
-
 Complex, right? Don't worry. Our goal is enumeration — no matter how many states, we list them all.
 
 **This problem has three "states"**: day index, max-allowed-transaction count, and whether currently holding (the earlier `rest` state — 1 = holding, 0 = not holding). Use a 3D array to hold all combinations:
@@ -124,11 +107,6 @@ We want `dp[n - 1][K][0]` — last day, at most `K` transactions, max profit.
 Why not `dp[n - 1][K][1]`? Because that means we still hold on the last day. `dp[n - 1][K][0]` means we sold on the last day — the latter is clearly bigger.
 
 Remember how to interpret "states" — translate to natural language whenever stuck.
-
-
-
-
-
 
 
 ## 2. State transition framework
@@ -174,11 +152,6 @@ Note `k`'s constraint: choosing `buy` opens a new transaction, so yesterday's tr
 > Correction: I used to think decrementing `k` on `sell` and on `buy` were equivalent, but careful readers questioned this. After deeper thought, the former is wrong. A transaction starts with `buy`, so if `buy` doesn't change `k`, transactions can exceed the limit.
 
 
-
-
-
-
-
 We've completed DP's hardest step — the state transition. **If you understand everything above, you can already demolish all the problems — just plug into this framework**. One last bit: define the base case (simplest situation).
 
 ```python
@@ -210,11 +183,6 @@ dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
 ```
 
 Readers may ask: how do we represent index -1, or negative infinity? Implementation details — many ways. Now the framework is complete; let's specialize.
-
-
-
-
-
 
 
 ## 3. Demolishing the problems
@@ -254,9 +222,6 @@ return dp[n - 1][0];
 Clearly `i = 0` makes `i - 1` invalid. We didn't handle the `i` base case — special-case it:
 
 
-
-
-
 ```java
 if (i - 1 == -1) {
     dp[i][0] = 0;
@@ -274,7 +239,6 @@ if (i - 1 == -1) {
     continue;
 }
 ```
-
 
 
 First problem done. Handling base cases like this is verbose. The transition only depends on the immediately previous state, so per [DP space-compression](https://labuladong.online/algo/dynamic-programming/space-optimization/), we don't need the whole `dp` array — just a variable storing the previous state. Space drops to O(1):
@@ -464,7 +428,6 @@ int maxProfit_with_cool(int[] prices) {
 ### 714. Best Time to Buy and Sell Stock with Transaction Fee
 
 
-
 **Fourth, LeetCode 714 "Best Time to Buy and Sell Stock with Transaction Fee" — `k = +infinity` with a per-transaction fee**:
 
 <Problem slug="best-time-to-buy-and-sell-stock-with-transaction-fee" />
@@ -529,7 +492,6 @@ int maxProfit_with_fee(int[] prices, int fee) {
 </details>
 </a>
 <hr/>
-
 
 
 ### 123. Best Time to Buy and Sell Stock III
@@ -616,7 +578,6 @@ int maxProfit_k_2(int[] prices) {
 </details>
 </a>
 <hr/>
-
 
 
 > [!NOTE]
@@ -718,7 +679,6 @@ int maxProfit_k_any(int max_k, int[] prices) {
 <hr/>
 
 
-
 All 6 problems solved with one state-transition equation.
 
 ## All paths lead to one
@@ -817,11 +777,6 @@ The key: enumerate every possible "state" and figure out how to enumerate-update
 For stocks specifically, we found 3 states — used a 3D array — really just enumerate + update. We can fancily call this "3D DP" — sounds impressive, doesn't it?
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -831,21 +786,18 @@ For stocks specifically, we found 3 states — used a 3D array — really just e
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer 63. 股票的最大利润](https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/?show=1) | 🟠 |
+| - | [Sword to Offer 63. Maximum Stock Profit](https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

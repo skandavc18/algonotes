@@ -1,11 +1,9 @@
 # Backtracking in Practice: Set Partitioning
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [698. Partition to K Equal Sum Subsets](https://leetcode.com/problems/partition-to-k-equal-sum-subsets/) | [698. Partition to K Equal Sum Subsets](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -50,11 +47,6 @@ boolean canPartitionKSubsets(int[] nums, int k);
 > In [Knapsack: Subset Partition](https://labuladong.online/algo/dynamic-programming/knapsack2/), each item has **two choices**: include or exclude. Partitioning `S` into two equal subsets `S_1, S_2`: each element has **two choices** — go to `S_1` or `S_2`. Same as knapsack.
 > 
 > But for `k` equal subsets, each element has **`k` choices**, fundamentally different from standard knapsack — you can't reduce.
-
-
-
-
-
 
 
 ## Approach
@@ -511,7 +503,6 @@ class Solution {
 <hr/>
 
 
-
 That's the second approach.
 
 ## Wrap-Up
@@ -533,11 +524,6 @@ In other words, prefer "many small choices" (multiplication) to "few huge ones" 
 The two perspectives, similar code, but very different efficiency. Hopefully this article cements your backtracking intuition.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -546,8 +532,6 @@ The two perspectives, similar code, but very different efficiency. Hopefully thi
  - [Algorithms in the Game of Doudizhu](https://labuladong.online/algo/practice-in-action/split-array-into-consecutive-subsequences/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -564,9 +548,7 @@ The two perspectives, similar code, but very different efficiency. Hopefully thi
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

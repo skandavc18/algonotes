@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -152,7 +151,6 @@ Many people prefer DP because it shows up often in interviews. But many algorith
 How to decompose problems and find recursion? Practice. My data-structure course covers [Recursive Implementations of a Singly Linked List](https://aep.h5.xeknow.com/s/1RQzXc) for deeper recursion intuition.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -162,8 +160,6 @@ How to decompose problems and find recursion? Practice. My data-structure course
  - [Recursive Magic: Reversing a Singly Linked List](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -178,7 +174,6 @@ How to decompose problems and find recursion? Practice. My data-structure course
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

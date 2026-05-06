@@ -1,11 +1,9 @@
 # Tricks for Traversing 2D Arrays
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -20,7 +18,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | - | [Sword to Offer 29. Print Matrix in Spiral Order](https://leetcode.cn/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/) | 🟢 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -348,13 +345,6 @@ Both spiral problems are now solved.
 These are some 2D-array tricks. For more array techniques see [Prefix Sums](https://labuladong.online/algo/data-structure/prefix-sum/), [Difference Arrays](https://labuladong.online/algo/data-structure/diff-array/), [Array Two-Pointer Collection](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/). For linked lists see [Six Linked-List Techniques](https://labuladong.online/algo/essential-technique/linked-list-skills-summary/).
 
 
-
-
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -363,8 +353,6 @@ These are some 2D-array tricks. For more array techniques see [Prefix Sums](http
  - [Two-Pointer Tricks Sweep 7 Array Problems](https://labuladong.online/algo/essential-technique/array-two-pointers-summary/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -384,9 +372,7 @@ These are some 2D-array tricks. For more array techniques see [Prefix Sums](http
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

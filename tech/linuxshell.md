@@ -1,11 +1,9 @@
 # Linux shell tricks you should know
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 **-----------**
@@ -257,7 +255,7 @@ For that situation, **the most common method is `history` with a pipe and `grep`
 ```shell
 # filter history for commands containing 'config'
 $ history | grep 'config'
- 7352  ./configure
+ 7352./configure
  7434  git config --global --unset https.proxy
  9609  ifconfig
  9985  clip -o | sed -z 's/\n/,\n/g' | clip
@@ -322,7 +320,7 @@ To avoid duplicates, I needed to know whether a Markdown file already had a foot
 #!/bin/bash
 filename=$1
 # check if the bottom contains the keyword
-tail | grep '下一篇' $filename
+tail | grep 'Next post' $filename
 # grep returns 0 on match, non-zero otherwise
 [ $? -ne 0 ] && { add footer; }
 ```
@@ -334,7 +332,6 @@ Hardly used interactively, but very useful in scripts. For example, when creatin
 That's all for today. If you'd like more Linux content, share this article — if numbers look good I'll write more next time.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -342,9 +339,6 @@ That's all for today. If you'd like more Linux content, share this article — i
  - [Pitfalls of Linux pipes](https://labuladong.online/algo/fname.html?fname=linux技巧3)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

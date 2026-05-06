@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -231,9 +230,6 @@ For dynamic problems with extremes, balanced BSTs and heaps both work; BSTs supp
 Why use heaps then? Heaps are simple — backed by an array; see [Binary Heap Detailed](https://labuladong.online/algo/data-structure-basic/binary-heap-implement/). Implementing a red-black tree is much harder and uses more memory.
 
 Hope this helps.
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

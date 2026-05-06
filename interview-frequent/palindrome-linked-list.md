@@ -1,11 +1,9 @@
 # Determining a Palindrome Linked List
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/) | [234. Palindrome Linked List](https://leetcode.cn/problems/palindrome-linked-list/) | 🟢 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -176,7 +173,6 @@ while (fast != null && fast.next != null) {
 ![](https://labuladong.online/algo/images/palindrome-list/1.jpg)
 
 
-
 **2. If `fast` is non-null, the length is odd; advance `slow` once more**:
 
 ```java
@@ -202,7 +198,6 @@ return true;
 ```
 
 ![](https://labuladong.online/algo/images/palindrome-list/3.jpg)
-
 
 
 Putting it together — see [Reverse Linked List](https://labuladong.online/algo/data-structure/reverse-linked-list-recursion/) for `reverse`:
@@ -278,14 +273,6 @@ Finding palindromes: expand from the center. Checking palindromes: contract from
 For palindrome linked-list checking specifically, the symmetry lets us reverse only the second half — O(1) extra space.
 
 
-
-
-
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems that reference this article</strong></summary>
@@ -300,9 +287,7 @@ For palindrome linked-list checking specifically, the symmetry lets us reverse o
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

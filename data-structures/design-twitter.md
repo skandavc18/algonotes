@@ -1,11 +1,9 @@
 # Designing a Social Feed (Timeline) Feature
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problem:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [355. Design Twitter](https://leetcode.com/problems/design-twitter/) | [355. Design Twitter](https://leetcode.cn/problems/design-twitter/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -285,11 +282,6 @@ Here's how it works. The GIF below shows the merge process. Suppose we have thre
 That completes a heavily simplified Twitter timeline feature. For more data-structure design problems, see [Classic Data-Structure Design Problems](https://labuladong.online/algo/problem-set/ds-design/).
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -299,11 +291,7 @@ That completes a heavily simplified Twitter timeline feature. For more data-stru
 </details><hr>
 
 
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

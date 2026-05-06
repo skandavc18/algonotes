@@ -1,11 +1,9 @@
 # Practical Framework for Applying Binary Search
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -19,7 +17,6 @@ After reading this article, you will not only master the algorithm pattern but a
 **-----------**
 
 
-
 > [!NOTE]
 > Before reading this article, you should first study:
 > 
@@ -30,11 +27,6 @@ In [Binary Search Framework](https://labuladong.online/algo/essential-technique/
 **That framework is for the basic case "search a sorted array for an element". Real problems are rarely so direct; you may not even spot the binary-search angle.**
 
 This article presents a thinking framework for applying binary search to real problems.
-
-
-
-
-
 
 
 ## Vanilla Binary Search
@@ -109,11 +101,6 @@ Same input → returns 4:
 ![](https://labuladong.online/algo/images/binary-search-in-action/2.jpeg)
 
 Review done. Whenever a problem reduces to such a graph, binary search applies.
-
-
-
-
-
 
 
 ## Generalizing Binary Search
@@ -325,7 +312,6 @@ class Solution {
 <hr/>
 
 
-
 > [!TIP]
 > If you prefer fully closed `[left, right]`:
 > 
@@ -526,7 +512,6 @@ class Solution {
 <hr/>
 
 
-
 ## Example 3: Split Array
 
 LeetCode 410 "Split Array Largest Sum" (Hard):
@@ -570,11 +555,6 @@ class Solution {
 Whenever there's monotonicity in the problem, try binary search. Identify the monotonicity, choose the boundary, sketch, write.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -589,8 +569,6 @@ Whenever there's monotonicity in the problem, try binary search. Identify the mo
  - [Two Common Factorial Problems](https://labuladong.online/algo/frequency-interview/factorial-problems/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -609,9 +587,7 @@ Whenever there's monotonicity in the problem, try binary search. Identify the mo
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

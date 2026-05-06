@@ -1,11 +1,9 @@
 # Understanding session and cookie
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 **-----------**
@@ -137,9 +135,6 @@ In summary, the main reason for splitting the session mechanism into multiple pa
 https://github.com/alexedwards/scs
 
 https://github.com/astaxie/build-web-application-with-golang
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

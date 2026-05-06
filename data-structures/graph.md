@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -23,7 +22,6 @@ After reading this article, you will not only master the algorithm pattern but a
 **-----------**
 
 > tip: a video version is available: [Graph Theory Basics and Traversal](https://www.bilibili.com/video/BV19G41187cL/). Follow my Bilibili account; I'll guide you through more difficult algorithm techniques on video.
-
 
 
 Readers often ask about graphs. As I discussed in [Framework Thinking for Learning Data Structures and Algorithms](https://labuladong.online/algo/essential-technique/abstraction-of-algorithm/), although graphs unlock many algorithms and tackle more complex problems, they can essentially be considered an extension of multiway trees.
@@ -325,7 +323,6 @@ In tests, the most common algorithm is graph traversal — very similar to multi
 There are many other interesting graph algorithms: [Bipartite Detection](https://labuladong.online/algo/data-structure/bipartite-graph/), [Cycle Detection and Topological Sort](https://labuladong.online/algo/data-structure/topological-sort/) (compilers detect circular references with a similar algorithm), [Minimum Spanning Tree](https://labuladong.online/algo/data-structure/kruskal/), [Dijkstra](https://labuladong.online/algo/data-structure/dijkstra/), and more — interested readers can explore further.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -352,8 +349,6 @@ There are many other interesting graph algorithms: [Bipartite Detection](https:/
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems that reference this article</strong></summary>
@@ -375,7 +370,6 @@ There are many other interesting graph algorithms: [Bipartite Detection](https:/
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

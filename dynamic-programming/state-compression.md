@@ -1,15 +1,12 @@
 # Dimensional reduction on dynamic programming
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 **-----------**
-
 
 
 > [!NOTE]
@@ -23,11 +20,6 @@
 We've written over a dozen DP articles. DP techniques produce huge efficiency gains, generally turning exponential or factorial time complexity into O(N^2). It's the algorithm world's "two-dimensional foil" — flattening all manner of monsters into 2D.
 
 But DP solutions can also be optimized further. If you carefully observe certain DP problems' state-transition equations, you can lower their space complexity from O(N^2) to O(N).
-
-
-
-
-
 
 
 > [!NOTE]
@@ -80,9 +72,6 @@ The idea is direct, but there's an obvious problem: in the figure, `dp[i][j-1]` 
 That's the crux of space compression. Let's analyze and solve this. Stick with the longest-palindromic-subsequence problem; its state-transition logic is essentially:
 
 
-
-
-
 ```java
 for (int i = n - 2; i >= 0; i--) {
     for (int j = i + 1; j < n; j++) {
@@ -97,13 +86,9 @@ for (int i = n - 2; i >= 0; i--) {
 ```
 
 
-
 Recall the earlier figure: "projection" turns multiple rows into one. So compressing 2D `dp` into 1D usually drops the first dimension `i`, leaving only `j`. **The compressed 1D `dp` array is the row `dp[i][..]` of the previous 2D `dp` array**.
 
 First, transform the code by mindlessly dropping `i` and turning `dp` into 1D:
-
-
-
 
 
 ```java
@@ -118,7 +103,6 @@ for (int i = n - 2; i >= 0; i--) {
     }
 }
 ```
-
 
 
 The 1D `dp` array can only represent one row `dp[i][..]` of the 2D `dp` array. But we want `dp[i+1][j-1]`, `dp[i][j-1]`, `dp[i+1][j]` for the state transition.
@@ -136,9 +120,6 @@ So consider two questions:
 That's most of the problem solved. Only `dp[i+1][j-1]` from the 2D array can't be obtained directly from the 1D array:
 
 
-
-
-
 ```java
 for (int i = n - 2; i >= 0; i--) {
     for (int j = i + 1; j < n; j++) {
@@ -154,15 +135,11 @@ for (int i = n - 2; i >= 0; i--) {
 ```
 
 
-
 Because the for loops iterate `i` and `j` from left to right, bottom to top, when we update the 1D `dp` array, `dp[i+1][j-1]` will be overwritten by `dp[i][j-1]`. The figure shows the order in which these four positions are visited:
 
 ![](https://labuladong.online/algo/images/space-optimal/3.jpeg)
 
 **So to access `dp[i+1][j-1]`, we must save it in a temporary variable `temp` before it's overwritten, and keep that value until we compute `dp[i][j]`**. Combined with the figure, here's the code:
-
-
-
 
 
 ```java
@@ -184,13 +161,9 @@ for (int i = n - 2; i >= 0; i--) {
 ```
 
 
-
 Don't underestimate this code — it's the most elegant part of 1D `dp`: easy if you know it, impossible if you don't. For clarity, let's trace this with concrete numbers:
 
 Suppose `i = 5, j = 7` and `s[5] == s[7]`. We enter this branch:
-
-
-
 
 
 ```java
@@ -203,7 +176,6 @@ for (int i = 5; i--) {
     }
 }
 ```
-
 
 
 What is `pre`? It's the `temp` from the previous inner-loop iteration.
@@ -273,11 +245,6 @@ In other words, you should at least be fluent with the [DP framework routine](ht
 I hope readers progress steadily, layer by layer. For these extreme optimizations, it's fine to skip them. As long as the patterns are in your head, you can travel anywhere fearlessly!
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -295,21 +262,18 @@ I hope readers progress steadily, layer by layer. For these extreme optimization
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
+| [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. Unique Paths II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

@@ -1,22 +1,19 @@
 # Classic DP: game theory
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/) | [486. 预测赢家](https://leetcode.cn/problems/predict-the-winner/) | 🟠 |
-| [877. Stone Game](https://leetcode.com/problems/stone-game/) | [877. 石子游戏](https://leetcode.cn/problems/stone-game/) | 🟠 |
+| [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/) | [486. Predict the Winner](https://leetcode.cn/problems/predict-the-winner/) | 🟠 |
+| [877. Stone Game](https://leetcode.com/problems/stone-game/) | [877. Stone Game](https://leetcode.cn/problems/stone-game/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -27,11 +24,6 @@ After reading this article, you'll not only learn the algorithmic pattern but al
 The earlier post [Brain teasers](https://labuladong.online/algo/frequency-interview/one-line-solutions/) discussed an interesting "stone game" — given the constraints, the first player always wins. But brain teasers are brain teasers. Real algorithm problems can't be cheesed by clever tricks. So this article uses the stone game to discuss how to use DP to solve "assuming both players are smart enough, who wins?" problems.
 
 Game-theory problems share patterns. The discussion below references the approach in [this YouTube video](https://www.youtube.com/watch?v=WxpIHvsu1RI). The core idea: on top of 2D dp, use a tuple to store both players' game results. With this technique, when someone asks you about pirates dividing gold or two people picking coins, you can say: I'm too lazy to think — let me write an algorithm to compute it.
-
-
-
-
-
 
 
 Let's generalize LeetCode 877 "Stone Game":
@@ -80,11 +72,6 @@ Before introducing the `dp` definition, here's what the final `dp` array looks l
 In what follows, treat the tuple as a class with `first` and `second` properties, abbreviated as `fir` and `sec` to save space. For example, with the figure above, `dp[1][3].fir = 11`, `dp[0][1].sec = 2`.
 
 
-
-
-
-
-
 First answer a few likely reader questions:
 
 The 2D dp table holds tuples — how do we represent that in code? Half the dp table is unused — how do we optimize? Easy — ignore those for now; first get the solution idea straight.
@@ -100,11 +87,6 @@ Example: with `piles = [2, 8, 3, 5]` (0-indexed):
 `dp[0][1].fir = 8` means: facing piles `[2, 8]`, the first player can get up to 8. `dp[1][3].sec = 5` means: facing piles `[8, 3, 5]`, the second player can get up to 5.
 
 We want the difference between first and second players' final scores — by this definition, that's `dp[0][n-1].fir - dp[0][n-1].sec` — facing the whole `piles`, first's optimal score minus second's optimal score.
-
-
-
-
-
 
 
 ## 2. State-transition equation
@@ -135,9 +117,6 @@ The pseudocode above is roughly the DP framework. The challenge here: both playe
 By our `dp` definition, this is easy. **State-transition equation**:
 
 
-
-
-
 ```python
 dp[i][j].fir = max(piles[i] + dp[i+1][j].sec, piles[j] + dp[i][j-1].sec)
 dp[i][j].fir = max(   pick the leftmost pile     ,   pick the rightmost pile  )
@@ -163,11 +142,7 @@ if first picks right:
 ```
 
 
-
 By the dp definition, we can also identify the **base case** — the simplest situation:
-
-
-
 
 
 ```python
@@ -180,7 +155,6 @@ where 0 <= i == j < n
 ```
 
 ![](https://labuladong.online/algo/images/stone-game/2.png)
-
 
 
 One thing to note: the base case is on the diagonal, and computing `dp[i][j]` requires `dp[i+1][j]` and `dp[i][j-1]`:
@@ -265,11 +239,6 @@ The reason for this design: after the first player makes a choice, they become t
 By now you should understand the algorithmic pattern for game-theory problems. When learning algorithms, focus on templates and frameworks, not flashy ideas. Don't try to write the optimal solution on the first attempt. Don't be stingy with extra space, don't optimize prematurely, and don't fear multidimensional arrays. The `dp` array is for storing info to avoid recomputation — use it freely until you're satisfied.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -277,9 +246,6 @@ By now you should understand the algorithmic pattern for game-theory problems. W
  - [Greedy: interval scheduling](https://labuladong.online/algo/frequency-interview/interval-scheduling/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

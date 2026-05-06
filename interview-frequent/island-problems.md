@@ -1,11 +1,9 @@
 # Sweeping All Island Problems
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -20,7 +18,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [695. Max Area of Island](https://leetcode.com/problems/max-area-of-island/) | [695. Max Area of Island](https://leetcode.cn/problems/max-area-of-island/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -103,11 +100,6 @@ void dfs(int[][] grid, int i, int j, boolean[][] visited) {
 A loop-based 4-neighbor visit. Use whichever style you prefer.
 
 
-
-
-
-
-
 ## Number of Islands
 
 LeetCode 200 "Number of Islands" — the classic. Given a 2D grid of `0` (water) and `1` (land); the matrix is surrounded by water on all sides.
@@ -176,7 +168,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 **Why "sink" each found island? To avoid maintaining a `visited` array.**
@@ -270,7 +261,6 @@ class Solution {
 <hr/>
 
 
-
 Pre-sink the border lands; count what remains.
 
 > [!TIP]
@@ -345,7 +335,6 @@ class Solution {
 <hr/>
 
 
-
 The next two are more interesting.
 
 ## Sub-Island Count
@@ -415,7 +404,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 Same flavor as closed-islands — except we exclude ones that can't be sub-islands.
@@ -552,15 +540,9 @@ class Solution {
 <hr/>
 
 
-
 The initial `dir` is arbitrary because this is backtracking — it focuses on edges, not nodes (see [Graph Basics](https://labuladong.online/algo/data-structure-basic/graph-basic/) for the difference).
 
 That's all the island problems. The first few are routine; the last two are clever.
-
-
-
-
-
 
 
 <hr>
@@ -574,8 +556,6 @@ That's all the island problems. The first few are routine; the last two are clev
  - [Binary Tree Algorithm Outline](https://labuladong.online/algo/essential-technique/binary-tree-summary/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -597,9 +577,7 @@ That's all the island problems. The first few are routine; the last two are clev
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

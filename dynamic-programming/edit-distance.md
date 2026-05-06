@@ -1,21 +1,18 @@
 # Classic DP: edit distance
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [72. Edit Distance](https://leetcode.com/problems/edit-distance/) | [72. 编辑距离](https://leetcode.cn/problems/edit-distance/) | 🔴 |
+| [72. Edit Distance](https://leetcode.com/problems/edit-distance/) | [72. Edit Distance](https://leetcode.cn/problems/edit-distance/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -28,13 +25,9 @@ After reading this article, you'll not only learn the algorithmic pattern but al
 > Tip: this article has a video version: [Edit distance DP explained](https://www.bilibili.com/video/BV1uv411W73P/). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
 
 
-
 The other day I saw a Tencent interview question set; the algorithm portion was mostly DP, and the last problem was to write a function computing edit distance. So today we'll dedicate an article to this problem.
 
 LeetCode 72 "Edit Distance" is the problem:
-
-
-
 
 
 <Problem slug="edit-distance" />
@@ -51,11 +44,6 @@ But the problem itself is quite practical. I once used this algorithm in real li
 A fancier application: DNA sequences are strings of A, G, C, T — like strings. Edit distance measures their similarity; smaller distance means more similar — maybe the two DNA owners are distant relatives.
 
 Now to the topic — I'll explain edit distance in detail. I'm sure you'll get something out of it.
-
-
-
-
-
 
 
 ## 1. Approach
@@ -90,11 +78,6 @@ Another easy case: when `j` finishes `s2` but `i` hasn't finished `s1`, we can o
 Similarly, if `i` finishes `s1` but `j` hasn't finished `s2`, we can only insert all of `s2`'s remaining characters into `s1`. As we'll see, these two are the algorithm's **base cases**.
 
 Now let's translate the approach into code.
-
-
-
-
-
 
 
 ## 2. Code in detail
@@ -210,7 +193,6 @@ dp(s1, i - 1, s2, j - 1) + 1
 ![](https://labuladong.online/algo/images/editDistance/replace.gif)
 
 
-
 Now you should fully understand this short and elegant code. One issue: this is brute force — there are overlapping subproblems, and we need DP to optimize.
 
 **How can you spot overlapping subproblems at a glance?** Covered in [DP FAQ](https://labuladong.online/algo/dynamic-programming/faq-summary/). Briefly: extract this algorithm's recursion framework:
@@ -285,9 +267,6 @@ First clarify the meaning of `dp`. Since this problem has two states (indices `i
 State transitions are the same as the recursive solution. `dp[..][0]` and `dp[0][..]` correspond to base cases. The meaning of `dp[i][j]` is similar to the previous `dp` function:
 
 
-
-
-
 ```java
 int dp(String s1, int i, String s2, int j)
 // returns the minimum edit distance of s1[0..i] and s2[0..j]
@@ -295,7 +274,6 @@ int dp(String s1, int i, String s2, int j)
 dp[i-1][j-1]
 // stores the minimum edit distance of s1[0..i] and s2[0..j]
 ```
-
 
 
 The recursive `dp` function's base case has `i, j == -1`, but array indices are at least 0, so the `dp` array shifts indices by one.
@@ -347,7 +325,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 ## 4. Extension
@@ -494,7 +471,6 @@ void printResult(Node[][] dp, String s1, String s2) {
 ```
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -506,21 +482,18 @@ void printResult(Node[][] dp, String s1, String s2) {
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [97. Interleaving String](https://leetcode.com/problems/interleaving-string/?show=1) | [97. 交错字符串](https://leetcode.cn/problems/interleaving-string/?show=1) | 🟠 |
+| [97. Interleaving String](https://leetcode.com/problems/interleaving-string/?show=1) | [97. Interleaving String](https://leetcode.cn/problems/interleaving-string/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

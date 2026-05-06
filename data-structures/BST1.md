@@ -1,11 +1,9 @@
 # Binary Search Tree Tactics (Properties)
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -17,7 +15,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [538. Convert BST to Greater Tree](https://leetcode.com/problems/convert-bst-to-greater-tree/) | [538. Convert BST to Greater Tree](https://leetcode.cn/problems/convert-bst-to-greater-tree/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -105,7 +102,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 This solves the problem, but a few more words: this isn't the most efficient solution — it just works for this problem.
@@ -232,17 +228,11 @@ class Solution {
 <hr/>
 
 
-
 Done. The core is again the BST in-order property — we just changed the recursion order to traverse values in descending order, matching the problem's greater-sum tree requirement.
 
 In short: BST problems either exploit the left-small/right-large property to make algorithms efficient, or use the in-order property to satisfy requirements. Pretty much that's all there is.
 
 That's it for this article. For more classic binary-tree problems and recursion practice, see the [Practice section](https://labuladong.online/algo/problem-set/bst1/) in the binary-tree chapter.
-
-
-
-
-
 
 
 <hr>
@@ -254,8 +244,6 @@ That's it for this article. For more classic binary-tree problems and recursion 
  - [Binary Search Tree Tactics (Construction)](https://labuladong.online/algo/data-structure/bst-part3/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -272,9 +260,7 @@ That's it for this article. For more classic binary-tree problems and recursion 
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

@@ -1,11 +1,9 @@
 # Cycle Detection and Topological Sort
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -16,7 +14,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [210. Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) | [210. Course Schedule II](https://leetcode.cn/problems/course-schedule-ii/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -221,7 +218,6 @@ Click <code type="click">if (onPath[s])</code> repeatedly to step through the DF
 </visual>
 
 
-
 Done — the core is detecting a cycle in a directed graph.
 
 What if we also need to identify which nodes form the cycle?
@@ -354,7 +350,6 @@ Click <code type="click">if (onPath[s])</code> repeatedly to step through the DF
 </visual>
 
 
-
 The code is longer but the logic is clear: if no cycle, DFS the graph, record postorder, reverse it.
 
 **Why does reverse postorder give a topological order?**
@@ -388,12 +383,6 @@ Some ask: how is reverse-postorder related to preorder?
 For binary trees they may look related, but they aren't identical. Don't assume reverse-postorder equals preorder.
 
 The key difference is in [Binary Tree Tactics (Outline)](https://labuladong.online/algo/essential-technique/binary-tree-summary/): postorder runs only after subtrees are processed — it captures dependency. Other orders don't.
-
-
-
-
-
-
 
 
 ## Cycle Detection (BFS Version)
@@ -505,11 +494,6 @@ After popping it and decrementing neighbors, the queue is empty without producin
 Some nodes never enter the queue — there's a cycle. With this picture the BFS code should be easy to follow.
 
 
-
-
-
-
-
 ## Topological Sort (BFS Version)
 
 **If you understand BFS cycle detection, BFS topological sort is immediate — the order in which nodes leave the queue is the topological order.**
@@ -582,11 +566,6 @@ That's the BFS implementations of cycle detection and topological sort. A puzzle
 For the BFS cycle-detection algorithm, how would you identify the specific nodes that form the cycle?
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -599,8 +578,6 @@ For the BFS cycle-detection algorithm, how would you identify the specific nodes
  - [Beat Algorithms with Algorithms](https://labuladong.online/algo/fname.html?fname=algorithm-in-pdf)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -618,9 +595,7 @@ For the BFS cycle-detection algorithm, how would you identify the specific nodes
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

@@ -12,7 +12,6 @@
 **Notice: [the new website's membership](https://labuladong.online/algo/intro/site-vip/) is about to increase in price; renewals for existing users are supported. It's also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
 
 | LeetCode | LiKou | Difficulty |
@@ -196,7 +195,6 @@ Done. The framework is unchanged — we just spent more time turning the puzzle 
 Many puzzle games look clever but can't withstand brute-force enumeration. Backtracking and BFS are the usual tools.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -204,8 +202,6 @@ Many puzzle games look clever but can't withstand brute-force enumeration. Backt
  - [BFS Algorithm Framework](https://labuladong.online/algo/essential-technique/bfs-framework/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -220,7 +216,6 @@ Many puzzle games look clever but can't withstand brute-force enumeration. Backt
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

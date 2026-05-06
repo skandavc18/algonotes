@@ -1,23 +1,20 @@
 # Classic DP: longest common subsequence
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/) | [1143. 最长公共subsequence](https://leetcode.cn/problems/longest-common-subsequence/) | 🟠 |
-| [583. Delete Operation for Two Strings](https://leetcode.com/problems/delete-operation-for-two-strings/) | [583. 两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/) | 🟠 |
-| [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/) | [712. 两个字符串的最小ASCII删除和](https://leetcode.cn/problems/minimum-ascii-delete-sum-for-two-strings/) | 🟠 |
+| [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/) | [1143. Longest Common Subsequence](https://leetcode.cn/problems/longest-common-subsequence/) | 🟠 |
+| [583. Delete Operation for Two Strings](https://leetcode.com/problems/delete-operation-for-two-strings/) | [583. Delete Operation for Two Strings](https://leetcode.cn/problems/delete-operation-for-two-strings/) | 🟠 |
+| [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/) | [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.cn/problems/minimum-ascii-delete-sum-for-two-strings/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -48,11 +45,6 @@ If you've never solved this, the simplest brute force is to enumerate every subs
 Clearly that complexity is enormous — enumerating all subsequences is exponential. Not practical.
 
 The right idea is to forget the whole strings and zoom in on each character of `s1` and `s2`. The earlier [subsequence template](https://labuladong.online/algo/dynamic-programming/subsequence-problem/) summarized this rule:
-
-
-
-
-
 
 
 **For two-string subsequence problems, use two pointers `i` and `j` moving in the two strings — almost certainly DP**.
@@ -241,7 +233,6 @@ class Solution {
 <hr/>
 
 
-
 The bottom-up `dp` array definition differs slightly from the recursive solution but the idea is the same. If you got the recursive version, this one should be easy.
 
 A subtle detail beginners may miss: `s1.charAt(i - 1) == s2.charAt(j - 1)` — string indices and `dp` indices differ by one, called **index offset**. Recall the `dp` definition:
@@ -367,7 +358,6 @@ class Solution {
 <hr/>
 
 
-
 The base case differs: when computing `lcs` length, an empty string yields lcs length 0; here, an empty string means the other string must be entirely deleted, so we sum up all of its characters' ASCII codes.
 
 For state transitions: when `s1[i] == s2[j]`, no deletion; otherwise, delete one. Use the `dp` function to compute both cases and take the minimum. The rest is similar — won't expand.
@@ -375,11 +365,6 @@ For state transitions: when `s1[i] == s2[j]`, no deletion; otherwise, delete one
 So three subseq problems are solved. The key is to zoom in on individual characters and decide whether each pair belongs to the result subseq, avoiding subseq enumeration.
 
 This is the standard approach for two-string subsequence problems — practice well.
-
-
-
-
-
 
 
 <hr>
@@ -391,22 +376,19 @@ This is the standard approach for two-string subsequence problems — practice w
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [97. Interleaving String](https://leetcode.com/problems/interleaving-string/?show=1) | [97. 交错字符串](https://leetcode.cn/problems/interleaving-string/?show=1) | 🟠 |
-| - | [剑指 Offer II 095. 最长公共subsequence](https://leetcode.cn/problems/qJnOS7/?show=1) | 🟠 |
+| [97. Interleaving String](https://leetcode.com/problems/interleaving-string/?show=1) | [97. Interleaving String](https://leetcode.cn/problems/interleaving-string/?show=1) | 🟠 |
+| - | [Sword to Offer II 095. Longest Common Subsequence](https://leetcode.cn/problems/qJnOS7/?show=1) | 🟠 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

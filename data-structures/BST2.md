@@ -1,11 +1,9 @@
 # Binary Search Tree Tactics (Basic Operations)
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -18,7 +16,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) | [98. Validate Binary Search Tree](https://leetcode.cn/problems/validate-binary-search-tree/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -111,7 +108,6 @@ class Solution {
 <hr/>
 
 
-
 We use a helper with extra parameters carrying additional information, propagating constraints to descendants. This is a small but useful binary-tree trick.
 
 ## Search for an Element in a BST
@@ -170,7 +166,6 @@ TreeNode searchBST(TreeNode root, int target) {
 <hr/>
 
 
-
 ## Insert a Number into a BST
 
 Operating on a data structure boils down to traverse + access — traverse "finds", access "modifies". Concretely, inserting a number means finding the insertion position, then inserting.
@@ -221,7 +216,6 @@ class Solution {
 <hr/>
 
 
-
 ## 3. Delete a Number from a BST
 
 LeetCode 450 "Delete Node in a BST" asks you to delete the node with value `key`:
@@ -257,7 +251,6 @@ if (root.left == null && root.right == null)
 ```
 
 
-
 **Case 2**: `A` has exactly one non-null child. The child takes `A`'s place.
 
 ![](https://labuladong.online/algo/images/bst/bst_deletion_case_2.png)
@@ -267,7 +260,6 @@ if (root.left == null && root.right == null)
 if (root.left == null) return root.right;
 if (root.right == null) return root.left;
 ```
-
 
 
 **Case 3**: `A` has two children. To preserve BST, `A` must be replaced by either the largest node in its left subtree or the smallest in its right subtree. We use the latter.
@@ -284,7 +276,6 @@ if (root.left != null && root.right != null) {
     root.right = deleteNode(root.right, minNode.val);
 }
 ```
-
 
 
 All three cases handled, fill them into the framework and simplify:
@@ -334,7 +325,6 @@ class Solution {
 <hr/>
 
 
-
 Done. In case 3, we swap `root` and `minNode` via a few pointer operations:
 
 ```java
@@ -350,7 +340,6 @@ root = minNode;
 ```
 
 
-
 You may wonder why this is necessary — why not just modify `val`? Like:
 
 ```java
@@ -362,7 +351,6 @@ root.right = deleteNode(root.right, minNode.val);
 // Replace root with minNode
 root.val = minNode.val;
 ```
-
 
 
 That works for this problem, but it's not ideal — generally we don't swap nodes by mutating internal values. In real applications, the BST's data field can be a complex user-defined payload, and the BST as a data structure should be decoupled from that payload. Pointer manipulation is preferred and doesn't require knowledge of the payload.
@@ -378,11 +366,6 @@ Quick recap of the techniques:
 That's it. For more classic binary-tree problems and recursion practice, see [Recursion Practice](https://labuladong.online/algo/problem-set/bst1/) in the binary-tree chapter.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -393,8 +376,6 @@ That's it. For more classic binary-tree problems and recursion practice, see [Re
  - [BST Tactics (Construction)](https://labuladong.online/algo/data-structure/bst-part3/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -411,9 +392,7 @@ That's it. For more classic binary-tree problems and recursion practice, see [Re
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

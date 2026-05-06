@@ -1,11 +1,9 @@
 # String Multiplication
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [43. Multiply Strings](https://leetcode.com/problems/multiply-strings/) | [43. Multiply Strings](https://leetcode.cn/problems/multiply-strings/) | 🟠 |
 
 **-----------**
-
 
 
 For small numbers, we can do arithmetic directly with the operators provided by a programming language, but if the two factors are very large, the language's data types may overflow. An alternative is to take the operands as strings and mimic the elementary-school multiplication procedure, returning the result as a string.
@@ -95,15 +92,7 @@ We're often told not to fall into mental ruts — to be creative, not robotic. B
 Maybe an algorithm is the **art of finding the right mental rut**. Hope this article helps.
 
 
-
-
-
-
-
-
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

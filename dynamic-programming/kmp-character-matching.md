@@ -12,12 +12,11 @@
 **Notice: [the new site membership](https://labuladong.online/algo/intro/site-vip/) is about to get a price hike; existing users can renew. Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [28. Find the Index of the First Occurrence in a String](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/) | [28. 找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/) | 🟠
+| [28. Find the Index of the First Occurrence in a String](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/) | [28. Find the Index of the First Occurrence in a String](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/) | 🟠
 
 **-----------**
 
@@ -344,7 +343,7 @@ Shadow `X` is initialized to 0 and updated as `j` advances. How **to update `X`*
 ```java
 int X = 0;
 for (int j = 1; j < M; j++) {
-    ...
+...
     // update shadow state
     // current state X; on character pat[j],
     // which state should pat transition to?
@@ -360,7 +359,7 @@ for (int i = 0; i < N; i++) {
     // current state j; on character txt[i],
     // which state should pat transition to?
     j = dp[j][txt.charAt(i)];
-    ...
+...
 }
 ```
 
@@ -439,7 +438,6 @@ Initialize shadow `X` to 0; as `j` advances, update `X` similarly to how `search
 KMP is just DP. Our public account has a DP series following one framework: describe the problem logic, clarify the `dp` array's meaning, define base cases — that's it. I hope this article deepens your understanding of DP.
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -448,9 +446,6 @@ KMP is just DP. Our public account has a DP series following one framework: desc
  - [Sliding-window extension: Rabin-Karp string matching](https://labuladong.online/algo/practice-in-action/rabinkarp/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
@@ -502,7 +497,6 @@ class Solution:
           # didn't reach terminal — match failed
           return -1
 ```
-
 
 
 ### javascript

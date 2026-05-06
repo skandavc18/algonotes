@@ -1,11 +1,9 @@
 # Online platforms for practicing programming skills
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 **-----------**
@@ -103,7 +101,6 @@ Site:
 https://sqlzoo.net/
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -111,9 +108,6 @@ https://sqlzoo.net/
  - [Master Git with four basic commands](https://labuladong.online/algo/fname.html?fname=git常用命令)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

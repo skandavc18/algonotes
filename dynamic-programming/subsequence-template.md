@@ -1,22 +1,19 @@
 # DP template for subsequence problems
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [1312. Minimum Insertion Steps to Make a String Palindrome](https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | [1312. 让字符串成为palindrome串的最少插入次数](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | 🔴 |
-| [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/) | [516. 最长palindromesubsequence](https://leetcode.cn/problems/longest-palindromic-subsequence/) | 🟠 |
+| [1312. Minimum Insertion Steps to Make a String Palindrome](https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | [1312. Minimum Insertion Steps to Make a String Palindrome](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/) | 🔴 |
+| [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/) | [516. Longest Palindromic Subsequence](https://leetcode.cn/problems/longest-palindromic-subsequence/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -37,11 +34,6 @@ Reason is simple: how many possible subsequences does a string have? At least ex
 Since we're using DP, we need to define the `dp` array and find the state transition. The two "thought templates" are essentially `dp` array definitions. Different problems may need different definitions.
 
 ## 1. Two thought templates
-
-
-
-
-
 
 
 **1. The first template uses a 1D `dp` array**:
@@ -126,9 +118,6 @@ Yes! It depends on `s[i]` and `s[j]`:
 In code:
 
 
-
-
-
 ```java
 if (s[i] == s[j])
     // they must be in the longest palindromic subseq
@@ -137,7 +126,6 @@ else
     // which yields a longer palindromic subseq, s[i+1..j] or s[i..j-1]?
     dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
 ```
-
 
 
 That's the state-transition equation. By the dp definition, we want `dp[0][n - 1]` — the length of the longest palindromic subseq of the entire `s`.
@@ -200,7 +188,6 @@ class Solution {
 <hr/>
 
 
-
 That's the longest palindromic subseq problem solved.
 
 ## 4. Extension
@@ -232,9 +219,6 @@ Then, by induction, suppose we've computed `dp[i+1][j-1]` — how do we derive `
 Very similar to longest palindromic subseq. Two cases:
 
 
-
-
-
 ```java
 if (s[i] == s[j]) {
     // no insertion needed
@@ -245,7 +229,6 @@ if (s[i] == s[j]) {
     dp[i][j] = min(dp[i + 1][j], dp[i][j - 1]) + 1;
 }
 ```
-
 
 
 Finally, again iterate the `dp` array in reverse:
@@ -299,11 +282,6 @@ class Solution {
 That's it for subseq-related algorithms. Hope it inspires you.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -314,9 +292,6 @@ That's it for subseq-related algorithms. Hope it inspires you.
  - [Classic DP: longest common subsequence](https://labuladong.online/algo/dynamic-programming/longest-common-subsequence/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

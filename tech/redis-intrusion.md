@@ -1,11 +1,9 @@
 # Redis intrusion
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 **-----------**
@@ -86,9 +84,6 @@ So back to using Redis: the official site spells out security recommendations cl
 1. Don't start Redis Server as root, and do set a password — and don't make it too short, or it'll be brute-forced.
 2. Configure your server firewall and Redis's `config` file so that Redis is, as much as possible, not exposed to the outside.
 3. Use the `rename` feature to disguise dangerous commands like `flushall`, to prevent the database from being wiped and data lost.
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

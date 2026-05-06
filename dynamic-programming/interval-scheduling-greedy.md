@@ -1,22 +1,19 @@
 # Greedy: interval scheduling
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve the following problems:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [435. Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/) | [435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/) | 🟠 |
-| [452. Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/) | [452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) | 🟠 |
+| [435. Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/) | [435. Non-overlapping Intervals](https://leetcode.cn/problems/non-overlapping-intervals/) | 🟠 |
+| [452. Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/) | [452. Minimum Number of Arrows to Burst Balloons](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) | 🟠 |
 
 **-----------**
-
 
 
 What is the greedy algorithm? You can think of it as a special case of dynamic programming. Compared with DP, greedy requires more conditions (the greedy-choice property), but it's more efficient.
@@ -42,11 +39,6 @@ int intervalSchedule(int[][] intvs);
 For example, with `intvs = [[1,3], [2,4], [3,6]]`, the maximum number of mutually non-overlapping intervals is 2, namely `[[1,3], [3,6]]`. Your algorithm should return 2. Note that touching at a boundary is not considered overlapping.
 
 This problem has many real-world applications. For example, you have several activities today, each represented by an interval `[start, end]`. **What's the maximum number of activities you can attend today?** Obviously you can't attend two at once, so the problem is to find the largest non-overlapping subset of these time intervals.
-
-
-
-
-
 
 
 ## 2. Greedy solution
@@ -141,7 +133,6 @@ class Solution {
 <hr/>
 
 
-
 Next, LeetCode 452 "Minimum Number of Arrows to Burst Balloons". Description:
 
 Suppose there are many circular balloons in a 2D plane. Their projections onto the x-axis form intervals. Given these intervals, you walk along the x-axis and can shoot arrows vertically upward. What's the minimum number of arrows needed to burst all balloons?
@@ -197,7 +188,6 @@ class Solution {
 <hr/>
 
 
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -207,9 +197,6 @@ class Solution {
  - [Sweep-line technique: scheduling meeting rooms](https://labuladong.online/algo/frequency-interview/scan-line-technique/)
 
 </details><hr>
-
-
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

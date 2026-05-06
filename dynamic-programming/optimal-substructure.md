@@ -1,15 +1,12 @@
 # Optimal substructure and dp-array traversal direction
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 **-----------**
-
 
 
 > [!NOTE]
@@ -18,7 +15,6 @@
 > - [Dynamic programming core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/)
 
 > Tip: this article has a video version: [DP detailed (advanced)](https://www.bilibili.com/video/BV1uv411W73P/). Subscribe to my Bilibili channel — I lead readers through tougher algorithmic techniques in video form.
-
 
 
 This article is a revised version of the older [DP FAQ post](https://mp.weixin.qq.com/s/qvlfyKBiXVX7CCwWFR-XKg). Based on continued learning, summarization, and reader feedback, I expanded more content, aiming to make this a comprehensive Q&A follow-up to [DP core framework](https://labuladong.online/algo/essential-technique/dynamic-programming-framework/). Here's the body.
@@ -32,11 +28,6 @@ This article will clarify these questions:
 3. Why is the `dp` array often sized `n + 1` instead of `n`?
 
 4. Why do DP solutions traverse the `dp` array in so many ways — sometimes forward, sometimes backward, sometimes diagonally?
-
-
-
-
-
 
 
 ## 1. Optimal substructure in detail
@@ -56,9 +47,6 @@ This problem **does not satisfy optimal substructure** — you can't derive the 
 **So when optimal substructure fails, what do we do? Strategy: reformulate the problem**. For the largest-score-gap problem, we couldn't use each class's known gap, so we'd have to write brute-force code:
 
 
-
-
-
 ```java
 int result = 0;
 for (Student a : school) {
@@ -69,7 +57,6 @@ for (Student a : school) {
 }
 return result;
 ```
-
 
 
 Reformulate, i.e. equivalently transform the problem: largest score gap is just the difference between the highest and lowest scores. So we want highest and lowest scores — that's exactly the first problem we discussed, which has optimal substructure! Now use optimal substructure to solve the max problem first, then come back and solve the gap problem — much more efficient.
@@ -99,11 +86,6 @@ DP works by deriving from a simple base case forward — picture a chain reactio
 Finding optimal substructure is essentially proving the state-transition equation correct; if the equation has it, you can write the brute force; once you have brute force, you can spot overlapping subproblems and optimize. Routine — frequent grinders feel this.
 
 We won't list canonical DP examples here — readers can browse historical articles to see how state transitions follow optimal substructure. Topic over; let's look at other DP confusions.
-
-
-
-
-
 
 
 ## 2. How to spot overlapping subproblems at a glance
@@ -157,16 +139,12 @@ For input `i = 8, j = 7`, the 2D-state recursion tree is below; clearly overlapp
 Just delete the code details and abstract the recursive framework:
 
 
-
-
-
 ```java
 int dp(int[][] grid, int i, int j) {
     dp(grid, i - 1, j), // #1
     dp(grid, i, j - 1)  // #2
 }
 ```
-
 
 
 We see `i, j` both decrease. Question: how many paths transition state `(i, j)` to `(i-1, j-1)`?
@@ -322,9 +300,6 @@ So we size the `dp` array as `int[m+1][n+1]`, shifting indices by one and reserv
 I'm sure readers worry about traversal order when doing DP. Take 2D `dp` arrays. Sometimes we go forward:
 
 
-
-
-
 ```java
 int[][] dp = new int[m][n];
 for (int i = 0; i < m; i++)
@@ -333,11 +308,7 @@ for (int i = 0; i < m; i++)
 ```
 
 
-
 Sometimes backward:
-
-
-
 
 
 ```java
@@ -347,11 +318,7 @@ for (int i = m - 1; i >= 0; i--)
 ```
 
 
-
 Sometimes diagonally:
-
-
-
 
 
 ```java
@@ -363,7 +330,6 @@ for (int l = 2; l <= n; l++) {
     }
 }
 ```
-
 
 
 More confusingly, sometimes both forward and backward yield correct answers — e.g. in the [Stock-buy-sell summary](https://labuladong.online/algo/dynamic-programming/stock-problem-summary/), some places are bidirectional.
@@ -383,16 +349,12 @@ Take the classic [Edit distance](https://labuladong.online/algo/dynamic-programm
 Per the two principles, how should you traverse `dp`? Forward:
 
 
-
-
-
 ```java
 for (int i = 1; i < m; i++)
     for (int j = 1; j < n; j++)
         // via dp[i-1][j], dp[i][j - 1], dp[i-1][j-1]
         // compute dp[i][j]
 ```
-
 
 
 Because each iteration's left, top, and top-left positions are either base cases or already computed, and we end at our desired `dp[m][n]`.
@@ -410,11 +372,6 @@ Either traverse diagonally from upper-left to lower-right, or bottom-up left-to-
 Now you should understand the two principles. Just look at the base case and the result-storage position — ensure the data used during traversal are computed. Sometimes multiple methods yield the right answer; pick what suits your taste.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -430,30 +387,27 @@ Now you should understand the two principles. Just look at the base case and the
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. 不同的subsequence](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
-| [139. Word Break](https://leetcode.com/problems/word-break/?show=1) | [139. 单词拆分](https://leetcode.cn/problems/word-break/?show=1) | 🟠 |
-| [221. Maximal Square](https://leetcode.com/problems/maximal-square/?show=1) | [221. 最大正方形](https://leetcode.cn/problems/maximal-square/?show=1) | 🟠 |
-| [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. 粉刷房子](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
-| [343. Integer Break](https://leetcode.com/problems/integer-break/?show=1) | [343. 整数拆分](https://leetcode.cn/problems/integer-break/?show=1) | 🟠 |
-| [576. Out of Boundary Paths](https://leetcode.com/problems/out-of-boundary-paths/?show=1) | [576. 出界的路径数](https://leetcode.cn/problems/out-of-boundary-paths/?show=1) | 🟠 |
-| [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
-| [91. Decode Ways](https://leetcode.com/problems/decode-ways/?show=1) | [91. 解码方法](https://leetcode.cn/problems/decode-ways/?show=1) | 🟠 |
-| - | [剑指 Offer II 091. 粉刷房子](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
-| - | [剑指 Offer II 097. subsequence的数目](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
+| [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/?show=1) | [115. Distinct Subsequences](https://leetcode.cn/problems/distinct-subsequences/?show=1) | 🔴 |
+| [139. Word Break](https://leetcode.com/problems/word-break/?show=1) | [139. Word Break](https://leetcode.cn/problems/word-break/?show=1) | 🟠 |
+| [221. Maximal Square](https://leetcode.com/problems/maximal-square/?show=1) | [221. Maximal Square](https://leetcode.cn/problems/maximal-square/?show=1) | 🟠 |
+| [256. Paint House](https://leetcode.com/problems/paint-house/?show=1)🔒 | [256. Paint House](https://leetcode.cn/problems/paint-house/?show=1)🔒 | 🟠 |
+| [343. Integer Break](https://leetcode.com/problems/integer-break/?show=1) | [343. Integer Break](https://leetcode.cn/problems/integer-break/?show=1) | 🟠 |
+| [576. Out of Boundary Paths](https://leetcode.com/problems/out-of-boundary-paths/?show=1) | [576. Out of Boundary Paths](https://leetcode.cn/problems/out-of-boundary-paths/?show=1) | 🟠 |
+| [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/?show=1) | [63. Unique Paths II](https://leetcode.cn/problems/unique-paths-ii/?show=1) | 🟠 |
+| [91. Decode Ways](https://leetcode.com/problems/decode-ways/?show=1) | [91. Decode Ways](https://leetcode.cn/problems/decode-ways/?show=1) | 🟠 |
+| - | [Sword to Offer II 091. Paint House](https://leetcode.cn/problems/JEj789/?show=1) | 🟠 |
+| - | [Sword to Offer II 097. Number of Distinct Subsequences](https://leetcode.cn/problems/21dk04/?show=1) | 🔴 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

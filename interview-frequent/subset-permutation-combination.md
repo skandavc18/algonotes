@@ -1,11 +1,9 @@
 # Backtracking Sweeps All Permutation/Combination/Subset Problems
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -26,7 +24,6 @@ After reading this article, you will not only master the algorithm pattern but a
 **-----------**
 
 
-
 > [!NOTE]
 > Before reading this article, you should first study:
 > 
@@ -34,7 +31,6 @@ After reading this article, you will not only master the algorithm pattern but a
 > - [Backtracking Framework](https://labuladong.online/algo/essential-technique/backtrack-framework/)
 
 > tip: a video version is available: [Backtracking Sweeps Permutation/Combination/Subset Problems](https://www.bilibili.com/video/BV1Yt4y1t7dK/). Follow my Bilibili account; I'll guide you through harder algorithm techniques on video.
-
 
 
 Permutations, combinations, and subsets are familiar from high school. But programming them tests algorithmic thinking. This article gives the core idea for variants you'll encounter.
@@ -73,11 +69,6 @@ We'll go through all 9 variants below.
 
 > [!NOTE]
 > Some readers may have seen alternative permutation/combination/subset code (using `swap`). Backtracking has two perspectives — see [Box-and-Ball Model: Two Backtracking Perspectives](https://labuladong.online/algo/practice-in-action/two-views-of-backtrack/). Stick with this article for now.
-
-
-
-
-
 
 
 ## Subsets (Distinct, No Reuse)
@@ -169,10 +160,6 @@ class Solution {
 `backtrack` looks base-case-less, but when `start == nums.length` the for loop doesn't execute, ending recursion.
 
 
-
-
-
-
 <hr/>
 <a href="https://labuladong.online/algo-visualize/leetcode/subsets/" target="_blank">
 <details style="max-width:90%;max-height:400px">
@@ -182,7 +169,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 ## Combinations (Distinct, No Reuse)
@@ -327,7 +313,6 @@ class Solution {
 <hr/>
 
 
-
 For permutations of size `k`, change the base case to collect level `k`:
 
 ```java
@@ -422,7 +407,6 @@ class Solution {
 <hr/>
 
 
-
 Same idea: a sort plus a pruning line.
 
 **Combinations and subsets are equivalent**, so let's directly look at LeetCode 40 "Combination Sum II":
@@ -493,7 +477,6 @@ class Solution {
 <hr/>
 
 
-
 ## Permutations (Duplicates, No Reuse)
 
 LeetCode 47 "Permutations II":
@@ -559,7 +542,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 Two changes from standard permutations: sort and a pruning condition.
@@ -774,7 +756,6 @@ class Solution {
 <hr/>
 
 
-
 ## Permutations (Distinct, Reusable)
 
 LeetCode doesn't have this directly, but consider: distinct elements, reuse allowed. For `nums = [1,2,3]`, there are 3^3 = 27 permutations:
@@ -926,11 +907,6 @@ Once you think in trees, these problems collapse to small base-case tweaks. That
 Try analyzing complexities with the methods in [Practical Time/Space Complexity Analysis](https://labuladong.online/algo/essential-technique/complexity-analysis/).
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -947,8 +923,6 @@ Try analyzing complexities with the methods in [Practical Time/Space Complexity 
  - [Answers to Common Backtracking/DFS Questions](https://labuladong.online/algo/essential-technique/backtrack-vs-dfs/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -979,9 +953,7 @@ Try analyzing complexities with the methods in [Practical Time/Space Complexity 
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

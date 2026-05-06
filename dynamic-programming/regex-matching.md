@@ -1,21 +1,18 @@
 # Classic DP: regular expression matching
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet the demand of many readers, the site now has a [crash-course outline](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for the support! Also, I recommend reading articles on my [website](https://labuladong.online/algo/) for a better experience.**
 
 
-
 After reading this article, you'll not only learn the algorithmic pattern but also be able to solve:
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/) | [10. regex表达式匹配](https://leetcode.cn/problems/regular-expression-matching/) | 🔴 |
+| [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/) | [10. Regular Expression Matching](https://leetcode.cn/problems/regular-expression-matching/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -112,13 +109,9 @@ This is a "choice" problem — we need to enumerate every possible choice. The c
 By the "states", define a `dp` function:
 
 
-
-
-
 ```java
 boolean dp(String s, int i, String p, int j);
 ```
-
 
 
 The `dp` function is defined as:
@@ -199,9 +192,6 @@ Easy with the figures. Now think about the `dp` base case:
 **One base case is `j == p.length()`**: by the definition, the pattern `p` is exhausted; check whether `s` is also exhausted — if so, success:
 
 
-
-
-
 ```java
 if (j == p.length()) {
     return i == s.length();
@@ -209,11 +199,7 @@ if (j == p.length()) {
 ```
 
 
-
 **Another base case is `i == s.length()`**: per the definition, the text `s` is exhausted; do we just check `j == p.length()`?
-
-
-
 
 
 ```java
@@ -222,7 +208,6 @@ if (i == s.length()) {
     return j == p.length();
 }
 ```
-
 
 
 **This is wrong. We can't just check whether `j == p.length()` — as long as `p[j..]` can match the empty string, it's a match**. For example, `s = "a", p = "ab*c*"`: when `i` reaches the end of `s`, `j` hasn't reached the end of `p`, but `p` still matches `s`.
@@ -322,7 +307,6 @@ class Solution {
 <hr/>
 
 
-
 The code uses a memo `memo` to eliminate overlapping subproblems. How can you spot overlapping subproblems at a glance? See the technique in the earlier [DP FAQ](https://labuladong.online/algo/dynamic-programming/faq-summary/) — extract the recursion framework of the regex algorithm:
 
 ```java
@@ -341,11 +325,6 @@ DP time complexity = "total number of states" * "time per recursion". The total 
 Space complexity is just the memo's size, $O(MN)$.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles citing this article</strong></summary>
@@ -355,21 +334,18 @@ Space complexity is just the memo's size, $O(MN)$.
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems citing this article</strong></summary>
 
 <strong>Install [my Chrome extension](https://labuladong.online/algo/intro/chrome/) and click any problem below to view its solution outline:</strong>
 
-| LeetCode | 力扣 | Difficulty |
+| LeetCode | LiKou | Difficulty |
 | :----: | :----: | :----: |
-| - | [剑指 Offer 19. regex表达式匹配](https://leetcode.cn/problems/zheng-ze-biao-da-shi-pi-pei-lcof/?show=1) | 🔴 |
+| - | [Sword to Offer 19. Regular Expression Match](https://leetcode.cn/problems/zheng-ze-biao-da-shi-pi-pei-lcof/?show=1) | 🔴 |
 
 </details>
 <hr>
-
 
 
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**

@@ -1,11 +1,9 @@
 # Two-Pointer Tricks Sweep 7 Array Problems
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -23,7 +21,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | - | [Sword to Offer II 006. Two-Sum in a Sorted Array](https://leetcode.cn/problems/kLl5u1/) | 🟢 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -409,11 +406,6 @@ Note this differs from earlier left/right pointer problems: those moved toward e
 That covers array two-pointer techniques. For more, see [More Classic Two-Pointer Array Problems](https://labuladong.online/algo/problem-set/array-two-pointers/).
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -446,8 +438,6 @@ That covers array two-pointer techniques. For more, see [More Classic Two-Pointe
 </details><hr>
 
 
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Problems that reference this article</strong></summary>
@@ -476,9 +466,7 @@ That covers array two-pointer techniques. For more, see [More Classic Two-Pointe
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

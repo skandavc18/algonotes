@@ -1,11 +1,9 @@
 # BFS Algorithm Framework
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -16,7 +14,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [773. Sliding Puzzle](https://leetcode.com/problems/sliding-puzzle/) | [773. Sliding Puzzle](https://leetcode.cn/problems/sliding-puzzle/) | 🔴 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -53,11 +50,6 @@ E.g., a maze: minimum steps to the exit? With teleporters? Two words: replace/in
 These don't seem to relate to trees/graphs, but a small abstraction reveals they are.
 
 Let's go through examples.
-
-
-
-
-
 
 
 ## 1. The Framework
@@ -252,7 +244,6 @@ int[][] generateNeighborMapping(int m, int n) {
 ::::
 
 
-
 With the mapping, swap 0 with any neighbor by index. Full code:
 
 ```java
@@ -337,7 +328,6 @@ class Solution {
 </details>
 </a>
 <hr/>
-
 
 
 Done. BFS itself is mechanical — the hard part is converting the problem into a BFS model and serializing the board for hashing.
@@ -640,11 +630,6 @@ In BFS, larger frontier → larger next frontier. Always expanding the smaller o
 Most importantly, internalize the BFS framework. Try the [BFS Practice](https://labuladong.online/algo/problem-set/bfs/).
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -667,8 +652,6 @@ Most importantly, internalize the BFS framework. Try the [BFS Practice](https://
  - [Algorithm Practice and Flow](https://labuladong.online/algo/fname.html?fname=flow)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -703,9 +686,7 @@ Most importantly, internalize the BFS framework. Try the [BFS Practice](https://
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

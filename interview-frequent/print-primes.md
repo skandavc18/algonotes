@@ -1,11 +1,9 @@
 # Efficiently Counting Primes
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [204. Count Primes](https://leetcode.com/problems/count-primes/) | [204. Count Primes](https://leetcode.cn/problems/count-primes/) | 🟠 |
 
 **-----------**
-
 
 
 Primes are simple to define: a number is prime if it's only divisible by 1 and itself.
@@ -59,7 +56,7 @@ First, **how to test whether a number is prime efficiently** — tweak the for l
 ```java
 boolean isPrime(int n) {
     for (int i = 2; i * i <= n; i++)
-        ...
+...
 }
 ```
 
@@ -128,7 +125,7 @@ First, by symmetry of factors, the outer loop only needs to go up to `sqrt(n)`:
 ```java
 for (int i = 2; i * i < n; i++) 
     if (isPrime[i]) 
-        ...
+...
 ```
 
 Second — less obvious — the inner loop has redundancy:
@@ -184,7 +181,6 @@ class Solution {
 <hr/>
 
 
-
 **Time complexity is tricky to derive.** It depends on the nested loops; the operation count is:
 
   n/2 + n/3 + n/5 + n/7 + ...
@@ -195,11 +191,6 @@ The parenthesized terms are reciprocals of primes. The result is $O(N \log \log 
 That's everything for prime algorithms. Looks simple, but plenty of detail to polish.
 
 
-
-
-
-
-
 <hr>
 <details class="hint-container details">
 <summary><strong>Articles that reference this one</strong></summary>
@@ -208,8 +199,6 @@ That's everything for prime algorithms. Looks simple, but plenty of detail to po
  - [Sweeping All Ugly-Number Problems](https://labuladong.online/algo/frequency-interview/ugly-number-summary/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -227,9 +216,7 @@ That's everything for prime algorithms. Looks simple, but plenty of detail to po
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)

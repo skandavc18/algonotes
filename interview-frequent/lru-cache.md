@@ -1,11 +1,9 @@
 # Algorithms Are Like LEGO: Implementing LRU
 
 
-
 ![](https://labuladong.online/algo/images/souyisou1.png)
 
 **Notice: To meet readers' needs, the site now offers a [Quick-Start Curriculum](https://labuladong.online/algo/intro/quick-learning-plan/) — feel free to take a look. Thanks for your support! It is also recommended that you read articles on my [website](https://labuladong.online/algo/) for a better experience.**
-
 
 
 After reading this article, you will not only master the algorithm pattern but also be able to solve the following problems:
@@ -15,7 +13,6 @@ After reading this article, you will not only master the algorithm pattern but a
 | [146. LRU Cache](https://leetcode.com/problems/lru-cache/) | [146. LRU Cache](https://leetcode.cn/problems/lru-cache/) | 🟠 |
 
 **-----------**
-
 
 
 > [!NOTE]
@@ -45,11 +42,6 @@ Suppose you can only have 3 apps. Now you open Clock — must close one. Which? 
 ![](https://labuladong.online/algo/images/lru/3.jpg)
 
 Now you understand LRU. Other strategies exist (e.g., LFU — least frequently used). I cover LFU in [LFU Detailed](https://labuladong.online/algo/frequency-interview/lfu/).
-
-
-
-
-
 
 
 ## 1. Problem Description
@@ -104,11 +96,6 @@ For O(1) `put` and `get`, we need:
 3. On access, move the key to "most recently used"; the structure must support fast insert/delete at any position.
 
 What structure satisfies all three? Hash maps are fast lookup but unordered; linked lists are ordered with fast insert/delete but slow lookup. Combine them → hash linked list (`LinkedHashMap`).
-
-
-
-
-
 
 
 LRU's core data structure is a hash linked list — a doubly linked list paired with a hash map:
@@ -472,13 +459,7 @@ class LRUCache {
 ```
 
 
-
 That's all there is to LRU. For more design problems, see [Classic Data-Structure Design Problems](https://labuladong.online/algo/problem-set/ds-design/).
-
-
-
-
-
 
 
 <hr>
@@ -490,8 +471,6 @@ That's all there is to LRU. For more design problems, see [Classic Data-Structur
  - ["Trick" Patterns for Algorithm Quizzes](https://labuladong.online/algo/other-skills/tips-in-exam/)
 
 </details><hr>
-
-
 
 
 <hr>
@@ -508,9 +487,7 @@ That's all there is to LRU. For more design problems, see [Classic Data-Structur
 <hr>
 
 
-
 **＿＿＿＿＿＿＿＿＿＿＿＿＿**
-
 
 
 ![](https://labuladong.online/algo/images/souyisou2.png)
